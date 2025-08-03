@@ -8,7 +8,7 @@
         <PackageLicenseExpression>Unlicense</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageProjectUrl>https://github.com/frj72/FRJ.Tools.SimpleWorkSheet</PackageProjectUrl>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
     </PropertyGroup>
 
     <ItemGroup>

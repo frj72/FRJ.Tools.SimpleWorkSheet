@@ -17,6 +17,6 @@ public class WorkBook
     public void SaveToFile(string fileName)
     {
         var bytes = SheetConverter.ToBinaryExcelFile(this);
-        File.WriteAllBytes("fileName", bytes);
+        File.WriteAllBytes(fileName, bytes);
     }
 }
