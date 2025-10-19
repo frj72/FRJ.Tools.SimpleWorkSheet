@@ -4,9 +4,8 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public static class CellValueUnionExtensions
 {
-    public static decimal AsDecimal(this CellValueUnion value)
-    {
-        return value.Match(
+    public static decimal AsDecimal(this CellValueUnion value) =>
+        value.Match(
             d => d,
             l => l,
             s => decimal.TryParse(s, out var result) ? result : decimal.Zero,
@@ -14,10 +13,9 @@ public static class CellValueUnionExtensions
             dto => dto.Ticks,
             cf => throw new InvalidOperationException("Cannot convert a formula to a decimal")
         );
-    }
-    public static double AsDouble(this CellValueUnion value)
-    {
-        return value.Match(
+
+    public static double AsDouble(this CellValueUnion value) =>
+        value.Match(
             d => (double) d,
             l => l,
             s => double.TryParse(s, out var result) ? result : 0.0,
@@ -25,11 +23,9 @@ public static class CellValueUnionExtensions
             dto => dto.Ticks,
             cf => throw new InvalidOperationException("Cannot convert a formula to a double")
         );
-    }
-    
-    public static long AsLong(this CellValueUnion value)
-    {
-        return value.Match(
+
+    public static long AsLong(this CellValueUnion value) =>
+        value.Match(
             d => (long) d,
             l => l,
             s => long.TryParse(s, out var result) ? result : 0L,
@@ -37,11 +33,9 @@ public static class CellValueUnionExtensions
             dto => dto.Ticks,
             cf => throw new InvalidOperationException("Cannot convert a formula to a long")
         );
-    }
-    
-    public static int AsInt(this CellValueUnion value)
-    {
-        return value.Match(
+
+    public static int AsInt(this CellValueUnion value) =>
+        value.Match(
             d => (int) d,
             l => (int) l,
             s => int.TryParse(s, out var result) ? result : 0,
@@ -49,11 +43,9 @@ public static class CellValueUnionExtensions
             dto => (int) dto.Ticks,
             cf => throw new InvalidOperationException("Cannot convert a formula to an int")
         );
-    }
-    
-    public static string AsString(this CellValueUnion value)
-    {
-        return value.Match<string>(
+
+    public static string AsString(this CellValueUnion value) =>
+        value.Match<string>(
             d => d.ToString(CultureInfo.InvariantCulture),
             l => l.ToString(),
             s => s,
@@ -61,11 +53,9 @@ public static class CellValueUnionExtensions
             dto => dto.ToString("O"),
             cf => cf.Value
         );
-    }
-    
-    public static DateTime AsDateTime(this CellValueUnion value)
-    {
-        return value.Match(
+
+    public static DateTime AsDateTime(this CellValueUnion value) =>
+        value.Match(
             d => new((long) d),
             l => new(l),
             s => DateTime.TryParse(s, null, DateTimeStyles.RoundtripKind, out var result) ? result : DateTime.MinValue,
@@ -73,11 +63,9 @@ public static class CellValueUnionExtensions
             dto => dto.DateTime,
             cf => throw new InvalidOperationException("Cannot convert a formula to a DateTime")
         );
-    }
-    
-    public static DateTimeOffset AsDateTimeOffset(this CellValueUnion value)
-    {
-        return value.Match(
+
+    public static DateTimeOffset AsDateTimeOffset(this CellValueUnion value) =>
+        value.Match(
             d => new DateTime((long) d),
             l => new DateTime(l),
             s => DateTimeOffset.TryParse(s, null, DateTimeStyles.RoundtripKind, out var result) ? result : DateTimeOffset.MinValue,
@@ -85,5 +73,4 @@ public static class CellValueUnionExtensions
             dto => dto,
             cf => throw new InvalidOperationException("Cannot convert a formula to a DateTimeOffset")
         );
-    }
 }

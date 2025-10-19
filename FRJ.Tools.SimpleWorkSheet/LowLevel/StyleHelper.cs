@@ -49,28 +49,26 @@ public class StyleHelper
                     FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType
                 };
 
-                if (!_styleIndexDictionary.ContainsKey(styleDef))
-                {
-                    var fontId = AddFont(styleDef.Font);
-                    var fillId = AddFill(styleDef.FillColor);
-                    var borderId = AddBorder(styleDef.Borders);
+                if (_styleIndexDictionary.ContainsKey(styleDef)) continue;
+                var fontId = AddFont(styleDef.Font);
+                var fillId = AddFill(styleDef.FillColor);
+                var borderId = AddBorder(styleDef.Borders);
 
-                    var cellFormat = new CellFormat
-                    {
-                        FontId = fontId,
-                        FillId = fillId,
-                        BorderId = borderId,
-                        ApplyFont = fontId != 0,
-                        ApplyFill = fillId != 0,
-                        ApplyBorder = borderId != 0,
-                        NumberFormatId = styleDef.FormatAsDate ? 164 : null,
-                        ApplyNumberFormat = styleDef.FormatAsDate ? true : null
-                    };
+                var cellFormat = new CellFormat
+                {
+                    FontId = fontId,
+                    FillId = fillId,
+                    BorderId = borderId,
+                    ApplyFont = fontId != 0,
+                    ApplyFill = fillId != 0,
+                    ApplyBorder = borderId != 0,
+                    NumberFormatId = styleDef.FormatAsDate ? 164 : null,
+                    ApplyNumberFormat = styleDef.FormatAsDate ? true : null
+                };
                     
-                    _cellFormats.Add(cellFormat);
-                    var styleIndex = (uint)_cellFormats.Count - 1;
-                    _styleIndexDictionary.Add(styleDef, styleIndex);
-                }
+                _cellFormats.Add(cellFormat);
+                var styleIndex = (uint)_cellFormats.Count - 1;
+                _styleIndexDictionary.Add(styleDef, styleIndex);
             }
         }
     }
@@ -80,40 +78,30 @@ public class StyleHelper
 
     public Stylesheet GenerateStylesheet()
     {
-        var stylesheet = new Stylesheet();
+        var stylesheet = new Stylesheet
+        {
+            Fonts = new() { Count = (uint)_fonts.Count },
+            Fills = new() { Count = (uint)_fills.Count },
+            Borders = new() { Count = (uint)_borders.Count },
+            CellFormats = new() { Count = (uint)_cellFormats.Count },
+            NumberingFormats = _numberingFormatsProvider.NumberingFormats()
+        };
 
-        stylesheet.Fonts = new() { Count = (uint)_fonts.Count };
         stylesheet.Fonts.Append(_fonts);
-
-        stylesheet.Fills = new() { Count = (uint)_fills.Count };
         stylesheet.Fills.Append(_fills);
-
-        stylesheet.Borders = new() { Count = (uint)_borders.Count };
         stylesheet.Borders.Append(_borders);
-
-        stylesheet.CellFormats = new() { Count = (uint)_cellFormats.Count };
         stylesheet.CellFormats.Append(_cellFormats);
-        
-        stylesheet.NumberingFormats = _numberingFormatsProvider.NumberingFormats(); 
-
         return stylesheet;
     }
 
-    public uint GetStyleIndex(Components.SimpleCell.Cell cell)
-    {
-        var styleDef = new StyleDefinition
+    public uint GetStyleIndex(Cell cell) =>
+        _styleIndexDictionary[new()
         {
             FillColor = cell.Color,
             Font = cell.Font ?? WorkSheetDefaults.Font,
             Borders = cell.Borders ?? WorkSheetDefaults.CellBorders,
             FormatAsDate = cell.Value.IsDateTime() || cell.Value.IsDateTimeOffset()
-        };
-        
-        
-
-        return _styleIndexDictionary[styleDef];
-    }
-
+        }];
 
 
     private uint AddFont(CellFont fontDef)
@@ -181,25 +169,22 @@ public class StyleHelper
     {
         var borderProp = new T();
 
-        if (borderDef != null && borderDef.Style != CellBorderStyle.None)
-        {
-            borderProp.Style = MapBorderStyle(borderDef.Style);
+        if (borderDef is not { Style: not CellBorderStyle.None }) return borderProp;
+        borderProp.Style = MapBorderStyle(borderDef.Style);
 
-            if (!string.IsNullOrEmpty(borderDef.Color))
+        if (!string.IsNullOrEmpty(borderDef.Color))
+        {
+            borderProp.Color = new()
             {
-                borderProp.Color = new()
-                {
-                    Rgb = new(borderDef.Color)
-                };
-            }
+                Rgb = new(borderDef.Color)
+            };
         }
 
         return borderProp;
     }
 
-    private BorderStyleValues MapBorderStyle(CellBorderStyle style)
-    {
-        return style switch
+    private static BorderStyleValues MapBorderStyle(CellBorderStyle style) =>
+        style switch
         {
             CellBorderStyle.Dashed => BorderStyleValues.Dashed,
             CellBorderStyle.Dotted => BorderStyleValues.Dotted,
@@ -217,7 +202,6 @@ public class StyleHelper
             CellBorderStyle.None => BorderStyleValues.None,
             _ => BorderStyleValues.None
         };
-    }
 }
 
 public class NumberingFormatsProvider

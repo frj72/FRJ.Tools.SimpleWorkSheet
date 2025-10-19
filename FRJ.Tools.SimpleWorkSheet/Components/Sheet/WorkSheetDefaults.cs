@@ -11,6 +11,7 @@ public static class WorkSheetDefaults
     public static CellFont Font => CellFont.Create(FontSize, FontName, Color);
     public static CellBorder CellBorder => CellBorder.Create(null, CellBorderStyle.None);
     public static CellBorders CellBorders => CellBorders.Create(CellBorder, CellBorder, CellBorder, CellBorder);
+    public static CellStyle DefaultCellStyle => CellStyle.Create(FillColor, Font, CellBorders, null);
     public static Cell DefaultCell => Cell.CreateEmpty();
     public static string DefaultDateFormat =>"yyyy-mm-dd hh:mm:ss";
 }

@@ -19,7 +19,35 @@ public class WorkSheet
         Cells = new();
     }
 
-    public Cell AddCell(CellPosition position, CellValue value, string? color = null, CellFont? font = null,
+    public Cell AddCell(CellPosition position, Action<CellBuilder> configure)
+    {
+        var builder = CellBuilder.Create();
+        configure(builder);
+        var cell = builder.Build();
+
+        if (!cell.Style.HasValidColors())
+            throw new ArgumentException("Invalid cell style colors", nameof(configure));
+
+        Cells.Cells[position] = cell;
+        return cell;
+    }
+
+    public Cell AddCell(CellPosition position, CellValue value, Action<CellBuilder>? configure = null)
+    {
+        var builder = CellBuilder.FromValue(value);
+        configure?.Invoke(builder);
+        var cell = builder.Build();
+
+        if (!cell.Style.HasValidColors())
+            throw new ArgumentException("Invalid cell style colors");
+
+        Cells.Cells[position] = cell;
+        return cell;
+    }
+
+
+
+    private Cell AddCellLegacy(CellPosition position, CellValue value, string? color = null, CellFont? font = null,
         CellBorders? borders = null)
     {
         if (!color.IsValidColor())
@@ -51,7 +79,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-            AddCell(new(x, y), value);
+            AddCellLegacy(new(x, y), value);
         else
             Cells.Cells[position] = cell.SetValue(value);
         
@@ -61,7 +89,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-             AddCell(new(x, y), string.Empty, font: font);
+             AddCellLegacy(new(x, y), string.Empty, font: font);
         else
             Cells.Cells[position] = cell.SetFont(font);
     }
@@ -71,18 +99,17 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-            AddCell(new(x, y), string.Empty, color: color);
+            AddCellLegacy(new(x, y), string.Empty, color: color);
         else
             Cells.Cells[position] = cell.SetColor(color);
     }
     
 
-
     public void SetBorders(uint x, uint y, CellBorders borders)
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-             AddCell(new(x, y), string.Empty, borders: borders);
+             AddCellLegacy(new(x, y), string.Empty, borders: borders);
         else
             Cells.Cells[position] = cell.SetBorders(borders);
     }
@@ -97,7 +124,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-            AddCell(new(x, y), string.Empty);
+            AddCellLegacy(new(x, y), string.Empty);
         else
         {
             cell = cell.SetDefaultFormatting();

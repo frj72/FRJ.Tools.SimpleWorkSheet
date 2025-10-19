@@ -24,7 +24,7 @@ public class WorkSheetTests
         var position = new CellPosition(1, 1);
         var value = new CellValue("TestValue");
 
-        Assert.Throws<ArgumentException>(() => sheet.AddCell(position, value, "invalidColor"));
+        Assert.Throws<ArgumentException>(() => sheet.AddCell(position, value, builder => builder.WithColor("invalidColor")));
     }
 
     [Fact]

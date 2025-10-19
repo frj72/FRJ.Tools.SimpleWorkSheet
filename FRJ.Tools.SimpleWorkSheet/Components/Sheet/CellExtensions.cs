@@ -13,31 +13,31 @@ public static class CellExtensions
     {
         if (!font.HasValidColor())
             throw new ArgumentException("Invalid font color format", nameof(font));
-        return cell with { Font = font };
+        return cell with { Style = cell.Style.WithFont(font) };
     }
     
     public static Cell SetColor(this Cell cell, string color)
     {
         if (!color.IsValidColor())
             throw new ArgumentException("Invalid color format", nameof(color));
-        return cell with { Color = color };
+        return cell with { Style = cell.Style.WithFillColor(color) };
     }
     
     public static Cell SetBorders(this Cell cell, CellBorders borders)
     {
         if (!borders.HasValidColors())
             throw new ArgumentException("Invalid border color format", nameof(borders));
-        return cell with { Borders = borders };
+        return cell with { Style = cell.Style.WithBorders(borders) };
     }
     
     public static Cell SetBorders(this Cell cell, CellBorder borders)
     {
-        return cell with { Borders = CellBorders.Create(borders, borders, borders, borders) };
+        return cell with { Style = cell.Style.WithBorders(CellBorders.Create(borders, borders, borders, borders)) };
     }
     
     public static Cell SetDefaultFormatting(this Cell cell)
     {
-        return cell with { Color = WorkSheetDefaults.Color, Font = WorkSheetDefaults.Font, Borders = WorkSheetDefaults.CellBorders };
+        return cell with { Style = WorkSheetDefaults.DefaultCellStyle };
     }
 
     public static double EstimateMaxWidth(this IEnumerable<Cell> cells)

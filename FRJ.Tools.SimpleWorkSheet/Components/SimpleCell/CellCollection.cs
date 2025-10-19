@@ -4,8 +4,5 @@ public class CellCollection
 {
     public Dictionary<CellPosition, Cell> Cells { get; } = new();
 
-    public void SetCell(CellPosition position, Cell cell)
-    {
-        Cells[position] = cell;
-    }
+    public void SetCell(CellPosition position, Cell cell) => Cells[position] = cell;
 }

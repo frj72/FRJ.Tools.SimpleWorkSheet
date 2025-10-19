@@ -6,36 +6,41 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public record Cell
 {
+    public Cell(CellValue Value, CellStyle Style, CellMetadata? Metadata = null)
+    {
+        this.Value = Value;
+        this.Style = Style;
+        this.Metadata = Metadata;
+    }
+
     public Cell(CellValue Value, string? Color, CellFont? Font, CellBorders? Borders, string? FormatCode)
     {
         this.Value = Value;
-        this.Color = Color;
-        this.Font = Font;
-        this.Borders = Borders;
-        this.FormatCode = FormatCode ?? Value.CellValueType() switch
+        var formatCode = FormatCode ?? Value.CellValueType() switch
         {
             CellValueBasicType.DateType => DateFormat.IsoDateTime.ToExcelFormatString(),
             CellValueBasicType.FloatingPointNumber => NumberFormat.Float3.ToExcelFormatString(),
             CellValueBasicType.IntegerNumber => NumberFormat.Integer.ToExcelFormatString(),
             _ => null
         };
+        Style = CellStyle.Create(Color, Font, Borders, formatCode);
+        Metadata = null;
     }
-    public static Cell Create(CellValue value, string? color = null, CellFont? font = null, CellBorders? borders = null, string? formatCode = null)
-    {
-        return new(value, color ?? WorkSheetDefaults.FillColor, font ?? WorkSheetDefaults.Font,
+
+    public static Cell Create(CellValue value, string? color = null, CellFont? font = null, CellBorders? borders = null, string? formatCode = null) =>
+        new(value, color ?? WorkSheetDefaults.FillColor, font ?? WorkSheetDefaults.Font,
             borders ?? WorkSheetDefaults.CellBorders, formatCode);
-    }
-    
-    public static Cell CreateEmpty()
-    {
-        return Create(string.Empty);
-    }
-    
+
+    public static Cell CreateEmpty() => Create(string.Empty);
+
     public CellValue Value { get; init; }
-    public string? Color { get; init; }
-    public CellFont? Font { get; init; }
-    public CellBorders? Borders { get; init; }
-    public string? FormatCode { get; init; }
+    public CellStyle Style { get; init; }
+    public CellMetadata? Metadata { get; init; }
+
+    public string? Color => Style.FillColor;
+    public CellFont? Font => Style.Font;
+    public CellBorders? Borders => Style.Borders;
+    public string? FormatCode => Style.FormatCode;
 };
 
 public static class CellExtensions
