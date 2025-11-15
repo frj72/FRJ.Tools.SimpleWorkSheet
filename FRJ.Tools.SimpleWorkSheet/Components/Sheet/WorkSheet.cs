@@ -13,6 +13,8 @@ public class WorkSheet
     public CellCollection Cells { get; }
     
     public Dictionary<uint, OneOf<double, CellWidth>> ExplicitColumnWidths { get; } = new();
+    public Dictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights { get; } = new();
+    public FreezePane? FrozenPane { get; private set; }
 
     public WorkSheet(string name)
     {
@@ -135,6 +137,26 @@ public class WorkSheet
     public  void SetColumnWith(uint column, OneOf<double, CellWidth> width)
     {
         ExplicitColumnWidths[column] = width;
+    }
+
+    public void SetRowHeight(uint row, OneOf<double, RowHeight> height)
+    {
+        ExplicitRowHeights[row] = height;
+    }
+
+    public void FreezePanes(uint row, uint column)
+    {
+        FrozenPane = new FreezePane(row, column);
+    }
+
+    public void FreezeRows(uint row)
+    {
+        FrozenPane = new FreezePane(row, 0);
+    }
+
+    public void FreezeColumns(uint column)
+    {
+        FrozenPane = new FreezePane(0, column);
     }
 
     public HashSet<int> GetAllFontSizes()

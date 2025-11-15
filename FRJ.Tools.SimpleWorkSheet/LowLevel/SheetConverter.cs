@@ -49,6 +49,15 @@ public class SheetConverter
                 {
                     var row = new Row { RowIndex = rowGroup.Key + 1 };
 
+                    if (workSheet.ExplicitRowHeights.TryGetValue(rowGroup.Key, out var rowHeight))
+                    {
+                        if (rowHeight.IsT0)
+                        {
+                            row.Height = rowHeight.AsT0;
+                            row.CustomHeight = true;
+                        }
+                    }
+
                     foreach (var cellEntry in rowGroup.OrderBy(ce => ce.Key.X))
                     {
                         var position = cellEntry.Key;
@@ -102,6 +111,43 @@ public class SheetConverter
 
                 if (columns.Any())
                     worksheetPart.Worksheet.InsertAt(columns, 0);
+
+                if (workSheet.FrozenPane != null)
+                {
+                    var sheetViews = new SheetViews();
+                    var sheetView = new SheetView { WorkbookViewId = 0 };
+                    
+                    var pane = new Pane
+                    {
+                        TopLeftCell = GetCellReference(new(workSheet.FrozenPane.Column, workSheet.FrozenPane.Row)),
+                        State = PaneStateValues.Frozen
+                    };
+                    
+                    if (workSheet.FrozenPane.Column > 0)
+                        pane.HorizontalSplit = (double)workSheet.FrozenPane.Column;
+                    
+                    if (workSheet.FrozenPane.Row > 0)
+                        pane.VerticalSplit = (double)workSheet.FrozenPane.Row;
+                    
+                    var activePane = (workSheet.FrozenPane.Row > 0, workSheet.FrozenPane.Column > 0) switch
+                    {
+                        (true, true) => PaneValues.BottomRight,
+                        (true, false) => PaneValues.BottomLeft,
+                        (false, true) => PaneValues.TopRight,
+                        _ => PaneValues.TopLeft
+                    };
+                    pane.ActivePane = activePane;
+                    
+                    sheetView.Append(pane);
+                    
+                    var selection = new Selection { Pane = activePane };
+                    sheetView.Append(selection);
+                    
+                    sheetViews.Append(sheetView);
+                    
+                    worksheetPart.Worksheet.InsertBefore(sheetViews, sheetData);
+                }
+
                 worksheetPart.Worksheet.Save();
                 var sheet = new Sheet
                 {

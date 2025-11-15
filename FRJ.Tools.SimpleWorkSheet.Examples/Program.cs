@@ -44,7 +44,9 @@ public static class Program
             new CountFormulaExample(),
             new MinMaxFormulaExample(),
             new JsonArrayImportExample(),
-            new JsonSparseArrayImportExample()
+            new JsonSparseArrayImportExample(),
+            new RowHeightExample(),
+            new FreezePanesExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
