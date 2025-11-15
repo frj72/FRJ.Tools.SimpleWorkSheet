@@ -146,17 +146,17 @@ public class WorkSheet
 
     public void FreezePanes(uint row, uint column)
     {
-        FrozenPane = new FreezePane(row, column);
+        FrozenPane = new(row, column);
     }
 
     public void FreezeRows(uint row)
     {
-        FrozenPane = new FreezePane(row, 0);
+        FrozenPane = new(row, 0);
     }
 
     public void FreezeColumns(uint column)
     {
-        FrozenPane = new FreezePane(0, column);
+        FrozenPane = new(0, column);
     }
 
     public HashSet<int> GetAllFontSizes()

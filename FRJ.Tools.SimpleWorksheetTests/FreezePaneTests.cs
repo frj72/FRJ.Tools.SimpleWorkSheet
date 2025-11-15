@@ -64,28 +64,25 @@ public class FreezePaneTests
         Assert.Equal(3u, sheet.FrozenPane.Column);
     }
 
+    private static readonly string[] SourceArrayHeaders = ["Column A", "Column B", "Column C", "Column D", "Column E"];
+
     [Fact]
     public void FreezePanes_CreatesValidExcelFile()
     {
         var sheet = new WorkSheet("FreezePanes");
         
-        var headers = new[] { "Column A", "Column B", "Column C", "Column D", "Column E" }
-            .Select(h => new CellValue(h));
+        var headers = SourceArrayHeaders.Select(h => new CellValue(h));
         sheet.AddRow(0, 0, headers, cell => cell
             .WithFont(font => font.Bold())
             .WithColor("4472C4"));
         
         for (uint row = 1; row < 20; row++)
-        {
-            for (uint col = 0; col < 5; col++)
-            {
-                sheet.AddCell(new CellPosition(col, row), $"R{row}C{col}");
-            }
-        }
-        
+        for (uint col = 0; col < 5; col++)
+            sheet.AddCell(new(col, row), $"R{row}C{col}");
+
         sheet.FreezePanes(1, 0);
         
-        var workbook = new WorkBook("Test", new[] { sheet });
+        var workbook = new WorkBook("Test", [sheet]);
         var bytes = SheetConverter.ToBinaryExcelFile(workbook);
         
         Assert.NotEmpty(bytes);
@@ -108,16 +105,12 @@ public class FreezePaneTests
             var sheet = new WorkSheet(name);
             
             for (uint r = 0; r < 10; r++)
-            {
-                for (uint c = 0; c < 5; c++)
-                {
-                    sheet.AddCell(new CellPosition(c, r), $"R{r}C{c}");
-                }
-            }
-            
+            for (uint c = 0; c < 5; c++)
+                sheet.AddCell(new(c, r), $"R{r}C{c}");
+
             sheet.FreezePanes(row, col);
             
-            var workbook = new WorkBook("Test", new[] { sheet });
+            var workbook = new WorkBook("Test", [sheet]);
             var bytes = SheetConverter.ToBinaryExcelFile(workbook);
             
             Assert.NotEmpty(bytes);

@@ -50,13 +50,11 @@ public class SheetConverter
                     var row = new Row { RowIndex = rowGroup.Key + 1 };
 
                     if (workSheet.ExplicitRowHeights.TryGetValue(rowGroup.Key, out var rowHeight))
-                    {
                         if (rowHeight.IsT0)
                         {
                             row.Height = rowHeight.AsT0;
                             row.CustomHeight = true;
                         }
-                    }
 
                     foreach (var cellEntry in rowGroup.OrderBy(ce => ce.Key.X))
                     {
