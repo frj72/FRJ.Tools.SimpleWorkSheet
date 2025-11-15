@@ -1,4 +1,3 @@
-using System.Globalization;
 using FRJ.Tools.SimpleWorkSheet.Components.Formatting;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
@@ -41,38 +40,4 @@ public record Cell
     public CellFont? Font => Style.Font;
     public CellBorders? Borders => Style.Borders;
     public string? FormatCode => Style.FormatCode;
-};
-
-public static class CellExtensions
-{
-    public static double CalculateApproximateWith(this Cell cell)
-    {
-        var cellFont = cell.Font ?? WorkSheetDefaults.Font;
-        var fontSize = cellFont.Size ?? WorkSheetDefaults.FontSize;
-        if (cell.Value.IsCellFormula())
-            return -1;
-        if (cell.Value.IsDateTime() || cell.Value.IsDateTimeOffset())
-        {
-            return GetTextWidth(fontSize, 19);
-        }
-        if (cell.Value.IsDecimal())
-        {
-            var text = cell.Value.AsDecimal().ToString(CultureInfo.InvariantCulture);
-            var textb = cell.Value.AsDecimal().ToString("F3");
-            return GetTextWidth(fontSize, Math.Min(text.Length, textb.Length));
-        }
-        if (cell.Value.IsLong())
-        {
-            var text = cell.Value.AsLong().ToString(CultureInfo.InvariantCulture);
-            return GetTextWidth(fontSize, text.Length);
-        }
-        if (cell.Value.IsString())
-        {
-            return GetTextWidth(fontSize, cell.Value.AsString().Length);
-        }
-
-        return -1;
-    }
-    
-    public static double GetTextWidth(int fontSize, int textLength) => fontSize / 11.0 * 7.0 * textLength / 7.5;
 }

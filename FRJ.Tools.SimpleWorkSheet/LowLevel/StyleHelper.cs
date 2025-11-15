@@ -1,7 +1,5 @@
-using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
-using FRJ.Tools.SimpleWorkSheet.Components.Formatting;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using Cell = FRJ.Tools.SimpleWorkSheet.Components.SimpleCell.Cell;
@@ -13,7 +11,7 @@ namespace FRJ.Tools.SimpleWorkSheet.LowLevel;
 public class StyleHelper
 {
     private readonly List<Font> _fonts =  [new()];
-    private readonly List<Fill> _fills = [new(new PatternFill { PatternType = PatternValues.None }), new(new PatternFill() { PatternType = PatternValues.Gray125 }) ];
+    private readonly List<Fill> _fills = [new(new PatternFill { PatternType = PatternValues.None }), new(new PatternFill { PatternType = PatternValues.Gray125 }) ];
     private readonly Dictionary<string, uint> _fillIndexDictionary = new();
     private readonly List<Border> _borders = [new()];
     private readonly NumberingFormatsProvider _numberingFormatsProvider = new ();
@@ -27,7 +25,7 @@ public class StyleHelper
             BorderId = 0,
             ApplyFont = false,
             ApplyFill = false,
-            ApplyBorder = false,
+            ApplyBorder = false
         }];
     private readonly Dictionary<StyleDefinition, uint> _styleIndexDictionary = new();
 
@@ -36,40 +34,38 @@ public class StyleHelper
     public void CollectStyles(WorkBook workBook)
     {
         foreach (var workSheet in workBook.Sheets)
+        foreach (var cellEntry in workSheet.Cells.Cells)
         {
-            foreach (var cellEntry in workSheet.Cells.Cells)
+            var cell = cellEntry.Value;
+
+            var styleDef = new StyleDefinition
             {
-                var cell = cellEntry.Value;
+                FillColor = cell.Color,
+                Font = cell.Font ?? WorkSheetDefaults.Font,
+                Borders = cell.Borders ?? WorkSheetDefaults.CellBorders, 
+                FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType
+            };
 
-                var styleDef = new StyleDefinition
-                {
-                    FillColor = cell.Color,
-                    Font = cell.Font ?? WorkSheetDefaults.Font,
-                    Borders = cell.Borders ?? WorkSheetDefaults.CellBorders, 
-                    FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType
-                };
+            if (_styleIndexDictionary.ContainsKey(styleDef)) continue;
+            var fontId = AddFont(styleDef.Font);
+            var fillId = AddFill(styleDef.FillColor);
+            var borderId = AddBorder(styleDef.Borders);
 
-                if (_styleIndexDictionary.ContainsKey(styleDef)) continue;
-                var fontId = AddFont(styleDef.Font);
-                var fillId = AddFill(styleDef.FillColor);
-                var borderId = AddBorder(styleDef.Borders);
-
-                var cellFormat = new CellFormat
-                {
-                    FontId = fontId,
-                    FillId = fillId,
-                    BorderId = borderId,
-                    ApplyFont = fontId != 0,
-                    ApplyFill = fillId != 0,
-                    ApplyBorder = borderId != 0,
-                    NumberFormatId = styleDef.FormatAsDate ? 164 : null,
-                    ApplyNumberFormat = styleDef.FormatAsDate ? true : null
-                };
+            var cellFormat = new CellFormat
+            {
+                FontId = fontId,
+                FillId = fillId,
+                BorderId = borderId,
+                ApplyFont = fontId != 0,
+                ApplyFill = fillId != 0,
+                ApplyBorder = borderId != 0,
+                NumberFormatId = styleDef.FormatAsDate ? 164 : null,
+                ApplyNumberFormat = styleDef.FormatAsDate ? true : null
+            };
                     
-                _cellFormats.Add(cellFormat);
-                var styleIndex = (uint)_cellFormats.Count - 1;
-                _styleIndexDictionary.Add(styleDef, styleIndex);
-            }
+            _cellFormats.Add(cellFormat);
+            var styleIndex = (uint)_cellFormats.Count - 1;
+            _styleIndexDictionary.Add(styleDef, styleIndex);
         }
     }
 
@@ -130,23 +126,24 @@ public class StyleHelper
         if (string.IsNullOrEmpty(fillColor))
             return 0;
 
-        var fillKey = fillColor;
-
-        if (fillKey == Colors.White)
+        if (fillColor == Colors.White)
             return 0;
 
-        if (_fillIndexDictionary.TryGetValue(fillKey, out var fillId))
+        if (_fillIndexDictionary.TryGetValue(fillColor, out var fillId))
             return fillId;
         
         var fill = new Fill();
-        var patternFill = new PatternFill() { PatternType = PatternValues.Solid };
-        patternFill.ForegroundColor = new() { Rgb = new(fillKey) };
-        patternFill.BackgroundColor = new() { Indexed = 64 };
+        var patternFill = new PatternFill
+        {
+            PatternType = PatternValues.Solid,
+            ForegroundColor = new() { Rgb = new(fillColor) },
+            BackgroundColor = new() { Indexed = 64 }
+        };
         fill.PatternFill = patternFill;
 
         _fills.Add(fill);
         fillId = (uint)(_fills.Count - 1);
-        _fillIndexDictionary[fillKey] = fillId;
+        _fillIndexDictionary[fillColor] = fillId;
 
         return fillId;
     }
@@ -165,7 +162,7 @@ public class StyleHelper
         return (uint)(_borders.Count - 1);
     }
 
-    private T CreateBorderStyle<T>(CellBorder? borderDef) where T : BorderPropertiesType, new()
+    private static T CreateBorderStyle<T>(CellBorder? borderDef) where T : BorderPropertiesType, new()
     {
         var borderProp = new T();
 
@@ -173,12 +170,10 @@ public class StyleHelper
         borderProp.Style = MapBorderStyle(borderDef.Style);
 
         if (!string.IsNullOrEmpty(borderDef.Color))
-        {
             borderProp.Color = new()
             {
                 Rgb = new(borderDef.Color)
             };
-        }
 
         return borderProp;
     }
@@ -199,58 +194,6 @@ public class StyleHelper
             CellBorderStyle.SlantDashDot => BorderStyleValues.SlantDashDot,
             CellBorderStyle.Thick => BorderStyleValues.Thick,
             CellBorderStyle.Thin => BorderStyleValues.Thin,
-            CellBorderStyle.None => BorderStyleValues.None,
             _ => BorderStyleValues.None
         };
-}
-
-public class NumberingFormatsProvider
-{
-    private readonly List<NumberingFormat> _internalNumberingFormats =
-    [ 
-        new() { NumberFormatId = DateFormat.IsoDateTime.ToExcelFormatId(), FormatCode = DateFormat.IsoDateTime.ToExcelFormatString() },
-        new() { NumberFormatId = DateFormat.IsoDate.ToExcelFormatId(), FormatCode = DateFormat.IsoDate.ToExcelFormatString() },
-        new() { NumberFormatId = DateFormat.DateTime.ToExcelFormatId(), FormatCode = DateFormat.DateTime.ToExcelFormatString() },
-        new() { NumberFormatId = DateFormat.DateOnly.ToExcelFormatId(), FormatCode = DateFormat.DateOnly.ToExcelFormatString() },
-        new() { NumberFormatId = DateFormat.TimeOnly.ToExcelFormatId(), FormatCode = DateFormat.TimeOnly.ToExcelFormatString() },
-        new() { NumberFormatId = NumberFormat.Integer.ToExcelFormatId(), FormatCode = NumberFormat.Integer.ToExcelFormatString() },
-        new() { NumberFormatId = NumberFormat.Float2.ToExcelFormatId(), FormatCode = NumberFormat.Float2.ToExcelFormatString() },
-        new() { NumberFormatId = NumberFormat.Float3.ToExcelFormatId(), FormatCode = NumberFormat.Float3.ToExcelFormatString() },
-        new() { NumberFormatId = NumberFormat.Float4.ToExcelFormatId(), FormatCode = NumberFormat.Float4.ToExcelFormatString() }
-    ];
-    
-    public NumberingFormats NumberingFormats()
-    {
-        NumberingFormats numberingFormats = new() { Count = (uint)_internalNumberingFormats.Count };
-        numberingFormats.Append(_internalNumberingFormats);
-        return numberingFormats;
-    }
-
-    public uint GetOrCreateNumberFormatId(string formatCode)
-    {
-        var existing = _internalNumberingFormats.FirstOrDefault(nf => nf.FormatCode == formatCode);
-        if (existing != null && existing.NumberFormatId != null)
-            return existing.NumberFormatId;
-
-        var newId = (uint)_internalNumberingFormats.Count + 164;
-        _internalNumberingFormats.Add(new() { NumberFormatId = newId, FormatCode = formatCode });
-        return newId;
-    }
-
-    public uint GetOrCreateNumberFormatId(Cell cell)
-    {
-        if (cell.FormatCode is not null)
-            return GetOrCreateNumberFormatId(cell.FormatCode);
-        
-        if (cell.Value.IsDateTime() || cell.Value.IsDateTimeOffset())
-            return DateFormat.IsoDateTime.ToExcelFormatId();
-
-        if (cell.Value.IsDecimal())
-            return NumberFormat.Float2.ToExcelFormatId();
-
-        if (cell.Value.IsLong())
-            return NumberFormat.Integer.ToExcelFormatId();
-
-        return 0;
-    }
 }

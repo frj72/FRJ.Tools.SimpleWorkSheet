@@ -17,15 +17,13 @@ public class CellMetadataBuilder
 
     public CellMetadataBuilder(CellMetadata? existingMetadata)
     {
-        if (existingMetadata != null)
-        {
-            _source = existingMetadata.Source;
-            _importedAt = existingMetadata.ImportedAt;
-            _originalValue = existingMetadata.OriginalValue;
-            _customData = existingMetadata.CustomData != null 
-                ? new(existingMetadata.CustomData) 
-                : null;
-        }
+        if (existingMetadata == null) return;
+        _source = existingMetadata.Source;
+        _importedAt = existingMetadata.ImportedAt;
+        _originalValue = existingMetadata.OriginalValue;
+        _customData = existingMetadata.CustomData != null 
+            ? new(existingMetadata.CustomData) 
+            : null;
     }
 
     public CellMetadataBuilder WithSource(string? source)

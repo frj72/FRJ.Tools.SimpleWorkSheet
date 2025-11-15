@@ -1,5 +1,3 @@
-using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-
 namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public class CellStyleBuilder
@@ -19,13 +17,11 @@ public class CellStyleBuilder
 
     public CellStyleBuilder(CellStyle? existingStyle)
     {
-        if (existingStyle != null)
-        {
-            _fillColor = existingStyle.FillColor;
-            _font = existingStyle.Font;
-            _borders = existingStyle.Borders;
-            _formatCode = existingStyle.FormatCode;
-        }
+        if (existingStyle == null) return;
+        _fillColor = existingStyle.FillColor;
+        _font = existingStyle.Font;
+        _borders = existingStyle.Borders;
+        _formatCode = existingStyle.FormatCode;
     }
 
     public CellStyleBuilder WithFillColor(string? fillColor)

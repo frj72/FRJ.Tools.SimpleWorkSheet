@@ -5,6 +5,7 @@ using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using Cell = DocumentFormat.OpenXml.Spreadsheet.Cell;
+// ReSharper disable UnusedMember.Global
 
 namespace FRJ.Tools.SimpleWorkSheet.LowLevel;
 
@@ -128,7 +129,7 @@ public class SheetConverter
     private static string GetExcelColumnName(uint columnNumber)
     {
         var dividend = columnNumber;
-        var columnName = String.Empty;
+        var columnName = string.Empty;
 
         while (dividend > 0)
         {

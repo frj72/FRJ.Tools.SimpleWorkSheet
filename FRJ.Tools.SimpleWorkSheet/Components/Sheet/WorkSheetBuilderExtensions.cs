@@ -4,69 +4,72 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public static class WorkSheetBuilderExtensions
 {
-    public static Cell AddCell(this WorkSheet sheet, uint x, uint y, Action<CellBuilder> configure)
+    extension(WorkSheet sheet)
     {
-        return sheet.AddCell(new CellPosition(x, y), configure);
-    }
-
-    public static Cell AddCell(this WorkSheet sheet, uint x, uint y, CellValue value, Action<CellBuilder>? configure = null)
-    {
-        return sheet.AddCell(new CellPosition(x, y), value, configure);
-    }
-
-    public static Cell AddStyledCell(this WorkSheet sheet, CellPosition position, CellValue value, CellStyle style)
-    {
-        return sheet.AddCell(position, value, cell => cell.WithStyle(style));
-    }
-
-    public static Cell AddStyledCell(this WorkSheet sheet, uint x, uint y, CellValue value, CellStyle style)
-    {
-        return sheet.AddCell(new CellPosition(x, y), value, cell => cell.WithStyle(style));
-    }
-
-    public static IEnumerable<Cell> AddRow(this WorkSheet sheet, uint row, uint startColumn, IEnumerable<CellValue> values, Action<CellBuilder>? configure = null)
-    {
-        var cells = new List<Cell>();
-        var column = startColumn;
-        
-        foreach (var value in values)
+        public Cell AddCell(uint x, uint y, Action<CellBuilder> configure)
         {
-            var cell = sheet.AddCell(column, row, value, configure);
-            cells.Add(cell);
-            column++;
+            return sheet.AddCell(new(x, y), configure);
         }
-        
-        return cells;
-    }
 
-    public static IEnumerable<Cell> AddColumn(this WorkSheet sheet, uint column, uint startRow, IEnumerable<CellValue> values, Action<CellBuilder>? configure = null)
-    {
-        var cells = new List<Cell>();
-        var row = startRow;
-        
-        foreach (var value in values)
+        public Cell AddCell(uint x, uint y, CellValue value, Action<CellBuilder>? configure = null)
         {
-            var cell = sheet.AddCell(column, row, value, configure);
-            cells.Add(cell);
-            row++;
+            return sheet.AddCell(new(x, y), value, configure);
         }
-        
-        return cells;
-    }
 
-    public static Cell UpdateCell(this WorkSheet sheet, uint x, uint y, Action<CellBuilder> configure)
-    {
-        var position = new CellPosition(x, y);
-        var existingCell = sheet.Cells.Cells.TryGetValue(position, out var cell) ? cell : Cell.CreateEmpty();
+        public Cell AddStyledCell(CellPosition position, CellValue value, CellStyle style)
+        {
+            return sheet.AddCell(position, value, cell => cell.WithStyle(style));
+        }
+
+        public Cell AddStyledCell(uint x, uint y, CellValue value, CellStyle style)
+        {
+            return sheet.AddCell(new(x, y), value, cell => cell.WithStyle(style));
+        }
+
+        public IEnumerable<Cell> AddRow(uint row, uint startColumn, IEnumerable<CellValue> values, Action<CellBuilder>? configure = null)
+        {
+            var cells = new List<Cell>();
+            var column = startColumn;
         
-        var builder = CellBuilder.FromCell(existingCell);
-        configure(builder);
-        var updatedCell = builder.Build();
+            foreach (var value in values)
+            {
+                var cell = sheet.AddCell(column, row, value, configure);
+                cells.Add(cell);
+                column++;
+            }
         
-        if (!updatedCell.Style.HasValidColors())
-            throw new ArgumentException("Invalid cell style colors", nameof(configure));
+            return cells;
+        }
+
+        public IEnumerable<Cell> AddColumn(uint column, uint startRow, IEnumerable<CellValue> values, Action<CellBuilder>? configure = null)
+        {
+            var cells = new List<Cell>();
+            var row = startRow;
         
-        sheet.Cells.Cells[position] = updatedCell;
-        return updatedCell;
+            foreach (var value in values)
+            {
+                var cell = sheet.AddCell(column, row, value, configure);
+                cells.Add(cell);
+                row++;
+            }
+        
+            return cells;
+        }
+
+        public Cell UpdateCell(uint x, uint y, Action<CellBuilder> configure)
+        {
+            var position = new CellPosition(x, y);
+            var existingCell = sheet.Cells.Cells.TryGetValue(position, out var cell) ? cell : Cell.CreateEmpty();
+        
+            var builder = CellBuilder.FromCell(existingCell);
+            configure(builder);
+            var updatedCell = builder.Build();
+        
+            if (!updatedCell.Style.HasValidColors())
+                throw new ArgumentException("Invalid cell style colors", nameof(configure));
+        
+            sheet.Cells.Cells[position] = updatedCell;
+            return updatedCell;
+        }
     }
 }

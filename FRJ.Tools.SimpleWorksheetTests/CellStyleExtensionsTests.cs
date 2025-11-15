@@ -13,7 +13,7 @@ public class CellStyleExtensionsTests
             CellBorder.Create("00FF00", CellBorderStyle.Thin),
             CellBorder.Create("0000FF", CellBorderStyle.Thin),
             CellBorder.Create("FFFF00", CellBorderStyle.Thin));
-        var style = CellStyle.Create("FFFFFF", font, borders, null);
+        var style = CellStyle.Create("FFFFFF", font, borders);
 
         var result = style.HasValidColors();
 
@@ -23,7 +23,7 @@ public class CellStyleExtensionsTests
     [Fact]
     public void HasValidColors_WithInvalidFillColor_ReturnsFalse()
     {
-        var style = CellStyle.Create("invalidColor", null, null, null);
+        var style = CellStyle.Create("invalidColor");
 
         var result = style.HasValidColors();
 
@@ -34,7 +34,7 @@ public class CellStyleExtensionsTests
     public void HasValidColors_WithInvalidFontColor_ReturnsFalse()
     {
         var font = CellFont.Create(12, "Arial", "invalidColor");
-        var style = CellStyle.Create("FFFFFF", font, null, null);
+        var style = CellStyle.Create("FFFFFF", font);
 
         var result = style.HasValidColors();
 
@@ -49,7 +49,7 @@ public class CellStyleExtensionsTests
             CellBorder.Create("000000", CellBorderStyle.Thin),
             CellBorder.Create("000000", CellBorderStyle.Thin),
             CellBorder.Create("000000", CellBorderStyle.Thin));
-        var style = CellStyle.Create("FFFFFF", null, borders, null);
+        var style = CellStyle.Create("FFFFFF", null, borders);
 
         var result = style.HasValidColors();
 
@@ -60,9 +60,7 @@ public class CellStyleExtensionsTests
     public void HasValidColors_WithNullStyle_ReturnsTrue()
     {
         CellStyle? style = null;
-
         var result = style.HasValidColors();
-
         Assert.True(result);
     }
 
@@ -84,7 +82,7 @@ public class CellStyleExtensionsTests
     public void WithFont_UpdatesFont_KeepsOtherProperties()
     {
         var originalStyle = CellStyle.Create("FFFFFF", null, null, "0.00");
-        var newFont = CellFont.Create(14, "Arial", "000000", true, false, false, false);
+        var newFont = CellFont.Create(14, "Arial", "000000", true);
         
         var updatedStyle = originalStyle.WithFont(newFont);
 
@@ -114,7 +112,7 @@ public class CellStyleExtensionsTests
     public void WithFormatCode_UpdatesFormatCode_KeepsOtherProperties()
     {
         var font = CellFont.Create(12, "Arial", "000000");
-        var originalStyle = CellStyle.Create("FFFFFF", font, null, null);
+        var originalStyle = CellStyle.Create("FFFFFF", font);
         
         var updatedStyle = originalStyle.WithFormatCode("0.000");
 
@@ -126,7 +124,7 @@ public class CellStyleExtensionsTests
     [Fact]
     public void ChainedWith_UpdatesMultipleProperties()
     {
-        var originalStyle = CellStyle.Create(null, null, null, null);
+        var originalStyle = CellStyle.Create();
         var font = CellFont.Create(14, "Arial", "000000");
         
         var updatedStyle = originalStyle

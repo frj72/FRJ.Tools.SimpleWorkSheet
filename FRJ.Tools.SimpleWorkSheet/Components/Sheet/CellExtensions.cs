@@ -1,43 +1,47 @@
 using System.Globalization;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using SkiaSharp;
+// ReSharper disable UnusedMember.Global
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public static class CellExtensions
 {
     private const double DefaultWidth = 65.0 / 6.0;
-    public static Cell SetValue(this Cell cell, CellValue value) => cell with { Value = value };
+    extension(Cell cell)
+    {
+        public Cell SetValue(CellValue value) => cell with { Value = value };
 
-    public static Cell SetFont(this Cell cell, CellFont font)
-    {
-        if (!font.HasValidColor())
-            throw new ArgumentException("Invalid font color format", nameof(font));
-        return cell with { Style = cell.Style.WithFont(font) };
-    }
-    
-    public static Cell SetColor(this Cell cell, string color)
-    {
-        if (!color.IsValidColor())
-            throw new ArgumentException("Invalid color format", nameof(color));
-        return cell with { Style = cell.Style.WithFillColor(color) };
-    }
-    
-    public static Cell SetBorders(this Cell cell, CellBorders borders)
-    {
-        if (!borders.HasValidColors())
-            throw new ArgumentException("Invalid border color format", nameof(borders));
-        return cell with { Style = cell.Style.WithBorders(borders) };
-    }
-    
-    public static Cell SetBorders(this Cell cell, CellBorder borders)
-    {
-        return cell with { Style = cell.Style.WithBorders(CellBorders.Create(borders, borders, borders, borders)) };
-    }
-    
-    public static Cell SetDefaultFormatting(this Cell cell)
-    {
-        return cell with { Style = WorkSheetDefaults.DefaultCellStyle };
+        public Cell SetFont(CellFont font)
+        {
+            if (!font.HasValidColor())
+                throw new ArgumentException("Invalid font color format", nameof(font));
+            return cell with { Style = cell.Style.WithFont(font) };
+        }
+
+        public Cell SetColor(string color)
+        {
+            if (!color.IsValidColor())
+                throw new ArgumentException("Invalid color format", nameof(color));
+            return cell with { Style = cell.Style.WithFillColor(color) };
+        }
+
+        public Cell SetBorders(CellBorders borders)
+        {
+            if (!borders.HasValidColors())
+                throw new ArgumentException("Invalid border color format", nameof(borders));
+            return cell with { Style = cell.Style.WithBorders(borders) };
+        }
+
+        public Cell SetBorders(CellBorder borders)
+        {
+            return cell with { Style = cell.Style.WithBorders(CellBorders.Create(borders, borders, borders, borders)) };
+        }
+
+        public Cell SetDefaultFormatting()
+        {
+            return cell with { Style = WorkSheetDefaults.DefaultCellStyle };
+        }
     }
 
     public static double EstimateMaxWidth(this IEnumerable<Cell> cells)

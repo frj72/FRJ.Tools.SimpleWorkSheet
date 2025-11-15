@@ -1,4 +1,10 @@
-using FRJ.Tools.SimpleWorkSheet.Examples.Examples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.BasicExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.BatchExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.FormulaExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.IntegrationExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.StylingExamples;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 
 namespace FRJ.Tools.SimpleWorkSheet.Examples;
@@ -36,7 +42,9 @@ public static class Program
             new ConditionalFormulaExample(),
             new MultiRangeFormulaExample(),
             new CountFormulaExample(),
-            new MinMaxFormulaExample()
+            new MinMaxFormulaExample(),
+            new JsonArrayImportExample(),
+            new JsonSparseArrayImportExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

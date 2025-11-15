@@ -12,7 +12,7 @@ public static class ExampleRunner
         
         var filePath = Path.Combine(outputDir, filename);
         
-        var workBook = new WorkBook("Examples", new[] { sheet });
+        var workBook = new WorkBook("Examples", [sheet]);
         workBook.SaveToFile(filePath);
         
         Console.WriteLine($"Saved: {filePath}");

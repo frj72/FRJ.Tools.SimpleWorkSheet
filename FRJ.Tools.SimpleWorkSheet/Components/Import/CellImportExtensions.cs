@@ -4,53 +4,38 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 
 public static class CellImportExtensions
 {
-    public static CellBuilder FromImportedValue(
-        this CellBuilder builder,
-        string rawValue,
-        string source)
+    extension(CellBuilder builder)
     {
-        return builder
-            .WithMetadata(meta => meta
-                .WithSource(source)
-                .WithOriginalValue(rawValue)
-                .WithImportedAt(DateTime.UtcNow));
-    }
-
-    public static CellBuilder FromImportedValue(
-        this CellBuilder builder,
-        string rawValue,
-        ImportOptions options)
-    {
-        var metadataBuilder = builder;
-
-        if (options.PreserveOriginalValue)
+        public CellBuilder FromImportedValue(string rawValue,
+            string source)
         {
-            metadataBuilder = metadataBuilder.WithMetadata(meta => meta
-                .WithOriginalValue(rawValue)
-                .WithImportedAt(DateTime.UtcNow));
+            return builder
+                .WithMetadata(meta => meta
+                    .WithSource(source)
+                    .WithOriginalValue(rawValue)
+                    .WithImportedAt(DateTime.UtcNow));
         }
 
-        if (!string.IsNullOrEmpty(options.SourceIdentifier))
+        public CellBuilder FromImportedValue(string rawValue,
+            ImportOptions options)
         {
-            metadataBuilder = metadataBuilder.WithMetadata(meta => meta
-                .WithSource(options.SourceIdentifier));
-        }
+            var metadataBuilder = builder;
 
-        if (options.CustomMetadata != null)
-        {
-            foreach (var kvp in options.CustomMetadata)
-            {
+            if (options.PreserveOriginalValue)
                 metadataBuilder = metadataBuilder.WithMetadata(meta => meta
-                    .AddCustomData(kvp.Key, kvp.Value));
-            }
-        }
+                    .WithOriginalValue(rawValue)
+                    .WithImportedAt(DateTime.UtcNow));
 
-        if (options.DefaultStyle != null)
-        {
-            metadataBuilder = metadataBuilder.WithStyle(options.DefaultStyle);
-        }
+            if (!string.IsNullOrEmpty(options.SourceIdentifier))
+                metadataBuilder = metadataBuilder.WithMetadata(meta => meta
+                    .WithSource(options.SourceIdentifier));
 
-        return metadataBuilder;
+            if (options.CustomMetadata != null) metadataBuilder = options.CustomMetadata.Aggregate(metadataBuilder, (current, kvp) => current.WithMetadata(meta => meta.AddCustomData(kvp.Key, kvp.Value)));
+
+            if (options.DefaultStyle != null) metadataBuilder = metadataBuilder.WithStyle(options.DefaultStyle);
+
+            return metadataBuilder;
+        }
     }
 
     public static string ProcessRawValue(this string rawValue, ImportOptions? options)

@@ -38,7 +38,7 @@ public class CellBuilderTests
     [Fact]
     public void CellBuilder_WithColor_SetsFillColor()
     {
-        var color = "FF0000";
+        const string color = "FF0000";
 
         var cell = CellBuilder.FromValue("Test")
             .WithColor(color)
@@ -59,7 +59,7 @@ public class CellBuilderTests
     [Fact]
     public void CellBuilder_WithFont_SetsFont()
     {
-        var font = CellFont.Create(14, "Arial", "000000", true, false, false, false);
+        var font = CellFont.Create(14, "Arial", "000000", true);
 
         var cell = CellBuilder.FromValue("Test")
             .WithFont(font)
@@ -72,7 +72,7 @@ public class CellBuilderTests
     [Fact]
     public void CellBuilder_WithFont_InvalidFontColor_ThrowsException()
     {
-        var font = CellFont.Create(14, "Arial", "invalidColor", false, false, false, false);
+        var font = CellFont.Create(14, "Arial", "invalidColor");
         var builder = CellBuilder.FromValue("Test");
 
         Assert.Throws<ArgumentException>(() => builder.WithFont(font));
@@ -116,7 +116,7 @@ public class CellBuilderTests
     [Fact]
     public void CellBuilder_WithFormatCode_SetsFormatCode()
     {
-        var formatCode = "0.000";
+        const string formatCode = "0.000";
 
         var cell = CellBuilder.FromValue(123.456m)
             .WithFormatCode(formatCode)
@@ -175,7 +175,7 @@ public class CellBuilderTests
     [Fact]
     public void CellBuilder_WithMetadata_SetsMetadata()
     {
-        var metadata = CellMetadata.Create("json", DateTime.UtcNow, "original", null);
+        var metadata = CellMetadata.Create("json", DateTime.UtcNow, "original");
 
         var cell = CellBuilder.FromValue("Test")
             .WithMetadata(metadata)
@@ -219,7 +219,7 @@ public class CellBuilderTests
         var originalCell = CellBuilder.FromValue("Original")
             .WithColor("FF0000")
             .WithFont(CellFont.Create(12, "Arial", "000000"))
-            .WithMetadata(CellMetadata.Create("csv", DateTime.UtcNow, "raw", null))
+            .WithMetadata(CellMetadata.Create("csv", DateTime.UtcNow, "raw"))
             .Build();
 
         var newCell = CellBuilder.FromCell(originalCell)

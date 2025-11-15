@@ -111,8 +111,10 @@ public class CellBuilder
 
     public static CellBuilder FromValue(CellValue value)
     {
-        var builder = new CellBuilder();
-        builder._value = value;
+        var builder = new CellBuilder
+        {
+            _value = value
+        };
         return builder;
     }
 

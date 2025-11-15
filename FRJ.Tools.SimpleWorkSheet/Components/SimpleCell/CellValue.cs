@@ -1,4 +1,5 @@
 global using CellValueUnion = OneOf.OneOf<decimal, long, string, System.DateTime, System.DateTimeOffset, FRJ.Tools.SimpleWorkSheet.Components.SimpleCell.CellFormula>;
+// ReSharper disable UnusedMember.Global
 namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public class CellValue

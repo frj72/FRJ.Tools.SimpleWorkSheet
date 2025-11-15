@@ -15,7 +15,7 @@ public class CellMetadataBuilderTests
     [Fact]
     public void CellMetadataBuilder_WithSource_SetsSource()
     {
-        var source = "csv";
+        const string source = "csv";
 
         var metadata = CellMetadataBuilder.Create()
             .WithSource(source)
@@ -39,7 +39,7 @@ public class CellMetadataBuilderTests
     [Fact]
     public void CellMetadataBuilder_WithOriginalValue_SetsOriginalValue()
     {
-        var originalValue = "raw_value";
+        const string originalValue = "raw_value";
 
         var metadata = CellMetadataBuilder.Create()
             .WithOriginalValue(originalValue)
@@ -148,7 +148,7 @@ public class CellMetadataBuilderTests
 
         Assert.NotNull(newMetadata.CustomData);
         Assert.Equal(2, newMetadata.CustomData.Count);
-        Assert.Single(originalMetadata.CustomData!);
+        Assert.Single(originalMetadata.CustomData ?? throw new InvalidOperationException());
     }
 
     [Fact]

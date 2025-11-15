@@ -16,7 +16,7 @@ public class CellFontBuilderTests
     [Fact]
     public void CellFontBuilder_WithSize_SetsSize()
     {
-        var size = 16;
+        const int size = 16;
 
         var font = CellFontBuilder.Create()
             .WithSize(size)
@@ -28,7 +28,7 @@ public class CellFontBuilderTests
     [Fact]
     public void CellFontBuilder_WithName_SetsName()
     {
-        var name = "Calibri";
+        const string name = "Calibri";
 
         var font = CellFontBuilder.Create()
             .WithName(name)
@@ -40,7 +40,7 @@ public class CellFontBuilderTests
     [Fact]
     public void CellFontBuilder_WithColor_SetsColor()
     {
-        var color = "FF0000";
+        const string color = "FF0000";
 
         var font = CellFontBuilder.Create()
             .WithColor(color)
@@ -162,7 +162,7 @@ public class CellFontBuilderTests
     [Fact]
     public void CellFontBuilder_FromFont_CopiesAllProperties()
     {
-        var originalFont = CellFont.Create(14, "Arial", "FF0000", true, false, true, false);
+        var originalFont = CellFont.Create(14, "Arial", "FF0000", true, false, true);
 
         var newFont = CellFontBuilder.FromFont(originalFont)
             .WithSize(16)

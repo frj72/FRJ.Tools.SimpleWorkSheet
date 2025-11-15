@@ -1,6 +1,7 @@
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using OneOf;
 using ArgumentException = System.ArgumentException;
+// ReSharper disable UnusedMember.Global
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
@@ -11,7 +12,7 @@ public class WorkSheet
     public string Name { get; }
     public CellCollection Cells { get; }
     
-    public Dictionary<uint, OneOf.OneOf<double, CellWidth>> ExplicitColumnWidths { get; } = new();
+    public Dictionary<uint, OneOf<double, CellWidth>> ExplicitColumnWidths { get; } = new();
 
     public WorkSheet(string name)
     {
@@ -47,7 +48,7 @@ public class WorkSheet
 
 
 
-    private Cell AddCellLegacy(CellPosition position, CellValue value, string? color = null, CellFont? font = null,
+    private void AddCellLegacy(CellPosition position, CellValue value, string? color = null, CellFont? font = null,
         CellBorders? borders = null)
     {
         if (!color.IsValidColor())
@@ -60,7 +61,6 @@ public class WorkSheet
         var cell = Cell.Create(value, color ?? WorkSheetDefaults.FillColor, font ?? WorkSheetDefaults.Font,
             borders ?? WorkSheetDefaults.CellBorders);
         Cells.Cells[position] = cell;
-        return cell;
     }
 
     public CellValue? GetValue(uint x, uint y)
@@ -71,7 +71,7 @@ public class WorkSheet
 
     public void InsertCell(int x, int y, Cell cell)
     {
-        Cells.Cells[new CellPosition((uint)x, (uint)y)] = cell;
+        Cells.Cells[new((uint)x, (uint)y)] = cell;
     }
 
 
@@ -151,7 +151,8 @@ public class WorkSheet
     {
         var cellColors = Cells.Cells.Values.Select(cell => cell.Color ?? WorkSheetDefaults.Color);
         var fontColors = Cells.Cells.Values.Select(cell => cell.Font?.Color ?? WorkSheetDefaults.Color);
-        var borderColors = Cells.Cells.Values.SelectMany(cell => cell.Borders?.GetAllColors() ?? new[] { WorkSheetDefaults.Color });
+        var borderColors = Cells.Cells.Values.SelectMany(cell => cell.Borders?.GetAllColors() ?? [WorkSheetDefaults.Color
+        ]);
         return cellColors.Concat(fontColors).Concat(borderColors).ToHashSet();
     }
 

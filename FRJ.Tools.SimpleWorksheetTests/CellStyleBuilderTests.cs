@@ -15,7 +15,7 @@ public class CellStyleBuilderTests
     [Fact]
     public void CellStyleBuilder_WithFillColor_SetsFillColor()
     {
-        var color = "FFFFFF";
+        const string color = "FFFFFF";
 
         var style = CellStyleBuilder.Create()
             .WithFillColor(color)
@@ -35,7 +35,7 @@ public class CellStyleBuilderTests
     [Fact]
     public void CellStyleBuilder_WithFont_SetsFont()
     {
-        var font = CellFont.Create(14, "Arial", "000000", true, false, false, false);
+        var font = CellFont.Create(14, "Arial", "000000", true);
 
         var style = CellStyleBuilder.Create()
             .WithFont(font)
@@ -47,7 +47,7 @@ public class CellStyleBuilderTests
     [Fact]
     public void CellStyleBuilder_WithFont_InvalidFontColor_ThrowsException()
     {
-        var font = CellFont.Create(14, "Arial", "invalidColor", false, false, false, false);
+        var font = CellFont.Create(14, "Arial", "invalidColor");
         var builder = CellStyleBuilder.Create();
 
         Assert.Throws<ArgumentException>(() => builder.WithFont(font));
@@ -74,7 +74,7 @@ public class CellStyleBuilderTests
     [Fact]
     public void CellStyleBuilder_WithFontAction_ModifiesExistingFont()
     {
-        var existingStyle = CellStyle.Create(null, CellFont.Create(12, "Arial", "000000"), null, null);
+        var existingStyle = CellStyle.Create(null, CellFont.Create(12, "Arial", "000000"));
 
         var style = CellStyleBuilder.FromStyle(existingStyle)
             .WithFont(font => font.WithSize(16).Bold())
@@ -117,7 +117,7 @@ public class CellStyleBuilderTests
     [Fact]
     public void CellStyleBuilder_WithFormatCode_SetsFormatCode()
     {
-        var formatCode = "0.000";
+        const string formatCode = "0.000";
 
         var style = CellStyleBuilder.Create()
             .WithFormatCode(formatCode)

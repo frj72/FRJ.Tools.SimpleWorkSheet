@@ -9,7 +9,7 @@ public record ImportOptions
     public Dictionary<int, Func<string, CellValue>>? ColumnParsers { get; init; }
     public string? SourceIdentifier { get; init; }
     public bool TrimWhitespace { get; init; } = true;
-    public bool SkipEmptyRows { get; init; } = false;
+    public bool SkipEmptyRows { get; init; }
     public Dictionary<string, object>? CustomMetadata { get; init; }
 
     public static ImportOptions Create(

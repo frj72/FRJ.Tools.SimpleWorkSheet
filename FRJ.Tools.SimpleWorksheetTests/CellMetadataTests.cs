@@ -7,9 +7,9 @@ public class CellMetadataTests
     [Fact]
     public void CellMetadata_Create_WithAllParameters_SetsAllProperties()
     {
-        var source = "csv";
+        const string source = "csv";
         var importedAt = DateTime.UtcNow;
-        var originalValue = "raw_value";
+        const string originalValue = "raw_value";
         var customData = new Dictionary<string, object> { { "key1", "value1" } };
 
         var metadata = CellMetadata.Create(source, importedAt, originalValue, customData);
@@ -23,7 +23,7 @@ public class CellMetadataTests
     [Fact]
     public void CellMetadata_Create_WithNullParameters_SetsNullProperties()
     {
-        var metadata = CellMetadata.Create(null, null, null, null);
+        var metadata = CellMetadata.Create();
 
         Assert.Null(metadata.Source);
         Assert.Null(metadata.ImportedAt);
@@ -45,10 +45,10 @@ public class CellMetadataTests
     [Fact]
     public void CellMetadata_RecordEquality_WithSameValues_AreEqual()
     {
-        var source = "json";
+        const string source = "json";
         var importedAt = new DateTime(2025, 1, 1);
-        var metadata1 = CellMetadata.Create(source, importedAt, "original", null);
-        var metadata2 = CellMetadata.Create(source, importedAt, "original", null);
+        var metadata1 = CellMetadata.Create(source, importedAt, "original");
+        var metadata2 = CellMetadata.Create(source, importedAt, "original");
 
         Assert.Equal(metadata1, metadata2);
     }
@@ -56,8 +56,8 @@ public class CellMetadataTests
     [Fact]
     public void CellMetadata_RecordEquality_WithDifferentValues_AreNotEqual()
     {
-        var metadata1 = CellMetadata.Create("csv", null, null, null);
-        var metadata2 = CellMetadata.Create("json", null, null, null);
+        var metadata1 = CellMetadata.Create("csv");
+        var metadata2 = CellMetadata.Create("json");
 
         Assert.NotEqual(metadata1, metadata2);
     }
@@ -65,7 +65,7 @@ public class CellMetadataTests
     [Fact]
     public void CellMetadata_WithExpression_UpdatesProperty()
     {
-        var originalMetadata = CellMetadata.Create("csv", null, null, null);
+        var originalMetadata = CellMetadata.Create("csv");
         var importedAt = DateTime.UtcNow;
         
         var updatedMetadata = originalMetadata with { ImportedAt = importedAt };

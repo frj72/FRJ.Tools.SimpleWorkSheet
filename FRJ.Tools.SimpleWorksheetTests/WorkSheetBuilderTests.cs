@@ -40,7 +40,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var position = new CellPosition(1, 1);
 
-        var cell = sheet.AddCell(position, "TestValue");
+        _ = sheet.AddCell(position, "TestValue");
 
         Assert.Equal("TestValue", sheet.GetValue(1, 1)?.AsString());
     }
@@ -75,7 +75,7 @@ public class WorkSheetBuilderTests
     public void WorkSheet_AddStyledCell_WithPosition_AppliesStyle()
     {
         var sheet = new WorkSheet("Test");
-        var style = CellStyle.Create("EFEFEF", CellFont.Create(12, "Arial", "000000"), null, null);
+        var style = CellStyle.Create("EFEFEF", CellFont.Create(12, "Arial", "000000"));
         var position = new CellPosition(1, 1);
 
         var cell = sheet.AddStyledCell(position, "TestValue", style);
@@ -88,7 +88,7 @@ public class WorkSheetBuilderTests
     public void WorkSheet_AddStyledCell_WithCoordinates_AppliesStyle()
     {
         var sheet = new WorkSheet("Test");
-        var style = CellStyle.Create("FFFFFF", CellFont.Create(14, bold: true), null, null);
+        var style = CellStyle.Create("FFFFFF", CellFont.Create(14, bold: true));
 
         var cell = sheet.AddStyledCell(1, 1, "TestValue", style);
 
@@ -97,11 +97,13 @@ public class WorkSheetBuilderTests
         Assert.True(cell.Font?.Bold);
     }
 
+    private static readonly string[] SourceArrayAbc = ["A", "B", "C"];
+
     [Fact]
     public void WorkSheet_AddRow_AddsMultipleCells()
     {
         var sheet = new WorkSheet("Test");
-        var values = new[] { "A", "B", "C" }.Select(s => new CellValue(s));
+        var values = SourceArrayAbc.Select(s => new CellValue(s));
 
         var cells = sheet.AddRow(1, 0, values).ToList();
 
@@ -111,16 +113,19 @@ public class WorkSheetBuilderTests
         Assert.Equal("C", sheet.GetValue(2, 1)?.AsString());
     }
 
+
+
     [Fact]
     public void WorkSheet_AddRow_WithConfiguration_AppliesStyleToAll()
     {
         var sheet = new WorkSheet("Test");
-        var values = new[] { "A", "B", "C" }.Select(s => new CellValue(s));
+        var values = SourceArrayAbc.Select(s => new CellValue(s));
 
         var cells = sheet.AddRow(1, 0, values, builder => builder
             .WithColor("EFEFEF")
             .WithFont(font => font.Bold())).ToList();
 
+        // ReSharper disable once ParameterOnlyUsedForPreconditionCheck.Local
         Assert.All(cells, cell =>
         {
             Assert.Equal("EFEFEF", cell.Color);
@@ -128,11 +133,13 @@ public class WorkSheetBuilderTests
         });
     }
 
+
+
     [Fact]
     public void WorkSheet_AddColumn_AddsMultipleCells()
     {
         var sheet = new WorkSheet("Test");
-        var values = new[] { "A", "B", "C" }.Select(s => new CellValue(s));
+        var values = SourceArrayAbc.Select(s => new CellValue(s));
 
         var cells = sheet.AddColumn(1, 0, values).ToList();
 
@@ -146,7 +153,7 @@ public class WorkSheetBuilderTests
     public void WorkSheet_AddColumn_WithConfiguration_AppliesStyleToAll()
     {
         var sheet = new WorkSheet("Test");
-        var values = new[] { 1, 2, 3 }.Select(i => new CellValue(i));
+        var values = SourceArrayAbc.Select(i => new CellValue(i));
 
         var cells = sheet.AddColumn(1, 0, values, builder => builder
             .WithFont(font => font.WithSize(16))).ToList();

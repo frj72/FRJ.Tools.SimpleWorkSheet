@@ -57,7 +57,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
         var position = new CellPosition(1, 1);
-        var font = CellFont.Create(12, "Arial", "000000", false, false, false, false);
+        var font = CellFont.Create(12, "Arial", "000000");
 
         sheet.AddCell(position, new CellValue("TestValue"));
         sheet.SetFont(1, 1, font);
@@ -70,7 +70,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
         var position = new CellPosition(1, 1);
-        var color = "FFFFFF";
+        const string color = "FFFFFF";
 
         sheet.AddCell(position, new CellValue("TestValue"));
         sheet.SetColor(1, 1, color);
@@ -100,7 +100,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
         var position = new CellPosition(1, 1);
-        var font = CellFont.Create(12, "Arial", "invalidColor", false, false, false, false);
+        var font = CellFont.Create(12, "Arial", "invalidColor");
 
         sheet.AddCell(position, new CellValue("TestValue"));
 

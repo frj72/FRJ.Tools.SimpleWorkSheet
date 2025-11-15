@@ -1,5 +1,3 @@
-using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-
 namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public class CellFontBuilder
@@ -25,16 +23,14 @@ public class CellFontBuilder
 
     public CellFontBuilder(CellFont? existingFont)
     {
-        if (existingFont != null)
-        {
-            _size = existingFont.Size;
-            _name = existingFont.Name;
-            _color = existingFont.Color;
-            _bold = existingFont.Bold;
-            _italic = existingFont.Italic;
-            _underline = existingFont.Underline;
-            _strike = existingFont.Strike;
-        }
+        if (existingFont == null) return;
+        _size = existingFont.Size;
+        _name = existingFont.Name;
+        _color = existingFont.Color;
+        _bold = existingFont.Bold;
+        _italic = existingFont.Italic;
+        _underline = existingFont.Underline;
+        _strike = existingFont.Strike;
     }
 
     public CellFontBuilder WithSize(int size)

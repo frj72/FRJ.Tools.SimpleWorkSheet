@@ -14,7 +14,7 @@ public static class CellBordersExtensions
 
     public static IEnumerable<string> GetAllColors(this CellBorders cellBorders)
     {
-        List<string> colors = new();
+        List<string> colors = [];
         if (cellBorders.Left?.Color is not null) colors.Add(cellBorders.Left.Color);
         if (cellBorders.Right?.Color is not null) colors.Add(cellBorders.Right.Color);
         if (cellBorders.Top?.Color is not null) colors.Add(cellBorders.Top.Color);

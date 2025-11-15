@@ -1,3 +1,4 @@
+// ReSharper disable UnusedMember.Global
 namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public static class Colors

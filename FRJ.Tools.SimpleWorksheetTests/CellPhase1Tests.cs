@@ -10,7 +10,7 @@ public class CellPhase1Tests
     {
         var value = new CellValue("TestValue");
         var style = CellStyle.Create("FFFFFF", CellFont.Create(12, "Arial", "000000"), null, "0.00");
-        var metadata = CellMetadata.Create("csv", DateTime.UtcNow, "raw_value", null);
+        var metadata = CellMetadata.Create("csv", DateTime.UtcNow, "raw_value");
 
         var cell = new Cell(value, style, metadata);
 
@@ -23,7 +23,7 @@ public class CellPhase1Tests
     public void Cell_ConstructorWithStyle_WithoutMetadata_SetsNullMetadata()
     {
         var value = new CellValue("TestValue");
-        var style = CellStyle.Create("FFFFFF", null, null, null);
+        var style = CellStyle.Create("FFFFFF");
 
         var cell = new Cell(value, style);
 
@@ -36,14 +36,14 @@ public class CellPhase1Tests
     public void Cell_LegacyConstructor_CreatesStyleInternally()
     {
         var value = new CellValue("TestValue");
-        var color = "FFFFFF";
+        const string color = "FFFFFF";
         var font = CellFont.Create(12, "Arial", "000000");
         var borders = CellBorders.Create(
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
-        var formatCode = "0.00";
+        const string formatCode = "0.00";
 
         var cell = new Cell(value, color, font, borders, formatCode);
 
@@ -57,16 +57,16 @@ public class CellPhase1Tests
     [Fact]
     public void Cell_BackwardCompatibilityProperties_ReturnStyleProperties()
     {
-        var color = "FFFFFF";
+        const string color = "FFFFFF";
         var font = CellFont.Create(12, "Arial", "000000");
         var borders = CellBorders.Create(
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
-        var formatCode = "0.00";
+        const string formatCode = "0.00";
         var style = CellStyle.Create(color, font, borders, formatCode);
-        var cell = new Cell(new CellValue("Test"), style);
+        var cell = new Cell(new("Test"), style);
 
         Assert.Equal(color, cell.Color);
         Assert.Equal(font, cell.Font);
@@ -77,9 +77,9 @@ public class CellPhase1Tests
     [Fact]
     public void Cell_WithStyleUpdate_UpdatesStyleProperty()
     {
-        var originalStyle = CellStyle.Create("FFFFFF", null, null, null);
-        var cell = new Cell(new CellValue("Test"), originalStyle);
-        var newStyle = CellStyle.Create("FF0000", null, null, null);
+        var originalStyle = CellStyle.Create("FFFFFF");
+        var cell = new Cell(new("Test"), originalStyle);
+        var newStyle = CellStyle.Create("FF0000");
 
         var updatedCell = cell with { Style = newStyle };
 
@@ -90,9 +90,9 @@ public class CellPhase1Tests
     [Fact]
     public void Cell_WithMetadata_StoresMetadata()
     {
-        var style = CellStyle.Create("FFFFFF", null, null, null);
-        var metadata = CellMetadata.Create("json", DateTime.UtcNow, "original_value", null);
-        var cell = new Cell(new CellValue("Test"), style, metadata);
+        var style = CellStyle.Create("FFFFFF");
+        var metadata = CellMetadata.Create("json", DateTime.UtcNow, "original_value");
+        var cell = new Cell(new("Test"), style, metadata);
 
         Assert.NotNull(cell.Metadata);
         Assert.Equal("json", cell.Metadata.Source);
@@ -125,7 +125,7 @@ public class CellPhase1Tests
     public void CellExtensions_SetFont_UpdatesStyleFont()
     {
         var cell = Cell.Create("Test");
-        var newFont = CellFont.Create(14, "Arial", "000000", true, false, false, false);
+        var newFont = CellFont.Create(14, "Arial", "000000", true);
         
         var updatedCell = cell.SetFont(newFont);
 

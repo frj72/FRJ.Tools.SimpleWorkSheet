@@ -1,3 +1,4 @@
+// ReSharper disable ConvertToExtensionBlock
 namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public static class CellStyleExtensions

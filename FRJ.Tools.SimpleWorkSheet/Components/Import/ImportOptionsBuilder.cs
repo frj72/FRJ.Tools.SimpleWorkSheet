@@ -18,18 +18,16 @@ public class ImportOptionsBuilder
 
     public ImportOptionsBuilder(ImportOptions? existingOptions)
     {
-        if (existingOptions != null)
-        {
-            _preserveOriginalValue = existingOptions.PreserveOriginalValue;
-            _defaultStyle = existingOptions.DefaultStyle;
-            _columnParsers = existingOptions.ColumnParsers;
-            _sourceIdentifier = existingOptions.SourceIdentifier;
-            _trimWhitespace = existingOptions.TrimWhitespace;
-            _skipEmptyRows = existingOptions.SkipEmptyRows;
-            _customMetadata = existingOptions.CustomMetadata != null
-                ? new(existingOptions.CustomMetadata)
-                : null;
-        }
+        if (existingOptions == null) return;
+        _preserveOriginalValue = existingOptions.PreserveOriginalValue;
+        _defaultStyle = existingOptions.DefaultStyle;
+        _columnParsers = existingOptions.ColumnParsers;
+        _sourceIdentifier = existingOptions.SourceIdentifier;
+        _trimWhitespace = existingOptions.TrimWhitespace;
+        _skipEmptyRows = existingOptions.SkipEmptyRows;
+        _customMetadata = existingOptions.CustomMetadata != null
+            ? new(existingOptions.CustomMetadata)
+            : null;
     }
 
     public ImportOptionsBuilder WithPreserveOriginalValue(bool preserve)

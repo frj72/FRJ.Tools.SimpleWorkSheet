@@ -1,4 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+// ReSharper disable UnusedMember.Global
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
@@ -10,5 +11,5 @@ public record CellFont(int? Size, string? Name, string? Color, bool Bold, bool I
             color ?? WorkSheetDefaults.Color, bold, italic, underline, strike);
 
     public static CellFont Create(string name) => 
-        Create(null, name, null, false, false, false, false);
-};
+        Create(null, name);
+}
