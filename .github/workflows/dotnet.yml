@@ -28,6 +28,6 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal --configuration release
     - name: Pack
-      run: dotnet pack --configuration Release --no-build --output ./nupkg
+      run: dotnet pack FRJ.Tools.SimpleWorkSheet/FRJ.Tools.SimpleWorkSheet.csproj --configuration Release --no-build --output ./nupkg
     - name: NuGet Push nuget.org
-      run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push "./nupkg/FRJ.Tools.SimpleWorkSheet.*.nupkg" --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
