@@ -14,8 +14,6 @@ public class ScatterChart : Chart
 
     public static ScatterChart Create() => new();
 
-    public override string GetChartTypeName() => "scatterChart";
-
     public ScatterChart WithTitle(string? title)
     {
         if (string.IsNullOrWhiteSpace(title))

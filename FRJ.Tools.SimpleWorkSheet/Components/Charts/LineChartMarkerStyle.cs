@@ -4,7 +4,5 @@ public enum LineChartMarkerStyle
 {
     None,
     Circle,
-    Square,
-    Diamond,
-    Triangle
+    Diamond
 }

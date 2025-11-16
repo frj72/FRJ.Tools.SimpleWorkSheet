@@ -15,8 +15,6 @@ public class PieChart : Chart
 
     public static PieChart Create() => new();
 
-    public override string GetChartTypeName() => "pieChart";
-
     public PieChart WithTitle(string? title)
     {
         if (string.IsNullOrWhiteSpace(title))

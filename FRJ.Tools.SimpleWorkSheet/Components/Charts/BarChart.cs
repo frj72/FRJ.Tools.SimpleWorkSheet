@@ -14,8 +14,6 @@ public class BarChart : Chart
 
     public static BarChart Create() => new();
 
-    public override string GetChartTypeName() => "barChart";
-
     public BarChart WithTitle(string? title)
     {
         if (string.IsNullOrWhiteSpace(title))

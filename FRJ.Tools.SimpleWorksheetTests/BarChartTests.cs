@@ -15,14 +15,6 @@ public class BarChartTests
     }
 
     [Fact]
-    public void GetChartTypeName_ReturnsBarChart()
-    {
-        var chart = BarChart.Create();
-
-        Assert.Equal("barChart", chart.GetChartTypeName());
-    }
-
-    [Fact]
     public void DefaultOrientation_IsVertical()
     {
         var chart = BarChart.Create();

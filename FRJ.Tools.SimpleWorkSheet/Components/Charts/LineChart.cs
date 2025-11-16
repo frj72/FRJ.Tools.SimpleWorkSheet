@@ -15,8 +15,6 @@ public class LineChart : Chart
 
     public static LineChart Create() => new();
 
-    public override string GetChartTypeName() => "lineChart";
-
     public LineChart WithTitle(string? title)
     {
         if (string.IsNullOrWhiteSpace(title))

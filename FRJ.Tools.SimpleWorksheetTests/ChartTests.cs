@@ -8,7 +8,6 @@ public class ChartTests
     private class TestChart : Chart
     {
         public TestChart() : base(ChartType.Bar) { }
-        public override string GetChartTypeName() => "TestChart";
     }
 
     [Fact]

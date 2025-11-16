@@ -15,14 +15,6 @@ public class LineChartTests
     }
 
     [Fact]
-    public void GetChartTypeName_ReturnsLineChart()
-    {
-        var chart = LineChart.Create();
-
-        Assert.Equal("lineChart", chart.GetChartTypeName());
-    }
-
-    [Fact]
     public void DefaultMarkerStyle_IsNone()
     {
         var chart = LineChart.Create();
@@ -102,6 +94,129 @@ public class LineChartTests
     }
 
     [Fact]
+    public void WithTitle_EmptyTitle_ThrowsArgumentException()
+    {
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithTitle(""));
+        Assert.Equal("title", ex.ParamName);
+    }
+
+    [Fact]
+    public void WithTitle_WhitespaceTitle_ThrowsArgumentException()
+    {
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithTitle("   "));
+        Assert.Equal("title", ex.ParamName);
+    }
+
+    [Fact]
+    public void WithDataRange_SingleCellCategoriesRange_ThrowsArgumentException()
+    {
+        var categoriesRange = new CellRange(new(0, 0), new(0, 0));
+        var valuesRange = CellRange.FromBounds(1, 0, 1, 5);
+
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithDataRange(categoriesRange, valuesRange));
+        Assert.Contains("range", ex.Message.ToLower());
+    }
+
+    [Fact]
+    public void WithDataRange_SingleCellValuesRange_ThrowsArgumentException()
+    {
+        var categoriesRange = CellRange.FromBounds(0, 0, 0, 5);
+        var valuesRange = new CellRange(new(1, 0), new(1, 0));
+
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithDataRange(categoriesRange, valuesRange));
+        Assert.Contains("range", ex.Message.ToLower());
+    }
+
+    [Fact]
+    public void WithPosition_InvalidCoordinates_ThrowsArgumentException()
+    {
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithPosition(10, 15, 5, 0));
+        Assert.Contains("from", ex.Message.ToLower());
+    }
+
+    [Fact]
+    public void WithSize_SetsSize()
+    {
+        var chart = LineChart.Create()
+            .WithSize(8000000, 5000000);
+
+        Assert.Equal(8000000, chart.Size.WidthEmus);
+        Assert.Equal(5000000, chart.Size.HeightEmus);
+    }
+
+    [Fact]
+    public void WithSize_InvalidWidth_ThrowsArgumentException()
+    {
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithSize(0, 5000000));
+        Assert.Contains("width", ex.Message.ToLower());
+    }
+
+    [Fact]
+    public void WithSize_InvalidHeight_ThrowsArgumentException()
+    {
+        var chart = LineChart.Create();
+
+        var ex = Assert.Throws<ArgumentException>(() => chart.WithSize(8000000, -1));
+        Assert.Contains("height", ex.Message.ToLower());
+    }
+
+    [Fact]
+    public void AddSeries_AddsSeriesAndReturnsLineChart()
+    {
+        var dataRange = CellRange.FromBounds(1, 0, 1, 5);
+        
+        var chart = LineChart.Create()
+            .AddSeries("Q1", dataRange);
+
+        Assert.Single(chart.Series);
+        Assert.Equal("Q1", chart.Series[0].Name);
+        Assert.Equal(dataRange, chart.Series[0].DataRange);
+    }
+
+    [Fact]
+    public void AddSeries_MultipleSeries_AddsAll()
+    {
+        var dataRange1 = CellRange.FromBounds(1, 0, 1, 5);
+        var dataRange2 = CellRange.FromBounds(2, 0, 2, 5);
+
+        var chart = LineChart.Create()
+            .AddSeries("2023", dataRange1)
+            .AddSeries("2024", dataRange2);
+
+        Assert.Equal(2, chart.Series.Count);
+        Assert.Equal("2023", chart.Series[0].Name);
+        Assert.Equal("2024", chart.Series[1].Name);
+    }
+
+    [Fact]
+    public void DefaultValues_AreCorrect()
+    {
+        var chart = LineChart.Create();
+
+        Assert.Null(chart.Title);
+        Assert.Null(chart.Position);
+        Assert.Null(chart.CategoriesRange);
+        Assert.Null(chart.ValuesRange);
+        Assert.Equal(ChartSize.Default.WidthEmus, chart.Size.WidthEmus);
+        Assert.Equal(ChartSize.Default.HeightEmus, chart.Size.HeightEmus);
+        Assert.Equal(LineChartMarkerStyle.None, chart.MarkerStyle);
+        Assert.False(chart.SmoothLines);
+        Assert.Empty(chart.Series);
+    }
+
+    [Fact]
     public void FluentAPI_AllMethods_ReturnLineChart()
     {
         var categoriesRange = CellRange.FromBounds(0, 0, 0, 5);
@@ -111,6 +226,7 @@ public class LineChartTests
             .WithTitle("Sales Trend")
             .WithDataRange(categoriesRange, valuesRange)
             .WithPosition(5, 0, 10, 15)
+            .WithSize(6000000, 4000000)
             .WithMarkers(LineChartMarkerStyle.Diamond)
             .WithSmoothLines(true);
 
@@ -118,6 +234,7 @@ public class LineChartTests
         Assert.Equal("Sales Trend", chart.Title);
         Assert.Equal(categoriesRange, chart.CategoriesRange);
         Assert.Equal(valuesRange, chart.ValuesRange);
+        Assert.Equal(6000000, chart.Size.WidthEmus);
         Assert.Equal(LineChartMarkerStyle.Diamond, chart.MarkerStyle);
         Assert.True(chart.SmoothLines);
     }

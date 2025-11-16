@@ -13,8 +13,6 @@ public abstract class Chart
         Type = type;
     }
 
-    public abstract string GetChartTypeName();
-
     public void AddSeries(string name, Sheet.CellRange dataRange)
     {
         ChartDataRange.ValidateDataRange(dataRange);
