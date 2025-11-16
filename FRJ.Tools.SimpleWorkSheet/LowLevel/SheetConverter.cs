@@ -1,11 +1,18 @@
 using System.Globalization;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Drawing.Spreadsheet;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
+using BarChart = FRJ.Tools.SimpleWorkSheet.Components.Charts.BarChart;
 using Cell = DocumentFormat.OpenXml.Spreadsheet.Cell;
+using Hyperlink = DocumentFormat.OpenXml.Spreadsheet.Hyperlink;
+using Selection = DocumentFormat.OpenXml.Spreadsheet.Selection;
 // ReSharper disable UnusedMember.Global
 
 namespace FRJ.Tools.SimpleWorkSheet.LowLevel;
@@ -252,6 +259,32 @@ public class SheetConverter
                     worksheetPart.Worksheet.Append(dataValidations);
                 }
 
+                if (workSheet.Charts.Count != 0)
+                {
+                    var drawingsPart = worksheetPart.AddNewPart<DrawingsPart>();
+                    var drawingId = worksheetPart.GetIdOfPart(drawingsPart);
+                    
+                    var drawing = new Drawing { Id = drawingId };
+                    worksheetPart.Worksheet.Append(drawing);
+                    
+                    var worksheetDrawing = new WorksheetDrawing();
+                    
+                    uint chartIndex = 1;
+                    foreach (var chart in workSheet.Charts)
+                    {
+                        var chartPart = drawingsPart.AddNewPart<ChartPart>();
+                        var chartRelId = drawingsPart.GetIdOfPart(chartPart);
+                        
+                        GenerateChartPart(chartPart, chart, workSheet.Name);
+                        
+                        var twoCellAnchor = CreateTwoCellAnchor(chart, chartRelId, chartIndex++);
+                        worksheetDrawing.Append(twoCellAnchor);
+                    }
+                    
+                    drawingsPart.WorksheetDrawing = worksheetDrawing;
+                    drawingsPart.WorksheetDrawing.Save();
+                }
+
                 worksheetPart.Worksheet.Save();
                 var sheet = new Sheet
                 {
@@ -368,6 +401,183 @@ public class SheetConverter
             "information" => DataValidationErrorStyleValues.Information,
             _ => DataValidationErrorStyleValues.Stop
         };
+
+    private static void GenerateChartPart(ChartPart chartPart, Components.Charts.Chart chart, string sheetName)
+    {
+        if (chart is not BarChart barChart)
+            return;
+
+        var chartSpace = new ChartSpace();
+        chartSpace.AddNamespaceDeclaration("c", "http://schemas.openxmlformats.org/drawingml/2006/chart");
+        chartSpace.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+        chartSpace.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+
+        var editingLanguage = new EditingLanguage { Val = "en-US" };
+        chartSpace.Append(editingLanguage);
+
+        var chartElement = new DocumentFormat.OpenXml.Drawing.Charts.Chart();
+        
+        var plotArea = new PlotArea();
+        var layout = new Layout();
+        plotArea.Append(layout);
+
+        var barChartElement = new DocumentFormat.OpenXml.Drawing.Charts.BarChart();
+        barChartElement.Append(new BarDirection { Val = barChart.Orientation == BarChartOrientation.Horizontal 
+            ? BarDirectionValues.Bar 
+            : BarDirectionValues.Column });
+        barChartElement.Append(new BarGrouping { Val = BarGroupingValues.Clustered });
+        barChartElement.Append(new VaryColors { Val = false });
+
+        if (barChart is { CategoriesRange: not null, ValuesRange: not null })
+        {
+            var barChartSeries = new BarChartSeries();
+            barChartSeries.Append(new DocumentFormat.OpenXml.Drawing.Charts.Index { Val = 0 });
+            barChartSeries.Append(new Order { Val = 0 });
+
+            var categoryAxisData = new CategoryAxisData();
+            var catRef = new StringReference();
+            catRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(barChart.CategoriesRange.Value, sheetName) });
+            categoryAxisData.Append(catRef);
+            barChartSeries.Append(categoryAxisData);
+
+            var values = new DocumentFormat.OpenXml.Drawing.Charts.Values();
+            var numRef = new NumberReference();
+            numRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(barChart.ValuesRange.Value, sheetName) });
+            values.Append(numRef);
+            barChartSeries.Append(values);
+
+            barChartElement.Append(barChartSeries);
+        }
+
+        barChartElement.Append(new DataLabels(new ShowLegendKey { Val = false }, 
+            new ShowValue { Val = false }, 
+            new ShowCategoryName { Val = false }, 
+            new ShowSeriesName { Val = false }, 
+            new ShowPercent { Val = false }, 
+            new ShowBubbleSize { Val = false }));
+
+        plotArea.Append(barChartElement);
+
+        var categoryAxis = new CategoryAxis();
+        categoryAxis.Append(new AxisId { Val = 1 });
+        categoryAxis.Append(new Scaling(new Orientation { Val = DocumentFormat.OpenXml.Drawing.Charts.OrientationValues.MinMax }));
+        categoryAxis.Append(new AxisPosition { Val = AxisPositionValues.Bottom });
+        categoryAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        categoryAxis.Append(new CrossingAxis { Val = 2 });
+        categoryAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
+        categoryAxis.Append(new AutoLabeled { Val = true });
+        categoryAxis.Append(new LabelAlignment { Val = LabelAlignmentValues.Center });
+        categoryAxis.Append(new LabelOffset { Val = 100 });
+        plotArea.Append(categoryAxis);
+
+        var valueAxis = new ValueAxis();
+        valueAxis.Append(new AxisId { Val = 2 });
+        valueAxis.Append(new Scaling(new Orientation { Val = DocumentFormat.OpenXml.Drawing.Charts.OrientationValues.MinMax }));
+        valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
+        valueAxis.Append(new MajorGridlines());
+        valueAxis.Append(new DocumentFormat.OpenXml.Drawing.Charts.NumberingFormat 
+        { 
+            FormatCode = "General", 
+            SourceLinked = true 
+        });
+        valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        valueAxis.Append(new CrossingAxis { Val = 1 });
+        valueAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
+        valueAxis.Append(new CrossBetween { Val = CrossBetweenValues.Between });
+        plotArea.Append(valueAxis);
+
+        chartElement.Append(plotArea);
+
+        var legend = new Legend();
+        legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        legend.Append(new Layout());
+        chartElement.Append(legend);
+
+        chartElement.Append(new PlotVisibleOnly { Val = true });
+        chartElement.Append(new DisplayBlanksAs { Val = DisplayBlanksAsValues.Gap });
+        chartElement.Append(new ShowDataLabelsOverMaximum { Val = false });
+
+        chartSpace.Append(chartElement);
+
+        if (!string.IsNullOrEmpty(chart.Title))
+        {
+            var title = new Title();
+            var chartText = new ChartText();
+            var richText = new RichText();
+            richText.Append(new BodyProperties());
+            richText.Append(new ListStyle());
+            
+            var paragraph = new Paragraph();
+            var paragraphProperties = new ParagraphProperties();
+            paragraphProperties.Append(new DefaultRunProperties());
+            paragraph.Append(paragraphProperties);
+            
+            var run = new DocumentFormat.OpenXml.Drawing.Run();
+            run.Append(new DocumentFormat.OpenXml.Drawing.RunProperties { Language = "en-US" });
+            run.Append(new DocumentFormat.OpenXml.Drawing.Text { Text = chart.Title });
+            paragraph.Append(run);
+            
+            richText.Append(paragraph);
+            chartText.Append(richText);
+            title.Append(chartText);
+            title.Append(new Layout());
+            
+            chartElement.InsertAt(title, 0);
+        }
+
+        chartSpace.Append(new PrintSettings(
+            new DocumentFormat.OpenXml.Drawing.Charts.HeaderFooter(),
+            new DocumentFormat.OpenXml.Drawing.Charts.PageMargins { Left = 0.7, Right = 0.7, Top = 0.75, Bottom = 0.75, Header = 0.3, Footer = 0.3 }
+        ));
+
+        chartPart.ChartSpace = chartSpace;
+        chartPart.ChartSpace.Save();
+    }
+
+    private static TwoCellAnchor CreateTwoCellAnchor(Components.Charts.Chart chart, string chartRelId, uint chartIndex)
+    {
+        if (chart.Position == null)
+            throw new InvalidOperationException("Chart must have a position");
+
+        var twoCellAnchor = new TwoCellAnchor { EditAs = EditAsValues.OneCell };
+
+        var fromMarker = new DocumentFormat.OpenXml.Drawing.Spreadsheet.FromMarker();
+        fromMarker.Append(new ColumnId { Text = chart.Position.FromColumn.ToString() });
+        fromMarker.Append(new ColumnOffset { Text = "0" });
+        fromMarker.Append(new RowId { Text = chart.Position.FromRow.ToString() });
+        fromMarker.Append(new RowOffset { Text = "0" });
+        twoCellAnchor.Append(fromMarker);
+
+        var toMarker = new DocumentFormat.OpenXml.Drawing.Spreadsheet.ToMarker();
+        toMarker.Append(new ColumnId { Text = chart.Position.ToColumn.ToString() });
+        toMarker.Append(new ColumnOffset { Text = "0" });
+        toMarker.Append(new RowId { Text = chart.Position.ToRow.ToString() });
+        toMarker.Append(new RowOffset { Text = "0" });
+        twoCellAnchor.Append(toMarker);
+
+        var graphicFrame = new DocumentFormat.OpenXml.Drawing.Spreadsheet.GraphicFrame();
+        graphicFrame.Append(new DocumentFormat.OpenXml.Drawing.Spreadsheet.NonVisualGraphicFrameProperties(
+            new DocumentFormat.OpenXml.Drawing.Spreadsheet.NonVisualDrawingProperties { Id = chartIndex, Name = $"Chart {chartIndex}" },
+            new DocumentFormat.OpenXml.Drawing.Spreadsheet.NonVisualGraphicFrameDrawingProperties()
+        ));
+
+        var transform = new Transform();
+        transform.Append(new Offset { X = 0, Y = 0 });
+        transform.Append(new Extents { Cx = chart.Size.WidthEmus, Cy = chart.Size.HeightEmus });
+        graphicFrame.Append(transform);
+
+        var graphic = new Graphic();
+        var graphicData = new GraphicData { Uri = "http://schemas.openxmlformats.org/drawingml/2006/chart" };
+        var chartReference = new ChartReference { Id = chartRelId };
+        graphicData.Append(chartReference);
+        graphic.Append(graphicData);
+        graphicFrame.Append(graphic);
+
+        twoCellAnchor.Append(graphicFrame);
+        twoCellAnchor.Append(new ClientData());
+
+        return twoCellAnchor;
+    }
 }
 
 

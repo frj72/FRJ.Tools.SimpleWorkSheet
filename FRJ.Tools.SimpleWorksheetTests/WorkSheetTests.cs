@@ -189,7 +189,7 @@ public class WorkSheetTests
 
         sheet.AddChart(chart);
 
-        Assert.IsAssignableFrom<IReadOnlyList<Chart>>(sheet.Charts);
+        Assert.IsType<IReadOnlyList<Chart>>(sheet.Charts, exactMatch: false);
     }
 }
 
