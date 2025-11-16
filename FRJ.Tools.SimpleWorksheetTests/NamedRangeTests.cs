@@ -23,7 +23,7 @@ public class NamedRangeTests
         var range = CellRange.FromBounds(0, 0, 5, 10);
 
         Assert.Throws<ArgumentException>(() => new NamedRange("", "Sheet1", range));
-        Assert.Throws<ArgumentException>(() => new NamedRange(null!, "Sheet1", range));
+        Assert.Throws<ArgumentException>(() => new NamedRange(null, "Sheet1", range));
     }
 
     [Fact]
@@ -32,7 +32,7 @@ public class NamedRangeTests
         var range = CellRange.FromBounds(0, 0, 5, 10);
 
         Assert.Throws<ArgumentException>(() => new NamedRange("TestRange", "", range));
-        Assert.Throws<ArgumentException>(() => new NamedRange("TestRange", null!, range));
+        Assert.Throws<ArgumentException>(() => new NamedRange("TestRange", null, range));
     }
 
     [Fact]
@@ -81,8 +81,8 @@ public class NamedRangeTests
         Assert.Single(workbook.NamedRanges);
         var namedRange = workbook.NamedRanges[0];
         Assert.Equal("TestRange", namedRange.Name);
-        Assert.Equal(new CellPosition(0, 0), namedRange.Range.From);
-        Assert.Equal(new CellPosition(5, 10), namedRange.Range.To);
+        Assert.Equal(new(0, 0), namedRange.Range.From);
+        Assert.Equal(new(5, 10), namedRange.Range.To);
     }
 
     [Fact]

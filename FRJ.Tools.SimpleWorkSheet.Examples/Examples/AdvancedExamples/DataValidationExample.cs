@@ -34,7 +34,7 @@ public class DataValidationExample : IExample
         sheet.AddCell(new(2, 4), "Must be between 1 and 100");
         var numberValidation = CellValidation.WholeNumber(ValidationOperator.Between, 1, 100)
             .WithInputMessage("Number Input", "Enter a whole number between 1 and 100")
-            .WithErrorAlert("Invalid Number", "Number must be between 1 and 100", "stop");
+            .WithErrorAlert("Invalid Number", "Number must be between 1 and 100");
         sheet.AddValidation(1, 4, numberValidation);
 
         sheet.AddCell(new(0, 6), "Decimal Number");
@@ -49,8 +49,8 @@ public class DataValidationExample : IExample
         sheet.AddCell(new(2, 8), "Must be in 2025");
         var dateValidation = CellValidation.Date(
             ValidationOperator.Between,
-            new DateTime(2025, 1, 1),
-            new DateTime(2025, 12, 31))
+            new(2025, 1, 1),
+            new(2025, 12, 31))
             .WithInputMessage("Date Input", "Enter a date in 2025")
             .WithErrorAlert("Invalid Date", "Date must be between 01/01/2025 and 12/31/2025", "warning");
         sheet.AddValidation(1, 8, dateValidation);

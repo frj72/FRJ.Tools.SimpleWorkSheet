@@ -39,15 +39,12 @@ public class SheetConverter
             if (workBook.NamedRanges.Count != 0)
             {
                 var definedNames = new DefinedNames();
-                foreach (var namedRange in workBook.NamedRanges)
-                {
-                    var definedName = new DefinedName
-                    {
-                        Name = namedRange.Name,
-                        Text = namedRange.ToFormulaReference()
-                    };
+                foreach (var definedName in workBook.NamedRanges.Select(namedRange => new DefinedName
+                         {
+                             Name = namedRange.Name,
+                             Text = namedRange.ToFormulaReference()
+                         }))
                     definedNames.Append(definedName);
-                }
                 workbookPart.Workbook.Append(definedNames);
             }
 
@@ -220,22 +217,16 @@ public class SheetConverter
                             AllowBlank = validation.AllowBlank,
                             ShowInputMessage = validation.ShowInputMessage,
                             ShowErrorMessage = validation.ShowErrorAlert,
-                            SequenceOfReferences = new ListValue<StringValue> 
+                            SequenceOfReferences = new()
                             { 
                                 InnerText = $"{GetCellReference(range.From)}:{GetCellReference(range.To)}" 
                             }
                         };
                         
-                        if (!string.IsNullOrEmpty(validation.Formula1))
-                        {
-                            dataValidation.Formula1 = new Formula1(validation.Formula1);
-                        }
-                        
-                        if (!string.IsNullOrEmpty(validation.Formula2))
-                        {
-                            dataValidation.Formula2 = new Formula2(validation.Formula2);
-                        }
-                        
+                        if (!string.IsNullOrEmpty(validation.Formula1)) dataValidation.Formula1 = new(validation.Formula1);
+
+                        if (!string.IsNullOrEmpty(validation.Formula2)) dataValidation.Formula2 = new(validation.Formula2);
+
                         if (validation.ShowInputMessage)
                         {
                             if (!string.IsNullOrEmpty(validation.InputTitle))

@@ -79,7 +79,7 @@ public class NamedRangesExample : IExample
         workbook.AddNamedRange("QuarterlySales", "Sales", 1, 1, 4, 3);
         workbook.AddNamedRange("TotalSales", "Sales", 5, 1, 5, 3);
 
-        var bytes = FRJ.Tools.SimpleWorkSheet.LowLevel.SheetConverter.ToBinaryExcelFile(workbook);
+        var bytes = LowLevel.SheetConverter.ToBinaryExcelFile(workbook);
         var outputPath = Path.Combine("Output", "39_NamedRanges.xlsx");
         File.WriteAllBytes(outputPath, bytes);
     }

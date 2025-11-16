@@ -8,7 +8,7 @@ public record NamedRange
     public string SheetName { get; init; }
     public CellRange Range { get; init; }
 
-    public NamedRange(string name, string sheetName, CellRange range)
+    public NamedRange(string? name, string? sheetName, CellRange range)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Name cannot be null or whitespace", nameof(name));
