@@ -15,6 +15,7 @@ public class WorkSheet
     
     public Dictionary<uint, OneOf<double, CellWidth>> ExplicitColumnWidths { get; } = new();
     public Dictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights { get; } = new();
+    public Dictionary<CellRange, CellValidation> Validations { get; } = new();
     public FreezePane? FrozenPane { get; private set; }
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
 
@@ -221,6 +222,30 @@ public class WorkSheet
     public HashSet<CellFont> GetAllFonts()
     {
         return Cells.Cells.Values.Select(cell => cell.Font ?? WorkSheetDefaults.Font).ToHashSet();
+    }
+
+    public void AddValidation(uint x, uint y, CellValidation validation)
+    {
+        var position = new CellPosition(x, y);
+        var range = CellRange.FromPositions(position, position);
+        Validations[range] = validation;
+    }
+
+    public void AddValidation(CellPosition position, CellValidation validation)
+    {
+        var range = CellRange.FromPositions(position, position);
+        Validations[range] = validation;
+    }
+
+    public void AddValidation(CellRange range, CellValidation validation)
+    {
+        Validations[range] = validation;
+    }
+
+    public void AddValidation(uint fromX, uint fromY, uint toX, uint toY, CellValidation validation)
+    {
+        var range = CellRange.FromBounds(fromX, fromY, toX, toY);
+        Validations[range] = validation;
     }
     
     private void EnsureCellExists(CellPosition position)

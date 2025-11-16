@@ -51,7 +51,9 @@ public static class Program
             new HyperlinksExample(),
             new CellMergingExample(),
             new ReadExcelExample(),
-            new RoundTripEditingExample()
+            new RoundTripEditingExample(),
+            new DataValidationExample(),
+            new NamedRangesExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

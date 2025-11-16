@@ -36,6 +36,21 @@ public class SheetConverter
             stylesPart.Stylesheet.Save();
             uint sheetId = 1;
                 
+            if (workBook.NamedRanges.Count != 0)
+            {
+                var definedNames = new DefinedNames();
+                foreach (var namedRange in workBook.NamedRanges)
+                {
+                    var definedName = new DefinedName
+                    {
+                        Name = namedRange.Name,
+                        Text = namedRange.ToFormulaReference()
+                    };
+                    definedNames.Append(definedName);
+                }
+                workbookPart.Workbook.Append(definedNames);
+            }
+
             foreach (var workSheet in workBook.Sheets)
             {
                 var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
@@ -189,6 +204,63 @@ public class SheetConverter
                     worksheetPart.Worksheet.Append(hyperlinks);
                 }
 
+                if (workSheet.Validations.Count != 0)
+                {
+                    var dataValidations = new DataValidations();
+                    
+                    foreach (var validationEntry in workSheet.Validations)
+                    {
+                        var range = validationEntry.Key;
+                        var validation = validationEntry.Value;
+                        
+                        var dataValidation = new DataValidation
+                        {
+                            Type = ConvertValidationType(validation.Type),
+                            Operator = ConvertValidationOperator(validation.Operator),
+                            AllowBlank = validation.AllowBlank,
+                            ShowInputMessage = validation.ShowInputMessage,
+                            ShowErrorMessage = validation.ShowErrorAlert,
+                            SequenceOfReferences = new ListValue<StringValue> 
+                            { 
+                                InnerText = $"{GetCellReference(range.From)}:{GetCellReference(range.To)}" 
+                            }
+                        };
+                        
+                        if (!string.IsNullOrEmpty(validation.Formula1))
+                        {
+                            dataValidation.Formula1 = new Formula1(validation.Formula1);
+                        }
+                        
+                        if (!string.IsNullOrEmpty(validation.Formula2))
+                        {
+                            dataValidation.Formula2 = new Formula2(validation.Formula2);
+                        }
+                        
+                        if (validation.ShowInputMessage)
+                        {
+                            if (!string.IsNullOrEmpty(validation.InputTitle))
+                                dataValidation.PromptTitle = validation.InputTitle;
+                            if (!string.IsNullOrEmpty(validation.InputMessage))
+                                dataValidation.Prompt = validation.InputMessage;
+                        }
+                        
+                        if (validation.ShowErrorAlert)
+                        {
+                            if (!string.IsNullOrEmpty(validation.ErrorTitle))
+                                dataValidation.ErrorTitle = validation.ErrorTitle;
+                            if (!string.IsNullOrEmpty(validation.ErrorMessage))
+                                dataValidation.Error = validation.ErrorMessage;
+                            if (!string.IsNullOrEmpty(validation.ErrorStyle))
+                                dataValidation.ErrorStyle = ConvertErrorStyle(validation.ErrorStyle);
+                        }
+                        
+                        dataValidations.Append(dataValidation);
+                    }
+                    
+                    dataValidations.Count = (uint)workSheet.Validations.Count;
+                    worksheetPart.Worksheet.Append(dataValidations);
+                }
+
                 worksheetPart.Worksheet.Save();
                 var sheet = new Sheet
                 {
@@ -269,6 +341,42 @@ public class SheetConverter
             newCell.CellValue = new(cellValue.AsString());
         }
     }
+
+    private static DataValidationValues ConvertValidationType(ValidationType type) =>
+        type switch
+        {
+            ValidationType.List => DataValidationValues.List,
+            ValidationType.WholeNumber => DataValidationValues.Whole,
+            ValidationType.Decimal => DataValidationValues.Decimal,
+            ValidationType.Date => DataValidationValues.Date,
+            ValidationType.Time => DataValidationValues.Time,
+            ValidationType.TextLength => DataValidationValues.TextLength,
+            ValidationType.Custom => DataValidationValues.Custom,
+            _ => DataValidationValues.None
+        };
+
+    private static DataValidationOperatorValues ConvertValidationOperator(ValidationOperator op) =>
+        op switch
+        {
+            ValidationOperator.Between => DataValidationOperatorValues.Between,
+            ValidationOperator.NotBetween => DataValidationOperatorValues.NotBetween,
+            ValidationOperator.Equal => DataValidationOperatorValues.Equal,
+            ValidationOperator.NotEqual => DataValidationOperatorValues.NotEqual,
+            ValidationOperator.GreaterThan => DataValidationOperatorValues.GreaterThan,
+            ValidationOperator.LessThan => DataValidationOperatorValues.LessThan,
+            ValidationOperator.GreaterThanOrEqual => DataValidationOperatorValues.GreaterThanOrEqual,
+            ValidationOperator.LessThanOrEqual => DataValidationOperatorValues.LessThanOrEqual,
+            _ => DataValidationOperatorValues.Between
+        };
+
+    private static DataValidationErrorStyleValues ConvertErrorStyle(string style) =>
+        style.ToLowerInvariant() switch
+        {
+            "stop" => DataValidationErrorStyleValues.Stop,
+            "warning" => DataValidationErrorStyleValues.Warning,
+            "information" => DataValidationErrorStyleValues.Information,
+            _ => DataValidationErrorStyleValues.Stop
+        };
 }
 
 
