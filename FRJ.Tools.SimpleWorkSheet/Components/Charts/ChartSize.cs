@@ -2,23 +2,23 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Charts;
 
 public record ChartSize
 {
-    public long WidthEMUs { get; init; }
-    public long HeightEMUs { get; init; }
+    public long WidthEmus { get; init; }
+    public long HeightEmus { get; init; }
 
-    private const long EMUsPerInch = 914400;
+    private const long EmusPerInch = 914400;
 
-    public ChartSize(long widthEMUs, long heightEMUs)
+    public ChartSize(long widthEmus, long heightEmus)
     {
-        if (widthEMUs <= 0)
-            throw new ArgumentException("Width must be greater than 0", nameof(widthEMUs));
-        if (heightEMUs <= 0)
-            throw new ArgumentException("Height must be greater than 0", nameof(heightEMUs));
+        if (widthEmus <= 0)
+            throw new ArgumentException("Width must be greater than 0", nameof(widthEmus));
+        if (heightEmus <= 0)
+            throw new ArgumentException("Height must be greater than 0", nameof(heightEmus));
 
-        WidthEMUs = widthEMUs;
-        HeightEMUs = heightEMUs;
+        WidthEmus = widthEmus;
+        HeightEmus = heightEmus;
     }
 
-    public static ChartSize FromEMUs(long width, long height)
+    public static ChartSize FromEmus(long width, long height)
     {
         return new(width, height);
     }
@@ -30,9 +30,9 @@ public record ChartSize
         if (heightInches <= 0)
             throw new ArgumentException("Height must be greater than 0", nameof(heightInches));
 
-        var widthEMUs = (long)(widthInches * EMUsPerInch);
-        var heightEMUs = (long)(heightInches * EMUsPerInch);
-        return new(widthEMUs, heightEMUs);
+        var widthEmus = (long)(widthInches * EmusPerInch);
+        var heightEmus = (long)(heightInches * EmusPerInch);
+        return new(widthEmus, heightEmus);
     }
 
     public static ChartSize Default => FromInches(6.5, 4.3);

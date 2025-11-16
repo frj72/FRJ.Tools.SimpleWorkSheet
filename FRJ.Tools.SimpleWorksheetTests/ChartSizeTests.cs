@@ -9,17 +9,17 @@ public class ChartSizeTests
     {
         var size = new ChartSize(6000000, 4000000);
 
-        Assert.Equal(6000000, size.WidthEMUs);
-        Assert.Equal(4000000, size.HeightEMUs);
+        Assert.Equal(6000000, size.WidthEmus);
+        Assert.Equal(4000000, size.HeightEmus);
     }
 
     [Fact]
     public void ChartSize_FromEMUs_CreatesSize()
     {
-        var size = ChartSize.FromEMUs(5000000, 3000000);
+        var size = ChartSize.FromEmus(5000000, 3000000);
 
-        Assert.Equal(5000000, size.WidthEMUs);
-        Assert.Equal(3000000, size.HeightEMUs);
+        Assert.Equal(5000000, size.WidthEmus);
+        Assert.Equal(3000000, size.HeightEmus);
     }
 
     [Fact]
@@ -27,8 +27,8 @@ public class ChartSizeTests
     {
         var size = ChartSize.FromInches(1.0, 2.0);
 
-        Assert.Equal(914400, size.WidthEMUs);
-        Assert.Equal(1828800, size.HeightEMUs);
+        Assert.Equal(914400, size.WidthEmus);
+        Assert.Equal(1828800, size.HeightEmus);
     }
 
     [Fact]
@@ -36,8 +36,8 @@ public class ChartSizeTests
     {
         var size = ChartSize.Default;
 
-        Assert.True(size.WidthEMUs > 0);
-        Assert.True(size.HeightEMUs > 0);
+        Assert.True(size.WidthEmus > 0);
+        Assert.True(size.HeightEmus > 0);
     }
 
     [Fact]

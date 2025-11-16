@@ -25,8 +25,8 @@ public class ChartTests
         var chart = new TestChart();
 
         Assert.NotNull(chart.Size);
-        Assert.Equal(ChartSize.Default.WidthEMUs, chart.Size.WidthEMUs);
-        Assert.Equal(ChartSize.Default.HeightEMUs, chart.Size.HeightEMUs);
+        Assert.Equal(ChartSize.Default.WidthEmus, chart.Size.WidthEmus);
+        Assert.Equal(ChartSize.Default.HeightEmus, chart.Size.HeightEmus);
     }
 
     [Fact]
