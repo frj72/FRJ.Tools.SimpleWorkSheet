@@ -58,6 +58,12 @@ public class LineChart : Chart
         return this;
     }
 
+    public LineChart WithDataSourceSheet(string sheetName)
+    {
+        DataSourceSheet = sheetName;
+        return this;
+    }
+
     public new LineChart AddSeries(string name, CellRange dataRange)
     {
         base.AddSeries(name, dataRange);

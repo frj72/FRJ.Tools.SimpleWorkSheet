@@ -274,7 +274,8 @@ public class SheetConverter
                         var chartPart = drawingsPart.AddNewPart<ChartPart>();
                         var chartRelId = drawingsPart.GetIdOfPart(chartPart);
                         
-                        GenerateChartPart(chartPart, chart, workSheet.Name);
+                        var dataSheetName = chart.DataSourceSheet ?? workSheet.Name;
+                        GenerateChartPart(chartPart, chart, dataSheetName);
                         
                         var twoCellAnchor = CreateTwoCellAnchor(chart, chartRelId, chartIndex++);
                         worksheetDrawing.Append(twoCellAnchor);

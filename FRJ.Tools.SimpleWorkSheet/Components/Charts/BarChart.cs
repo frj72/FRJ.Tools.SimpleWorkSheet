@@ -51,6 +51,12 @@ public class BarChart : Chart
         return this;
     }
 
+    public BarChart WithDataSourceSheet(string sheetName)
+    {
+        DataSourceSheet = sheetName;
+        return this;
+    }
+
     public new BarChart AddSeries(string name, CellRange dataRange)
     {
         base.AddSeries(name, dataRange);

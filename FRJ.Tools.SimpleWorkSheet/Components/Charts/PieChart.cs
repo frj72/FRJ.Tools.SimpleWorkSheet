@@ -64,6 +64,12 @@ public class PieChart : Chart
         return this;
     }
 
+    public PieChart WithDataSourceSheet(string sheetName)
+    {
+        DataSourceSheet = sheetName;
+        return this;
+    }
+
     public new PieChart AddSeries(string name, CellRange dataRange)
     {
         base.AddSeries(name, dataRange);

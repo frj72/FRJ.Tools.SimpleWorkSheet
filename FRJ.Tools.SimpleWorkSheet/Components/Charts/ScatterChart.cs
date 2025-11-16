@@ -51,6 +51,12 @@ public class ScatterChart : Chart
         return this;
     }
 
+    public ScatterChart WithDataSourceSheet(string sheetName)
+    {
+        DataSourceSheet = sheetName;
+        return this;
+    }
+
     public new ScatterChart AddSeries(string name, CellRange dataRange)
     {
         base.AddSeries(name, dataRange);

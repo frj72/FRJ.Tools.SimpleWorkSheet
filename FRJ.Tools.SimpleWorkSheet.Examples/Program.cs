@@ -58,7 +58,8 @@ public static class Program
             new BarChartExample(),
             new LineChartExample(),
             new PieChartExample(),
-            new ScatterChartExample()
+            new ScatterChartExample(),
+            new ChartSheetExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

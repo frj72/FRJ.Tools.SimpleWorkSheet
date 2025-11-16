@@ -6,6 +6,7 @@ public abstract class Chart
     public ChartPosition? Position { get; protected set; }
     public ChartSize Size { get; protected set; } = ChartSize.Default;
     public string? Title { get; protected set; }
+    public string? DataSourceSheet { get; protected set; }
     public List<ChartSeries> Series { get; } = [];
 
     protected Chart(ChartType type)

@@ -298,5 +298,44 @@ public class OpenXmlValidationTests
         }
     }
 
+    [Fact]
+    public void ChartOnlySheet_NoCells_ValidatesCorrectly()
+    {
+        var dataSheet = new WorkSheet("Data");
+        dataSheet.AddCell(new(0, 0), new CellValue("Category"));
+        dataSheet.AddCell(new(1, 0), new CellValue("Value"));
+        dataSheet.AddCell(new(0, 1), new CellValue("A"));
+        dataSheet.AddCell(new(1, 1), new CellValue(100));
+        dataSheet.AddCell(new(0, 2), new CellValue("B"));
+        dataSheet.AddCell(new(1, 2), new CellValue(200));
+
+        var chartSheet = new WorkSheet("Dashboard");
+
+        var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
+        var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
+
+        var chart = BarChart.Create()
+            .WithTitle("Data from Another Sheet")
+            .WithDataRange(categoriesRange, valuesRange)
+            .WithPosition(0, 0, 8, 15)
+            .WithDataSourceSheet("Data");
+
+        chartSheet.AddChart(chart);
+
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+
+        try
+        {
+            var workbook = new WorkBook("Test", [dataSheet, chartSheet]);
+            workbook.SaveToFile(tempPath);
+
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
 
 }

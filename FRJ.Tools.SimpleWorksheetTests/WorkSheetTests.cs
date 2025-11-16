@@ -1,3 +1,4 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
@@ -223,6 +224,46 @@ public class WorkSheetTests
         Assert.NotNull(excelBytes);
         Assert.True(excelBytes.Length > 0);
         Assert.True(excelBytes.Length > 3000, $"File size was {excelBytes.Length} bytes");
+    }
+
+    [Fact]
+    public void AddChart_ChartOnlySheet_NoCells_Works()
+    {
+        var chartSheet = new WorkSheet("Dashboard");
+
+        var chart = BarChart.Create()
+            .WithTitle("Chart Only")
+            .WithDataRange(CellRange.FromBounds(0, 1, 0, 3), CellRange.FromBounds(1, 1, 1, 3))
+            .WithPosition(0, 0, 8, 15);
+
+        chartSheet.AddChart(chart);
+
+        Assert.Empty(chartSheet.Cells.Cells);
+        Assert.Single(chartSheet.Charts);
+    }
+
+    [Fact]
+    public void AddChart_MultipleSheets_ChartsReferenceCrossSheetsCorrectly()
+    {
+        var dataSheet = new WorkSheet("Data");
+        dataSheet.AddCell(new(0, 0), new CellValue("A"));
+        dataSheet.AddCell(new(1, 0), new CellValue(100));
+        dataSheet.AddCell(new(0, 1), new CellValue("B"));
+        dataSheet.AddCell(new(1, 1), new CellValue(200));
+
+        var chartSheet = new WorkSheet("Charts");
+        var chart = BarChart.Create()
+            .WithTitle("Cross Sheet Chart")
+            .WithDataRange(CellRange.FromBounds(0, 0, 0, 1), CellRange.FromBounds(1, 0, 1, 1))
+            .WithPosition(0, 0, 8, 15);
+
+        chartSheet.AddChart(chart);
+
+        var workbook = new WorkBook("Test", [dataSheet, chartSheet]);
+        var excelBytes = SheetConverter.ToBinaryExcelFile(workbook);
+
+        Assert.NotNull(excelBytes);
+        Assert.True(excelBytes.Length > 0);
     }
 }
 
