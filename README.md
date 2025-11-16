@@ -3,14 +3,11 @@
 A modern, fluent C# library for creating Excel documents with a clean builder pattern API.
 
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue)](https://dotnet.microsoft.com/)
-[![License](https://img.shields.io/badge/license-Unlicense-green)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-## ⚠️ Project Status
+## Project Status
 
-This project is currently in **pre-alpha** and will have regularly breaking changes.
-
-It should not be used in any production environment. If some code is usable, fork or copy it and maintain it in a separate/isolated repo.
-
+This project is currently in **alpha** (v1.0.0-alpha).
 
 ## Quick Start
 
@@ -33,7 +30,7 @@ var workbook = new WorkBook("MyWorkbook", [sheet]);
 workbook.SaveToFile("output.xlsx");
 ```
 
-## API Overview
+## Usage Overview
 
 ### Cell Creation
 
@@ -351,7 +348,9 @@ dotnet build --configuration Release
 
 ## License
 
-This project is released into the public domain under the [Unlicense](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
+
+**Note:** Version 0.9.0 was released under the Unlicense (public domain). Starting from version 1.0.0-alpha, the project is licensed under the MIT License.
 
 ## Acknowledgments
 
