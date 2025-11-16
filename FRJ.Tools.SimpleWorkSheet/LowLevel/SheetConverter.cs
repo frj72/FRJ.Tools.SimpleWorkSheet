@@ -510,6 +510,7 @@ public class SheetConverter
         var legend = new Legend();
         legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
         legend.Append(new Layout());
+        legend.Append(new Overlay { Val = false });
         chartElement.Append(legend);
 
         chartElement.Append(new PlotVisibleOnly { Val = true });
@@ -540,6 +541,7 @@ public class SheetConverter
             chartText.Append(richText);
             title.Append(chartText);
             title.Append(new Layout());
+            title.Append(new Overlay { Val = false });
             
             chartElement.InsertAt(title, 0);
         }
@@ -621,6 +623,8 @@ public class SheetConverter
 
         var legend = new Legend();
         legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        legend.Append(new Layout());
+        legend.Append(new Overlay { Val = false });
         chartElement.Append(legend);
 
         chartSpace.Append(chartElement);
@@ -642,6 +646,8 @@ public class SheetConverter
             richText.Append(paragraph);
             chartText.Append(richText);
             title.Append(chartText);
+            title.Append(new Layout());
+            title.Append(new Overlay { Val = false });
             
             chartElement.InsertAt(title, 0);
         }
@@ -695,6 +701,8 @@ public class SheetConverter
 
         var legend = new Legend();
         legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        legend.Append(new Layout());
+        legend.Append(new Overlay { Val = false });
         chartElement.Append(legend);
 
         chartSpace.Append(chartElement);
@@ -716,6 +724,8 @@ public class SheetConverter
             richText.Append(paragraph);
             chartText.Append(richText);
             title.Append(chartText);
+            title.Append(new Layout());
+            title.Append(new Overlay { Val = false });
             
             chartElement.InsertAt(title, 0);
         }
@@ -791,6 +801,8 @@ public class SheetConverter
 
         var legend = new Legend();
         legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        legend.Append(new Layout());
+        legend.Append(new Overlay { Val = false });
         chartElement.Append(legend);
 
         chartSpace.Append(chartElement);
@@ -812,6 +824,8 @@ public class SheetConverter
             richText.Append(paragraph);
             chartText.Append(richText);
             title.Append(chartText);
+            title.Append(new Layout());
+            title.Append(new Overlay { Val = false });
             
             chartElement.InsertAt(title, 0);
         }
