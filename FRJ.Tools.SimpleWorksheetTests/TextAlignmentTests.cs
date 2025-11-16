@@ -142,4 +142,172 @@ public class TextAlignmentTests
         Assert.Equal(15, style.TextRotation);
         Assert.True(style.WrapText);
     }
+
+    [Fact]
+    public void HorizontalAlignment_Left_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithHorizontalAlignment(HorizontalAlignment.Left)
+            .Build();
+
+        Assert.Equal(HorizontalAlignment.Left, style.HorizontalAlignment);
+    }
+
+    [Fact]
+    public void HorizontalAlignment_Center_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithHorizontalAlignment(HorizontalAlignment.Center)
+            .Build();
+
+        Assert.Equal(HorizontalAlignment.Center, style.HorizontalAlignment);
+    }
+
+    [Fact]
+    public void HorizontalAlignment_Right_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithHorizontalAlignment(HorizontalAlignment.Right)
+            .Build();
+
+        Assert.Equal(HorizontalAlignment.Right, style.HorizontalAlignment);
+    }
+
+    [Fact]
+    public void HorizontalAlignment_Justify_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithHorizontalAlignment(HorizontalAlignment.Justify)
+            .Build();
+
+        Assert.Equal(HorizontalAlignment.Justify, style.HorizontalAlignment);
+    }
+
+    [Fact]
+    public void HorizontalAlignment_Fill_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithHorizontalAlignment(HorizontalAlignment.Fill)
+            .Build();
+
+        Assert.Equal(HorizontalAlignment.Fill, style.HorizontalAlignment);
+    }
+
+    [Fact]
+    public void HorizontalAlignment_Distributed_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithHorizontalAlignment(HorizontalAlignment.Distributed)
+            .Build();
+
+        Assert.Equal(HorizontalAlignment.Distributed, style.HorizontalAlignment);
+    }
+
+    [Fact]
+    public void VerticalAlignment_Top_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithVerticalAlignment(VerticalAlignment.Top)
+            .Build();
+
+        Assert.Equal(VerticalAlignment.Top, style.VerticalAlignment);
+    }
+
+    [Fact]
+    public void VerticalAlignment_Middle_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithVerticalAlignment(VerticalAlignment.Middle)
+            .Build();
+
+        Assert.Equal(VerticalAlignment.Middle, style.VerticalAlignment);
+    }
+
+    [Fact]
+    public void VerticalAlignment_Bottom_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithVerticalAlignment(VerticalAlignment.Bottom)
+            .Build();
+
+        Assert.Equal(VerticalAlignment.Bottom, style.VerticalAlignment);
+    }
+
+    [Fact]
+    public void VerticalAlignment_Justify_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithVerticalAlignment(VerticalAlignment.Justify)
+            .Build();
+
+        Assert.Equal(VerticalAlignment.Justify, style.VerticalAlignment);
+    }
+
+    [Fact]
+    public void VerticalAlignment_Distributed_SetsCorrectly()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithVerticalAlignment(VerticalAlignment.Distributed)
+            .Build();
+
+        Assert.Equal(VerticalAlignment.Distributed, style.VerticalAlignment);
+    }
+
+    [Fact]
+    public void TextRotation_Zero_NoRotation()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithTextRotation(0)
+            .Build();
+
+        Assert.Equal(0, style.TextRotation);
+    }
+
+    [Fact]
+    public void TextRotation_MaxPositive_90Degrees()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithTextRotation(90)
+            .Build();
+
+        Assert.Equal(90, style.TextRotation);
+    }
+
+    [Fact]
+    public void TextRotation_MaxNegative_Minus90Degrees()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithTextRotation(-90)
+            .Build();
+
+        Assert.Equal(-90, style.TextRotation);
+    }
+
+    [Fact]
+    public void TextRotation_180Degrees_ThrowsException()
+    {
+        var builder = CellStyleBuilder.Create();
+
+        Assert.Throws<ArgumentException>(() => builder.WithTextRotation(180));
+    }
+
+    [Fact]
+    public void TextRotation_MidRangePositive_45Degrees()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithTextRotation(45)
+            .Build();
+
+        Assert.Equal(45, style.TextRotation);
+    }
+
+    [Fact]
+    public void TextRotation_MidRangeNegative_Minus45Degrees()
+    {
+        var style = CellStyleBuilder.Create()
+            .WithTextRotation(-45)
+            .Build();
+
+        Assert.Equal(-45, style.TextRotation);
+    }
 }

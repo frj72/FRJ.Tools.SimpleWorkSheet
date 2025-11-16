@@ -28,7 +28,12 @@ public class WorkBookReaderTests
         sheet.SetRowHeight(0, 25.0);
         sheet.FreezePanes(1, 0);
         
-        var workbook = new WorkBook("TestWorkbook", [sheet]);
+        WorkBook workbook = new("TestWorkbook", [sheet]);
+        return SaveWorkbook(workbook);
+    }
+
+    private static string SaveWorkbook(WorkBook workbook)
+    {
         var tempPath = Path.GetTempFileName() + ".xlsx";
         workbook.SaveToFile(tempPath);
         return tempPath;
@@ -204,7 +209,7 @@ public class WorkBookReaderTests
             .WithColor("FF0000"));
         originalSheet.AddCell(new(1, 0), 42);
         
-        var originalWorkbook = new WorkBook("Test", [originalSheet]);
+        WorkBook originalWorkbook = new("Test", [originalSheet]);
         var tempPath = Path.GetTempFileName() + ".xlsx";
         
         try
@@ -239,12 +244,11 @@ public class WorkBookReaderTests
                 .WithHorizontalAlignment(HorizontalAlignment.Center)
                 .WithVerticalAlignment(VerticalAlignment.Middle)));
         
-        var workbook = new WorkBook("Test", [sheet]);
-        var tempPath = Path.GetTempFileName() + ".xlsx";
+        WorkBook workbook = new("Test", [sheet]);
+        var tempPath = SaveWorkbook(workbook);
         
         try
         {
-            workbook.SaveToFile(tempPath);
             var loadedWorkbook = WorkBookReader.LoadFromFile(tempPath);
             
             var loadedSheet = loadedWorkbook.Sheets.First();
@@ -256,6 +260,163 @@ public class WorkBookReaderTests
         finally
         {
             File.Delete(tempPath);
+        }
+    }
+
+    [Fact]
+    public void RoundTrip_PreservesAllCellBorderStyles()
+    {
+        var sheet = new WorkSheet("Borders");
+        var styles = Enum.GetValues<CellBorderStyle>();
+        uint row = 0;
+        foreach (var style in styles)
+        {
+            sheet.AddCell(new(0, row), style.ToString(), cell => cell
+                .WithBorders(CellBorders.Create(
+                    CellBorder.Create("000000", style),
+                    CellBorder.Create("000000", style),
+                    CellBorder.Create("000000", style),
+                    CellBorder.Create("000000", style))));
+            row++;
+        }
+
+        var workbook = new WorkBook("Borders", [sheet]);
+        var tempPath = SaveWorkbook(workbook);
+
+        try
+        {
+            var loaded = WorkBookReader.LoadFromFile(tempPath);
+            var loadedSheet = loaded.Sheets.First();
+
+            row = 0;
+            foreach (var style in styles)
+            {
+                var cell = loadedSheet.Cells.Cells[new(0, row)];
+                Assert.Equal(style, cell.Borders?.Top?.Style);
+                Assert.Equal(style, cell.Borders?.Left?.Style);
+                row++;
+            }
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    [Fact]
+    public void RoundTrip_PreservesHorizontalAlignmentValues()
+    {
+        var sheet = new WorkSheet("HorizontalAlignment");
+        uint row = 0;
+        foreach (var alignment in Enum.GetValues<HorizontalAlignment>())
+        {
+            sheet.AddCell(new(0, row), alignment.ToString(), cell => cell
+                .WithStyle(style => style.WithHorizontalAlignment(alignment)));
+            row++;
+        }
+ 
+        var path = SaveWorkbook(new("Alignments", [sheet]));
+ 
+        try
+        {
+            var loaded = WorkBookReader.LoadFromFile(path);
+
+            var loadedSheet = loaded.Sheets.First();
+            row = 0;
+            foreach (var alignment in Enum.GetValues<HorizontalAlignment>())
+            {
+                var cell = loadedSheet.Cells.Cells[new(0, row)];
+                Assert.Equal(alignment, cell.Style.HorizontalAlignment);
+                row++;
+            }
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void RoundTrip_PreservesVerticalAlignmentValues()
+    {
+        var sheet = new WorkSheet("VerticalAlignment");
+        uint row = 0;
+        foreach (var alignment in Enum.GetValues<VerticalAlignment>())
+        {
+            sheet.AddCell(new(0, row), alignment.ToString(), cell => cell
+                .WithStyle(style => style.WithVerticalAlignment(alignment)));
+            row++;
+        }
+ 
+        var path = SaveWorkbook(new("Alignments", [sheet]));
+ 
+        try
+        {
+            var loaded = WorkBookReader.LoadFromFile(path);
+
+            var loadedSheet = loaded.Sheets.First();
+            row = 0;
+            foreach (var alignment in Enum.GetValues<VerticalAlignment>())
+            {
+                var cell = loadedSheet.Cells.Cells[new(0, row)];
+                Assert.Equal(alignment, cell.Style.VerticalAlignment);
+                row++;
+            }
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void RoundTrip_PreservesTextRotationAndWrapText()
+    {
+        var sheet = new WorkSheet("Formatting");
+        sheet.AddCell(new(0, 0), "Rotated", cell => cell
+            .WithStyle(style => style.WithTextRotation(45).WithWrapText(true)));
+
+        var path = SaveWorkbook(new("Formatting", [sheet]));
+ 
+        try
+        {
+            var loaded = WorkBookReader.LoadFromFile(path);
+
+            var cell = loaded.Sheets.First().Cells.Cells[new(0, 0)];
+
+            Assert.Equal(45, cell.Style.TextRotation);
+            Assert.True(cell.Style.WrapText);
+        }
+        finally
+        {
+            File.Delete(path);
+        }
+    }
+
+    [Fact]
+    public void RoundTrip_PreservesHyperlinks()
+    {
+        var sheet = new WorkSheet("Links");
+        sheet.AddCell(new(0, 0), "Docs", cell => cell.WithHyperlink("https://docs.example.com", "Docs"));
+        sheet.AddCell(new(0, 1), "Email", cell => cell.WithHyperlink("mailto:user@example.com?subject=Hello"));
+
+        var path = SaveWorkbook(new("Links", [sheet]));
+ 
+        try
+        {
+            var loaded = WorkBookReader.LoadFromFile(path);
+
+            var loadedSheet = loaded.Sheets.First();
+
+            var cell0 = loadedSheet.Cells.Cells[new(0, 0)];
+            var cell1 = loadedSheet.Cells.Cells[new(0, 1)];
+
+            Assert.Equal("https://docs.example.com/", cell0.Hyperlink?.Url);
+            Assert.Equal("mailto:user@example.com?subject=Hello", cell1.Hyperlink?.Url);
+        }
+        finally
+        {
+            File.Delete(path);
         }
     }
 }

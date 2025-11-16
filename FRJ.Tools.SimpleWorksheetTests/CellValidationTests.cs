@@ -59,12 +59,75 @@ public class CellValidationTests
     }
 
     [Fact]
+    public void TimeValidation_Record_CanBeConstructed()
+    {
+        var validation = new CellValidation
+        {
+            Type = ValidationType.Time,
+            Operator = ValidationOperator.Between,
+            Formula1 = "0.25",
+            Formula2 = "0.75"
+        };
+
+        Assert.Equal(ValidationType.Time, validation.Type);
+        Assert.Equal("0.25", validation.Formula1);
+        Assert.Equal("0.75", validation.Formula2);
+    }
+
+    [Fact]
     public void CustomValidation_SetsFormula()
     {
         var validation = CellValidation.Custom("=A1>B1");
 
         Assert.Equal(ValidationType.Custom, validation.Type);
         Assert.Equal("=A1>B1", validation.Formula1);
+    }
+
+    [Fact]
+    public void WholeNumberValidation_NotBetween_SetsOperator()
+    {
+        var validation = CellValidation.WholeNumber(ValidationOperator.NotBetween, 5, 10);
+
+        Assert.Equal(ValidationOperator.NotBetween, validation.Operator);
+        Assert.Equal("5", validation.Formula1);
+        Assert.Equal("10", validation.Formula2);
+    }
+
+    [Fact]
+    public void DecimalValidation_Equal_SetsOperator()
+    {
+        var validation = CellValidation.DecimalNumber(ValidationOperator.Equal, 12.5);
+
+        Assert.Equal(ValidationOperator.Equal, validation.Operator);
+        Assert.Equal("12.5", validation.Formula1);
+        Assert.Null(validation.Formula2);
+    }
+
+    [Fact]
+    public void DecimalValidation_NotEqual_SetsOperator()
+    {
+        var validation = CellValidation.DecimalNumber(ValidationOperator.NotEqual, 3.14);
+
+        Assert.Equal(ValidationOperator.NotEqual, validation.Operator);
+        Assert.Equal("3.14", validation.Formula1);
+    }
+
+    [Fact]
+    public void WholeNumberValidation_GreaterThanOrEqual_SetsOperator()
+    {
+        var validation = CellValidation.WholeNumber(ValidationOperator.GreaterThanOrEqual, 100);
+
+        Assert.Equal(ValidationOperator.GreaterThanOrEqual, validation.Operator);
+        Assert.Equal("100", validation.Formula1);
+    }
+
+    [Fact]
+    public void WholeNumberValidation_LessThanOrEqual_SetsOperator()
+    {
+        var validation = CellValidation.WholeNumber(ValidationOperator.LessThanOrEqual, 50);
+
+        Assert.Equal(ValidationOperator.LessThanOrEqual, validation.Operator);
+        Assert.Equal("50", validation.Formula1);
     }
 
     [Fact]

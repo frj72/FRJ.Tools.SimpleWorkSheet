@@ -64,6 +64,66 @@ public class FreezePaneTests
         Assert.Equal(3u, sheet.FrozenPane.Column);
     }
 
+    [Fact]
+    public void FreezePanes_ZeroZero_SetsZeroZeroFreeze()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.FreezePanes(0, 0);
+
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.Equal(0u, sheet.FrozenPane.Row);
+        Assert.Equal(0u, sheet.FrozenPane.Column);
+    }
+
+    [Fact]
+    public void FreezePanes_FirstColumnOnly_FreezeColumn()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.FreezePanes(0, 1);
+
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.Equal(0u, sheet.FrozenPane.Row);
+        Assert.Equal(1u, sheet.FrozenPane.Column);
+    }
+
+    [Fact]
+    public void FreezePanes_FirstRowOnly_FreezeRow()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.FreezePanes(1, 0);
+
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.Equal(1u, sheet.FrozenPane.Row);
+        Assert.Equal(0u, sheet.FrozenPane.Column);
+    }
+
+    [Fact]
+    public void FreezePanes_BothRowsAndColumns_FreezesBoth()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.FreezePanes(5, 5);
+
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.Equal(5u, sheet.FrozenPane.Row);
+        Assert.Equal(5u, sheet.FrozenPane.Column);
+    }
+
+    [Fact]
+    public void FreezePanes_ExtremeValues_StoresValues()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.FreezePanes(uint.MaxValue, uint.MaxValue);
+
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.Equal(uint.MaxValue, sheet.FrozenPane.Row);
+        Assert.Equal(uint.MaxValue, sheet.FrozenPane.Column);
+    }
+
     private static readonly string[] SourceArrayHeaders = ["Column A", "Column B", "Column C", "Column D", "Column E"];
 
     [Fact]

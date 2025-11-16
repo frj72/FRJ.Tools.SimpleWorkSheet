@@ -350,8 +350,6 @@ dotnet build --configuration Release
 
 This project is licensed under the [MIT License](LICENSE).
 
-**Note:** Version 0.9.0 was released under the Unlicense (public domain). Starting from version 1.0.0-alpha, the project is licensed under the MIT License.
-
 ## Acknowledgments
 
 Built with:

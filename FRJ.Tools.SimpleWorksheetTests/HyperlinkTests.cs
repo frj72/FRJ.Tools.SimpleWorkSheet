@@ -84,4 +84,71 @@ public class HyperlinkTests
 
         Assert.NotEmpty(bytes);
     }
+
+    [Fact]
+    public void WithHyperlink_AllowsVeryLongUrls()
+    {
+        var longPath = new string('a', 2100);
+        var url = $"https://example.com/{longPath}";
+
+        var cell = CellBuilder.Create()
+            .WithValue("Long URL")
+            .WithHyperlink(url)
+            .Build();
+
+        Assert.Equal(url, cell.Hyperlink?.Url);
+    }
+
+    [Fact]
+    public void WithHyperlink_AllowsSpecialCharacters()
+    {
+        const string url = "https://example.com/search?q=Résumé+😊";
+
+        var cell = CellBuilder.Create()
+            .WithValue("Special")
+            .WithHyperlink(url)
+            .Build();
+
+        Assert.Equal(url, cell.Hyperlink?.Url);
+    }
+
+    [Fact]
+    public void WithHyperlink_AllowsMailtoAddress()
+    {
+        const string url = "mailto:user@example.com";
+
+        var cell = CellBuilder.Create()
+            .WithValue("Email")
+            .WithHyperlink(url)
+            .Build();
+
+        Assert.Equal(url, cell.Hyperlink?.Url);
+    }
+
+    [Fact]
+    public void WithHyperlink_AllowsMailtoWithSubject()
+    {
+        const string url = "mailto:user@example.com?subject=Test";
+
+        var cell = CellBuilder.Create()
+            .WithValue("Email")
+            .WithHyperlink(url, "Send email")
+            .Build();
+
+        Assert.Equal(url, cell.Hyperlink?.Url);
+        Assert.Equal("Send email", cell.Hyperlink?.Tooltip);
+    }
+
+    [Fact]
+    public void WithHyperlink_InvalidUrlString_IsStoredAsIs()
+    {
+        const string url = "not a valid url";
+
+        var cell = CellBuilder.Create()
+            .WithValue("Invalid")
+            .WithHyperlink(url)
+            .Build();
+
+        Assert.Equal(url, cell.Hyperlink?.Url);
+    }
 }

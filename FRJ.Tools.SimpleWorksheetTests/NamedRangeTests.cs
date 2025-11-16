@@ -122,4 +122,15 @@ public class NamedRangeTests
 
         Assert.Equal("'Sheet1'!$D$6:$D$6", formula);
     }
+
+    [Fact]
+    public void NamedRange_WithSpacesInSheetName_QuotesSheetInFormula()
+    {
+        var range = CellRange.FromBounds(0, 0, 1, 1);
+        var namedRange = new NamedRange("Totals", "Sheet 1", range);
+
+        var formula = namedRange.ToFormulaReference();
+
+        Assert.Equal("'Sheet 1'!$A$1:$B$2", formula);
+    }
 }

@@ -72,6 +72,35 @@ public class LineChartTests
     }
 
     [Fact]
+    public void WithMarkers_None_SetsMarkerStyleToNone()
+    {
+        var chart = LineChart.Create()
+            .WithMarkers(LineChartMarkerStyle.None);
+
+        Assert.Equal(LineChartMarkerStyle.None, chart.MarkerStyle);
+    }
+
+    [Fact]
+    public void WithMarkers_Diamond_SetsMarkerStyle()
+    {
+        var chart = LineChart.Create()
+            .WithMarkers(LineChartMarkerStyle.Diamond);
+
+        Assert.Equal(LineChartMarkerStyle.Diamond, chart.MarkerStyle);
+    }
+
+    [Fact]
+    public void WithMarkers_ReturnsSameInstanceWithUpdatedStyle()
+    {
+        var chart = LineChart.Create();
+
+        var result = chart.WithMarkers(LineChartMarkerStyle.Circle);
+
+        Assert.Same(chart, result);
+        Assert.Equal(LineChartMarkerStyle.Circle, chart.MarkerStyle);
+    }
+
+    [Fact]
     public void WithSmoothLines_SetsSmoothLines()
     {
         var chart = LineChart.Create()

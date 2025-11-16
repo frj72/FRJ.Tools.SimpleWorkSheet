@@ -2,6 +2,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
@@ -44,5 +45,53 @@ public class CellMergingTests
         var range = loadedSheet.MergedCells[0];
         Assert.Equal(new(0, 0), range.From);
         Assert.Equal(new(3, 1), range.To);
+    }
+
+    [Fact]
+    public void MergeCells_WithSingleCellRange_ThrowsArgumentException()
+    {
+        var sheet = new WorkSheet("Test");
+
+        var exception = Assert.Throws<ArgumentException>(() => sheet.MergeCells(1, 1, 1, 1));
+        Assert.Equal("range", exception.ParamName);
+    }
+
+    [Fact]
+    public void MergeCells_WithExtremeCoordinates_AddsRange()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.MergeCells(0, 0, 16383, 1048575);
+
+        Assert.Single(sheet.MergedCells);
+        var range = sheet.MergedCells[0];
+        Assert.Equal(new(0, 0), range.From);
+        Assert.Equal(new(16383, 1048575), range.To);
+    }
+
+    [Fact]
+    public void MergeCells_PreservesExistingTopLeftValue()
+    {
+        var sheet = new WorkSheet("Test");
+        sheet.AddCell(new(0, 0), "Header");
+
+        sheet.MergeCells(0, 0, 2, 1);
+
+        var cell = sheet.Cells.Cells[new(0, 0)];
+        Assert.Equal("Header", cell.Value.Value.AsT2);
+    }
+
+    [Fact]
+    public void MergeCells_CreatesTopLeftCellWhenMissing()
+    {
+        var sheet = new WorkSheet("Test");
+
+        sheet.MergeCells(3, 4, 5, 6);
+
+        var position = new CellPosition(3, 4);
+        Assert.True(sheet.Cells.Cells.ContainsKey(position));
+        var cell = sheet.Cells.Cells[position];
+        Assert.True(cell.Value.Value.IsT2);
+        Assert.Equal(string.Empty, cell.Value.Value.AsT2);
     }
 }

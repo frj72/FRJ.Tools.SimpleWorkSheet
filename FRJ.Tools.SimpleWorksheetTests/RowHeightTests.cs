@@ -55,4 +55,71 @@ public class RowHeightTests
         Assert.Single(sheet.ExplicitRowHeights);
         Assert.Equal(40.0, sheet.ExplicitRowHeights[0].AsT0);
     }
+
+    [Fact]
+    public void SetRowHeight_WithZero_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetRowHeight(0, 0.0);
+
+        Assert.True(sheet.ExplicitRowHeights.ContainsKey(0));
+        Assert.Equal(0.0, sheet.ExplicitRowHeights[0].AsT0);
+    }
+
+    [Fact]
+    public void SetRowHeight_WithNegativeValue_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetRowHeight(0, -5.0);
+
+        Assert.True(sheet.ExplicitRowHeights.ContainsKey(0));
+        Assert.Equal(-5.0, sheet.ExplicitRowHeights[0].AsT0);
+    }
+
+    [Fact]
+    public void SetRowHeight_WithMinimum_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetRowHeight(0, 1.0);
+
+        Assert.True(sheet.ExplicitRowHeights.ContainsKey(0));
+        Assert.Equal(1.0, sheet.ExplicitRowHeights[0].AsT0);
+    }
+
+    [Fact]
+    public void SetRowHeight_WithExcelMaximum_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetRowHeight(0, 409.0);
+
+        Assert.True(sheet.ExplicitRowHeights.ContainsKey(0));
+        Assert.Equal(409.0, sheet.ExplicitRowHeights[0].AsT0);
+    }
+
+    [Fact]
+    public void SetRowHeight_WithBeyondExcelLimit_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetRowHeight(0, 1000.0);
+
+        Assert.True(sheet.ExplicitRowHeights.ContainsKey(0));
+        Assert.Equal(1000.0, sheet.ExplicitRowHeights[0].AsT0);
+    }
+
+    [Fact]
+    public void SetRowHeight_WithAutoEnumAlternate_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetRowHeight(1, RowHeight.AutoExpand);
+
+        Assert.True(sheet.ExplicitRowHeights.ContainsKey(1));
+        Assert.True(sheet.ExplicitRowHeights[1].IsT1);
+        Assert.Equal(RowHeight.AutoExpand, sheet.ExplicitRowHeights[1].AsT1);
+    }
 }

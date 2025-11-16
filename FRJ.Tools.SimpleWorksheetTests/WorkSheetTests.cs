@@ -265,5 +265,153 @@ public class WorkSheetTests
         Assert.NotNull(excelBytes);
         Assert.True(excelBytes.Length > 0);
     }
+
+    [Fact]
+    public void AddCell_ToSamePositionTwice_SecondOverwritesFirst()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var position = new CellPosition(0, 0);
+
+        sheet.AddCell(position, "First");
+        sheet.AddCell(position, "Second");
+
+        var value = sheet.GetValue(0, 0);
+        Assert.Equal("Second", value?.Value.AsT2);
+    }
+
+    [Fact]
+    public void AddCell_ThenSetValue_ValueUpdates()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var position = new CellPosition(0, 0);
+
+        sheet.AddCell(position, "Original");
+        sheet.SetValue(0, 0, "Updated");
+
+        var value = sheet.GetValue(0, 0);
+        Assert.Equal("Updated", value?.Value.AsT2);
+    }
+
+    [Fact]
+    public void AddCell_ThenSetFont_FontUpdatesValuePreserved()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var position = new CellPosition(0, 0);
+        var newFont = CellFont.Create(16, "Arial", "FF0000");
+
+        sheet.AddCell(position, "TestValue");
+        sheet.SetFont(0, 0, newFont);
+
+        var value = sheet.GetValue(0, 0);
+        var cell = sheet.Cells.Cells[position];
+        
+        Assert.Equal("TestValue", value?.Value.AsT2);
+        Assert.Equal(newFont, cell.Font);
+    }
+
+    [Fact]
+    public void AddCell_ThenSetColor_ColorUpdatesValuePreserved()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var position = new CellPosition(0, 0);
+        const string newColor = "FF0000";
+
+        sheet.AddCell(position, "TestValue");
+        sheet.SetColor(0, 0, newColor);
+
+        var value = sheet.GetValue(0, 0);
+        var cell = sheet.Cells.Cells[position];
+        
+        Assert.Equal("TestValue", value?.Value.AsT2);
+        Assert.Equal(newColor, cell.Color);
+    }
+
+    [Fact]
+    public void AddCell_ThenSetBorders_BordersUpdateValuePreserved()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var position = new CellPosition(0, 0);
+        var borders = CellBorders.Create(
+            CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
+            CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
+            CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
+            CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
+
+        sheet.AddCell(position, "TestValue");
+        sheet.SetBorders(0, 0, borders);
+
+        var value = sheet.GetValue(0, 0);
+        var cell = sheet.Cells.Cells[position];
+        
+        Assert.Equal("TestValue", value?.Value.AsT2);
+        Assert.Equal(borders, cell.Borders);
+    }
+
+    [Fact]
+    public void SetColumnWidth_WithZero_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetColumnWith(0, 0.0);
+
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.Equal(0.0, sheet.ExplicitColumnWidths[0].AsT0);
+    }
+
+    [Fact]
+    public void SetColumnWidth_WithNegativeValue_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetColumnWith(0, -5.0);
+
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.Equal(-5.0, sheet.ExplicitColumnWidths[0].AsT0);
+    }
+
+    [Fact]
+    public void SetColumnWidth_WithMinimum_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetColumnWith(0, 1.0);
+
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.Equal(1.0, sheet.ExplicitColumnWidths[0].AsT0);
+    }
+
+    [Fact]
+    public void SetColumnWidth_WithExcelMaximum_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetColumnWith(0, 255.0);
+
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.Equal(255.0, sheet.ExplicitColumnWidths[0].AsT0);
+    }
+
+    [Fact]
+    public void SetColumnWidth_WithBeyondExcelLimit_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetColumnWith(0, 1000.0);
+
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.Equal(1000.0, sheet.ExplicitColumnWidths[0].AsT0);
+    }
+
+    [Fact]
+    public void SetColumnWidth_WithAutoEnum_StoresValue()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        sheet.SetColumnWith(0, CellWidth.AutoExpand);
+
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.True(sheet.ExplicitColumnWidths[0].IsT1);
+        Assert.Equal(CellWidth.AutoExpand, sheet.ExplicitColumnWidths[0].AsT1);
+    }
 }
 

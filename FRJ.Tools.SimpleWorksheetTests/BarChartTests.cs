@@ -156,6 +156,17 @@ public class BarChartTests
     }
 
     [Fact]
+    public void WithOrientation_ReturnsSameInstanceWithUpdatedOrientation()
+    {
+        var chart = BarChart.Create();
+
+        var result = chart.WithOrientation(BarChartOrientation.Horizontal);
+
+        Assert.Same(chart, result);
+        Assert.Equal(BarChartOrientation.Horizontal, chart.Orientation);
+    }
+
+    [Fact]
     public void AddSeries_AddsSeriesAndReturnsBarChart()
     {
         var dataRange = CellRange.FromBounds(1, 0, 1, 5);

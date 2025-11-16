@@ -217,4 +217,71 @@ public class CellFontBuilderTests
         Assert.False(font.Bold);
         Assert.True(font.Italic);
     }
+
+    [Fact]
+    public void CellFont_WithSizeZero_StoresValue()
+    {
+        var font = CellFont.Create(0, "Arial", "000000");
+
+        Assert.Equal(0, font.Size);
+    }
+
+    [Fact]
+    public void CellFont_WithNegativeSize_StoresValue()
+    {
+        var font = CellFont.Create(-1, "Arial", "000000");
+
+        Assert.Equal(-1, font.Size);
+    }
+
+    [Fact]
+    public void CellFont_WithSizeOne_StoresValue()
+    {
+        var font = CellFont.Create(1, "Arial", "000000");
+
+        Assert.Equal(1, font.Size);
+    }
+
+    [Fact]
+    public void CellFont_WithSize409_StoresValue()
+    {
+        var font = CellFont.Create(409, "Arial", "000000");
+
+        Assert.Equal(409, font.Size);
+    }
+
+    [Fact]
+    public void CellFont_WithSize1000_StoresValue()
+    {
+        var font = CellFont.Create(1000, "Arial", "000000");
+
+        Assert.Equal(1000, font.Size);
+    }
+
+    [Fact]
+    public void CellFont_WithEmptyName_StoresEmptyString()
+    {
+        var font = CellFont.Create(12, "", "000000");
+
+        Assert.Equal("", font.Name);
+    }
+
+    [Fact]
+    public void CellFont_WithNullName_UsesDefaultName()
+    {
+        var font = CellFont.Create(12, null, "000000");
+
+        Assert.Equal(WorkSheetDefaults.FontName, font.Name);
+    }
+
+    [Fact]
+    public void CellFont_WithVeryLongName_StoresValue()
+    {
+        var longName = new string('A', 300);
+        var font = CellFont.Create(12, longName, "000000");
+
+        Assert.Equal(longName, font.Name);
+        if (font.Name != null)
+            Assert.Equal(300, font.Name.Length);
+    }
 }
