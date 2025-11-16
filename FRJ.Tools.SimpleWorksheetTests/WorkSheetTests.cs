@@ -114,7 +114,7 @@ public class WorkSheetTests
         sheet.MergeCells(0, 0, 2, 1);
  
         Assert.Single(sheet.MergedCells);
-        Assert.True(sheet.Cells.Cells.ContainsKey(new CellPosition(0, 0)));
+        Assert.True(sheet.Cells.Cells.ContainsKey(new(0, 0)));
     }
 
     [Fact]

@@ -94,14 +94,10 @@ public class SheetConverter
                         column.CustomWidth = true;
                     }
 
-                    if (columnWidth.Value.IsT1)
+                    if (columnWidth.Value is { IsT1: true, AsT1: CellWidth.AutoExpand })
                     {
-                        var width = columnWidth.Value.AsT1;
-                        if (width == CellWidth.AutoExpand)
-                        {
-                            column.BestFit = true;
-                            column.CustomWidth = false;
-                        }
+                        column.BestFit = true;
+                        column.CustomWidth = false;
                     }
 
                     columns.Append(column);

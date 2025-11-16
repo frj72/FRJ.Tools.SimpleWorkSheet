@@ -4,8 +4,6 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public readonly record struct CellRange(CellPosition From, CellPosition To)
 {
-    public uint Width => To.X - From.X + 1;
-    public uint Height => To.Y - From.Y + 1;
     public bool IsSingleCell => From.X == To.X && From.Y == To.Y;
 
     public static CellRange FromBounds(uint fromX, uint fromY, uint toX, uint toY)

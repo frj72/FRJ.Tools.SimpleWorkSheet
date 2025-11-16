@@ -13,28 +13,28 @@ public class CellMergingExample : IExample
     {
         var sheet = new WorkSheet("Cell Merging");
 
-        sheet.AddCell(new CellPosition(0, 0), "Quarterly Sales", cell => cell
+        sheet.AddCell(new(0, 0), "Quarterly Sales", cell => cell
             .WithFont(font => font.Bold().WithSize(16))
             .WithStyle(style => style.WithHorizontalAlignment(HorizontalAlignment.Center))
             .WithColor("FFD966"));
         sheet.MergeCells(0, 0, 4, 0);
 
-        sheet.AddCell(new CellPosition(0, 1), "Product", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(0, 1), "Product", cell => cell.WithFont(font => font.Bold()));
         sheet.MergeCells(0, 1, 0, 2);
-        sheet.AddCell(new CellPosition(1, 1), "Q1", cell => cell.WithFont(font => font.Bold()));
-        sheet.AddCell(new CellPosition(2, 1), "Q2", cell => cell.WithFont(font => font.Bold()));
-        sheet.AddCell(new CellPosition(3, 1), "Q3", cell => cell.WithFont(font => font.Bold()));
-        sheet.AddCell(new CellPosition(4, 1), "Q4", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(1, 1), "Q1", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(2, 1), "Q2", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(3, 1), "Q3", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(4, 1), "Q4", cell => cell.WithFont(font => font.Bold()));
 
-        sheet.AddCell(new CellPosition(1, 2), "North", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(1, 2), "North", cell => cell.WithFont(font => font.Bold()));
         sheet.MergeCells(1, 2, 2, 2);
-        sheet.AddCell(new CellPosition(3, 2), "South", cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(new(3, 2), "South", cell => cell.WithFont(font => font.Bold()));
         sheet.MergeCells(3, 2, 4, 2);
 
-        sheet.AddCell(new CellPosition(1, 3), 125000);
-        sheet.AddCell(new CellPosition(2, 3), 118500);
-        sheet.AddCell(new CellPosition(3, 3), 98000);
-        sheet.AddCell(new CellPosition(4, 3), 102500);
+        sheet.AddCell(new(1, 3), 125000);
+        sheet.AddCell(new(2, 3), 118500);
+        sheet.AddCell(new(3, 3), 98000);
+        sheet.AddCell(new(4, 3), 102500);
 
         sheet.SetColumnWith(0, 18.0);
         sheet.SetColumnWith(1, 14.0);
