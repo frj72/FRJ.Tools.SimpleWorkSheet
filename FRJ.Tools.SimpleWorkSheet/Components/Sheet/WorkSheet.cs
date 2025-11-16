@@ -1,3 +1,4 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using OneOf;
 using ArgumentException = System.ArgumentException;
@@ -10,6 +11,7 @@ public class WorkSheet
 
 
     private readonly List<CellRange> _mergedCells = [];
+    private readonly List<Chart> _charts = [];
     public string Name { get; }
     public CellCollection Cells { get; }
     
@@ -18,6 +20,7 @@ public class WorkSheet
     public Dictionary<CellRange, CellValidation> Validations { get; } = new();
     public FreezePane? FrozenPane { get; private set; }
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
+    public IReadOnlyList<Chart> Charts => _charts;
 
     public WorkSheet(string name)
     {
@@ -246,6 +249,14 @@ public class WorkSheet
     {
         var range = CellRange.FromBounds(fromX, fromY, toX, toY);
         Validations[range] = validation;
+    }
+    
+    public void AddChart(Chart chart)
+    {
+        if (chart.Position == null)
+            throw new ArgumentException("Chart must have a position before being added to worksheet", nameof(chart));
+
+        _charts.Add(chart);
     }
     
     private void EnsureCellExists(CellPosition position)

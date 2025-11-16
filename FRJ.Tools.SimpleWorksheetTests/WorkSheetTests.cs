@@ -1,3 +1,4 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
@@ -124,6 +125,71 @@ public class WorkSheetTests
         sheet.MergeCells(0, 0, 1, 0);
  
         Assert.Throws<ArgumentException>(() => sheet.MergeCells(1, 0, 2, 0));
+    }
+
+    [Fact]
+    public void Charts_DefaultValue_IsEmpty()
+    {
+        var sheet = new WorkSheet("TestSheet");
+
+        Assert.Empty(sheet.Charts);
+    }
+
+    [Fact]
+    public void AddChart_ValidChart_AddsToCollection()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var chart = BarChart.Create()
+            .WithTitle("Test Chart")
+            .WithPosition(5, 0, 10, 15);
+
+        sheet.AddChart(chart);
+
+        Assert.Single(sheet.Charts);
+        Assert.Same(chart, sheet.Charts[0]);
+    }
+
+    [Fact]
+    public void AddChart_MultipleCharts_AddsAll()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var chart1 = BarChart.Create()
+            .WithTitle("Chart 1")
+            .WithPosition(5, 0, 10, 15);
+        var chart2 = BarChart.Create()
+            .WithTitle("Chart 2")
+            .WithPosition(12, 0, 17, 15);
+
+        sheet.AddChart(chart1);
+        sheet.AddChart(chart2);
+
+        Assert.Equal(2, sheet.Charts.Count);
+        Assert.Same(chart1, sheet.Charts[0]);
+        Assert.Same(chart2, sheet.Charts[1]);
+    }
+
+    [Fact]
+    public void AddChart_ChartWithoutPosition_ThrowsArgumentException()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var chart = BarChart.Create()
+            .WithTitle("Test Chart");
+
+        var ex = Assert.Throws<ArgumentException>(() => sheet.AddChart(chart));
+        Assert.Contains("position", ex.Message.ToLower());
+    }
+
+    [Fact]
+    public void AddChart_ChartsAreReadOnly_CannotModifyDirectly()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        var chart = BarChart.Create()
+            .WithTitle("Test Chart")
+            .WithPosition(5, 0, 10, 15);
+
+        sheet.AddChart(chart);
+
+        Assert.IsAssignableFrom<IReadOnlyList<Chart>>(sheet.Charts);
     }
 }
 
