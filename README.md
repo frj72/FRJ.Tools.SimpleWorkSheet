@@ -2,7 +2,7 @@
 
 A modern, fluent C# library for creating Excel documents with a clean builder pattern API.
 
-[![.NET](https://img.shields.io/badge/.NET-9.0-blue)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-10.0-blue)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/license-Unlicense-green)](LICENSE)
 
 ## ⚠️ Project Status
@@ -24,27 +24,13 @@ It should not be used in any production environment. If some code is usable, for
 
 ```csharp
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
-// Create a worksheet
-var sheet = new WorkSheet("MySheet");
+var sheet = new WorkSheet("HelloWorld");
 
-// Add a simple cell
 sheet.AddCell(0, 0, "Hello World");
 
-// Add a styled cell
-sheet.AddCell(1, 1, "Styled Text", cell => cell
-    .WithColor("FF0000")
-    .WithFont(font => font
-        .WithSize(14)
-        .Bold()
-        .Italic()));
-
-// Add a row of data
-var headers = new[] { "Name", "Age", "City" }.Select(h => new CellValue(h));
-sheet.AddRow(0, 0, headers, cell => cell
-    .WithColor("4472C4")
-    .WithFont(font => font.Bold().WithColor("FFFFFF")));
+var workbook = new WorkBook("MyWorkbook", [sheet]);
+workbook.SaveToFile("output.xlsx");
 ```
 
 ## API Overview
@@ -52,34 +38,54 @@ sheet.AddRow(0, 0, headers, cell => cell
 ### Cell Creation
 
 ```csharp
-// Simple value
-sheet.AddCell(1, 1, "Hello");
+sheet.AddCell(0, 0, "String Value");
 
-// With configuration
-sheet.AddCell(1, 1, "Hello", cell => cell
-    .WithColor("FFFF00")
-    .WithFont(font => font.Bold()));
+sheet.AddCell(0, 1, "Integer:");
+sheet.AddCell(1, 1, 42);
+sheet.AddCell(0, 2, "Decimal:");
+sheet.AddCell(1, 2, 3.14159m);
+sheet.AddCell(0, 3, "Date:");
+sheet.AddCell(1, 3, DateTime.Now);
 
-// Complete styling
-sheet.AddCell(1, 1, 123.45m, cell => cell
+var borders = CellBorders.Create(
+    CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
+    CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
+    CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
+    CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
+
+sheet.AddCell(0, 0, 123.456m, cell => cell
     .WithStyle(style => style
         .WithFillColor("E0E0E0")
-        .WithFont(font => font.WithSize(14).Bold())
+        .WithFont(font => font
+            .WithSize(14)
+            .WithName("Calibri")
+            .WithColor("0000FF")
+            .Bold()
+            .Italic())
+        .WithBorders(borders)
         .WithFormatCode("0.00")));
 ```
 
 ### Batch Operations
 
 ```csharp
-// Add entire row
-var data = new[] { "A", "B", "C" }.Select(s => new CellValue(s));
-sheet.AddRow(row: 1, startColumn: 0, data, cell => cell.WithColor("EFEFEF"));
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
-// Add entire column
+var headers = new[] { "Product", "Price", "Quantity", "Total" }
+    .Select(h => new CellValue(h));
+
+sheet.AddRow(0, 0, headers, cell => cell
+    .WithColor("4472C4")
+    .WithFont(font => font.Bold().WithColor("FFFFFF")));
+
+var row1 = new[] { "Widget", "9.99", "10", "99.90" }
+    .Select(v => new CellValue(v));
+
+sheet.AddRow(1, 0, row1, cell => cell.WithColor("F0F0F0"));
+
 var numbers = new[] { 1, 2, 3 }.Select(i => new CellValue(i));
-sheet.AddColumn(column: 1, startRow: 0, numbers);
+sheet.AddColumn(0, 1, numbers);
 
-// Update existing cell
 sheet.UpdateCell(1, 1, cell => cell
     .WithValue("Updated")
     .WithColor("00FF00"));
@@ -88,14 +94,12 @@ sheet.UpdateCell(1, 1, cell => cell
 ### Working with Styles
 
 ```csharp
-// Create reusable style
 var headerStyle = CellStyle.Create(
     fillColor: "4472C4",
     font: CellFont.Create(14, "Calibri", "FFFFFF", bold: true),
     borders: null,
     formatCode: null);
 
-// Apply to multiple cells
 sheet.AddStyledCell(1, 1, "Header 1", headerStyle);
 sheet.AddStyledCell(1, 2, "Header 2", headerStyle);
 ```
@@ -103,7 +107,6 @@ sheet.AddStyledCell(1, 2, "Header 2", headerStyle);
 ### Import Tracking
 
 ```csharp
-// Track import metadata
 sheet.AddCell(1, 1, "Imported", cell => cell
     .WithMetadata(meta => meta
         .WithSource("csv")
@@ -111,7 +114,6 @@ sheet.AddCell(1, 1, "Imported", cell => cell
         .WithOriginalValue("raw_value")
         .AddCustomData("row", 10)));
 
-// Configure import options
 var options = ImportOptionsBuilder.Create()
     .WithSourceIdentifier("csv")
     .WithTrimWhitespace(true)
@@ -124,70 +126,92 @@ var options = ImportOptionsBuilder.Create()
 ### Creating a Simple Table
 
 ```csharp
-var sheet = new WorkSheet("Data");
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
-// Headers
-var headers = new[] { "Product", "Price", "Stock" }.Select(h => new CellValue(h));
-sheet.AddRow(0, 0, headers, cell => cell
-    .WithColor("4472C4")
-    .WithFont(font => font.Bold().WithColor("FFFFFF")));
+var sheet = new WorkSheet("SimpleTable");
 
-// Data rows
-var products = new[]
-{
-    new[] { "Widget", "9.99", "100" },
-    new[] { "Gadget", "19.99", "50" }
-};
+sheet.AddCell(0, 0, "Name");
+sheet.AddCell(1, 0, "Age");
+sheet.AddCell(2, 0, "City");
 
-for (int i = 0; i < products.Length; i++)
-{
-    var row = products[i].Select(v => new CellValue(v));
-    var bgColor = i % 2 == 0 ? "F0F0F0" : "FFFFFF";
-    sheet.AddRow((uint)(i + 1), 0, row, cell => cell.WithColor(bgColor));
-}
+sheet.AddCell(0, 1, "John");
+sheet.AddCell(1, 1, 30);
+sheet.AddCell(2, 1, "NYC");
+
+sheet.AddCell(0, 2, "Jane");
+sheet.AddCell(1, 2, 25);
+sheet.AddCell(2, 2, "LA");
 ```
 
 ### Conditional Formatting
 
 ```csharp
-var values = new[] { 10, 50, 90 };
+var sheet = new WorkSheet("ConditionalFormatting");
 
-foreach (var (value, index) in values.Select((v, i) => (v, i)))
+sheet.AddCell(0, 0, "Score");
+sheet.AddCell(1, 0, "Status");
+
+var scores = new[] { 15, 45, 65, 85, 95 };
+
+for (uint i = 0; i < scores.Length; i++)
 {
-    var color = value switch
+    var score = scores[i];
+    var row = i + 1;
+    
+    var color = score switch
     {
-        < 30 => "FF0000",   // Red
-        < 70 => "FFFF00",   // Yellow
-        _ => "00FF00"       // Green
+        < 30 => "FF0000",
+        < 70 => "FFFF00",
+        _ => "00FF00"
     };
     
-    sheet.AddCell(index, 0, value, cell => cell
+    var status = score switch
+    {
+        < 30 => "Fail",
+        < 70 => "Pass",
+        _ => "Excellent"
+    };
+    
+    sheet.AddCell(0, row, score, cell => cell
         .WithColor(color)
         .WithFont(font => font.Bold()));
+    
+    sheet.AddCell(1, row, status, cell => cell
+        .WithColor(color));
 }
 ```
 
 ### Adding Charts
 
 ```csharp
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
+
 var sheet = new WorkSheet("Sales Data");
 
-sheet.AddCell(new(0, 0), "Region");
-sheet.AddCell(new(1, 0), "Sales");
+sheet.AddCell(new(0, 0), "Region", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+sheet.AddCell(new(1, 0), "Q1 Sales", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+
 sheet.AddCell(new(0, 1), new CellValue("North"));
 sheet.AddCell(new(1, 1), new CellValue(125000));
 sheet.AddCell(new(0, 2), new CellValue("South"));
 sheet.AddCell(new(1, 2), new CellValue(98000));
 sheet.AddCell(new(0, 3), new CellValue("East"));
 sheet.AddCell(new(1, 3), new CellValue(87000));
+sheet.AddCell(new(0, 4), new CellValue("West"));
+sheet.AddCell(new(1, 4), new CellValue(145000));
 
-var categoriesRange = CellRange.FromBounds(0, 1, 0, 3);
-var valuesRange = CellRange.FromBounds(1, 1, 1, 3);
+var categoriesRange = CellRange.FromBounds(0, 1, 0, 4);
+var valuesRange = CellRange.FromBounds(1, 1, 1, 4);
 
 var barChart = BarChart.Create()
-    .WithTitle("Sales by Region")
+    .WithTitle("Q1 Sales by Region")
     .WithDataRange(categoriesRange, valuesRange)
-    .WithPosition(3, 0, 10, 15)
+    .WithPosition(0, 6, 8, 21)
     .WithOrientation(BarChartOrientation.Vertical);
 
 sheet.AddChart(barChart);
@@ -196,58 +220,111 @@ sheet.AddChart(barChart);
 ### Chart on Separate Sheet
 
 ```csharp
+using FRJ.Tools.SimpleWorkSheet.Components.Book;
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
+
 var dataSheet = new WorkSheet("Data");
-dataSheet.AddCell(new(0, 0), "Month");
-dataSheet.AddCell(new(1, 0), "Revenue");
+
+dataSheet.AddCell(new(0, 0), "Month", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+dataSheet.AddCell(new(1, 0), "Revenue", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+dataSheet.AddCell(new(2, 0), "Expenses", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+dataSheet.AddCell(new(3, 0), "Profit", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+
 dataSheet.AddCell(new(0, 1), new CellValue("Jan"));
 dataSheet.AddCell(new(1, 1), new CellValue(50000));
+dataSheet.AddCell(new(2, 1), new CellValue(30000));
+dataSheet.AddCell(new(3, 1), new CellValue(20000));
+
 dataSheet.AddCell(new(0, 2), new CellValue("Feb"));
 dataSheet.AddCell(new(1, 2), new CellValue(55000));
+dataSheet.AddCell(new(2, 2), new CellValue(32000));
+dataSheet.AddCell(new(3, 2), new CellValue(23000));
 
 var dashboardSheet = new WorkSheet("Dashboard");
 
 var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
-var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
+var revenueRange = CellRange.FromBounds(1, 1, 1, 2);
+var profitRange = CellRange.FromBounds(3, 1, 3, 2);
 
-var lineChart = LineChart.Create()
-    .WithTitle("Revenue Trend")
-    .WithDataRange(categoriesRange, valuesRange)
+var revenueChart = BarChart.Create()
+    .WithTitle("Monthly Revenue")
+    .WithDataRange(categoriesRange, revenueRange)
     .WithPosition(0, 0, 8, 15)
+    .WithOrientation(BarChartOrientation.Vertical)
     .WithDataSourceSheet("Data");
 
-dashboardSheet.AddChart(lineChart);
+dashboardSheet.AddChart(revenueChart);
 
-var workbook = new WorkBook("Report", [dataSheet, dashboardSheet]);
+var profitChart = LineChart.Create()
+    .WithTitle("Profit Trend")
+    .WithDataRange(categoriesRange, profitRange)
+    .WithPosition(9, 0, 17, 15)
+    .WithMarkers(LineChartMarkerStyle.Circle)
+    .WithDataSourceSheet("Data");
+
+dashboardSheet.AddChart(profitChart);
+
+var workbook = new WorkBook("Financial Dashboard", [dataSheet, dashboardSheet]);
 workbook.SaveToFile("report.xlsx");
 ```
 
 ### Multiple Chart Types
 
 ```csharp
-var sheet = new WorkSheet("Analysis");
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
+
+var sheet = new WorkSheet("Market Share");
+
+sheet.AddCell(new(0, 0), "Company", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+sheet.AddCell(new(1, 0), "Market Share %", cell => cell
+    .WithFont(font => font.Bold())
+    .WithStyle(style => style.WithFillColor("4472C4")));
+
+sheet.AddCell(new(0, 1), new CellValue("Company A"));
+sheet.AddCell(new(1, 1), new CellValue(35));
+
+sheet.AddCell(new(0, 2), new CellValue("Company B"));
+sheet.AddCell(new(1, 2), new CellValue(25));
+
+sheet.AddCell(new(0, 3), new CellValue("Company C"));
+sheet.AddCell(new(1, 3), new CellValue(20));
+
+sheet.AddCell(new(0, 4), new CellValue("Company D"));
+sheet.AddCell(new(1, 4), new CellValue(12));
+
+sheet.AddCell(new(0, 5), new CellValue("Others"));
+sheet.AddCell(new(1, 5), new CellValue(8));
 
 var categoriesRange = CellRange.FromBounds(0, 1, 0, 5);
 var valuesRange = CellRange.FromBounds(1, 1, 1, 5);
 
-var barChart = BarChart.Create()
-    .WithTitle("Bar Chart")
+var pieChart = PieChart.Create()
+    .WithTitle("Market Share Distribution")
     .WithDataRange(categoriesRange, valuesRange)
-    .WithPosition(0, 7, 8, 22);
+    .WithPosition(0, 7, 8, 22)
+    .WithExplosion(10);
 
-var lineChart = LineChart.Create()
-    .WithTitle("Line Chart")
+sheet.AddChart(pieChart);
+
+var barChart = BarChart.Create()
+    .WithTitle("Market Share Comparison")
     .WithDataRange(categoriesRange, valuesRange)
     .WithPosition(9, 7, 17, 22)
-    .WithMarkers(LineChartMarkerStyle.Circle);
-
-var pieChart = PieChart.Create()
-    .WithTitle("Pie Chart")
-    .WithDataRange(categoriesRange, valuesRange)
-    .WithPosition(0, 23, 8, 38);
+    .WithOrientation(BarChartOrientation.Vertical);
 
 sheet.AddChart(barChart);
-sheet.AddChart(lineChart);
-sheet.AddChart(pieChart);
 ```
 
 ## Testing
