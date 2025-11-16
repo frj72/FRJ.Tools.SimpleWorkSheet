@@ -404,8 +404,25 @@ public class SheetConverter
 
     private static void GenerateChartPart(ChartPart chartPart, Components.Charts.Chart chart, string sheetName)
     {
-        if (chart is not BarChart barChart)
-            return;
+        switch (chart)
+        {
+            case Components.Charts.BarChart barChart:
+                GenerateBarChartPart(chartPart, barChart, sheetName, chart);
+                break;
+            case Components.Charts.LineChart lineChart:
+                GenerateLineChartPart(chartPart, lineChart, sheetName, chart);
+                break;
+            case Components.Charts.PieChart pieChart:
+                GeneratePieChartPart(chartPart, pieChart, sheetName, chart);
+                break;
+            case Components.Charts.ScatterChart scatterChart:
+                GenerateScatterChartPart(chartPart, scatterChart, sheetName, chart);
+                break;
+        }
+    }
+
+    private static void GenerateBarChartPart(ChartPart chartPart, Components.Charts.BarChart barChart, string sheetName, Components.Charts.Chart chart)
+    {
 
         var chartSpace = new ChartSpace();
         chartSpace.AddNamespaceDeclaration("c", "http://schemas.openxmlformats.org/drawingml/2006/chart");
@@ -456,8 +473,8 @@ public class SheetConverter
             new ShowPercent { Val = false }, 
             new ShowBubbleSize { Val = false }));
 
-        barChartElement.Append(new DocumentFormat.OpenXml.Drawing.Charts.AxisId { Val = 1 });
-        barChartElement.Append(new DocumentFormat.OpenXml.Drawing.Charts.AxisId { Val = 2 });
+        barChartElement.Append(new AxisId { Val = 1 });
+        barChartElement.Append(new AxisId { Val = 2 });
 
         plotArea.Append(barChartElement);
 
@@ -532,6 +549,273 @@ public class SheetConverter
             new DocumentFormat.OpenXml.Drawing.Charts.HeaderFooter(),
             new DocumentFormat.OpenXml.Drawing.Charts.PageMargins { Left = 0.7, Right = 0.7, Top = 0.75, Bottom = 0.75, Header = 0.3, Footer = 0.3 }
         ));
+
+        chartPart.ChartSpace = chartSpace;
+        chartPart.ChartSpace.Save();
+    }
+
+    private static void GenerateLineChartPart(ChartPart chartPart, Components.Charts.LineChart lineChart, string sheetName, Components.Charts.Chart chart)
+    {
+        var chartSpace = new ChartSpace();
+        chartSpace.AddNamespaceDeclaration("c", "http://schemas.openxmlformats.org/drawingml/2006/chart");
+        chartSpace.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+        chartSpace.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+
+        var editingLanguage = new EditingLanguage { Val = "en-US" };
+        chartSpace.Append(editingLanguage);
+
+        var chartElement = new DocumentFormat.OpenXml.Drawing.Charts.Chart();
+        
+        var plotArea = new PlotArea();
+        var layout = new Layout();
+        plotArea.Append(layout);
+
+        var lineChartElement = new DocumentFormat.OpenXml.Drawing.Charts.LineChart();
+        lineChartElement.Append(new Grouping { Val = GroupingValues.Standard });
+        lineChartElement.Append(new VaryColors { Val = false });
+
+        if (lineChart is { CategoriesRange: not null, ValuesRange: not null })
+        {
+            var lineChartSeries = new LineChartSeries();
+            lineChartSeries.Append(new DocumentFormat.OpenXml.Drawing.Charts.Index { Val = 0 });
+            lineChartSeries.Append(new Order { Val = 0 });
+
+            var categoryAxisData = new CategoryAxisData();
+            var catRef = new StringReference();
+            catRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(lineChart.CategoriesRange.Value, sheetName) });
+            categoryAxisData.Append(catRef);
+            lineChartSeries.Append(categoryAxisData);
+
+            var values = new DocumentFormat.OpenXml.Drawing.Charts.Values();
+            var numRef = new NumberReference();
+            numRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(lineChart.ValuesRange.Value, sheetName) });
+            values.Append(numRef);
+            lineChartSeries.Append(values);
+
+            lineChartElement.Append(lineChartSeries);
+        }
+
+        lineChartElement.Append(new AxisId { Val = 1 });
+        lineChartElement.Append(new AxisId { Val = 2 });
+
+        plotArea.Append(lineChartElement);
+
+        var categoryAxis = new CategoryAxis();
+        categoryAxis.Append(new AxisId { Val = 1 });
+        categoryAxis.Append(new Scaling(new Orientation { Val = DocumentFormat.OpenXml.Drawing.Charts.OrientationValues.MinMax }));
+        categoryAxis.Append(new AxisPosition { Val = AxisPositionValues.Bottom });
+        categoryAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        categoryAxis.Append(new CrossingAxis { Val = 2 });
+        categoryAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
+        plotArea.Append(categoryAxis);
+
+        var valueAxis = new ValueAxis();
+        valueAxis.Append(new AxisId { Val = 2 });
+        valueAxis.Append(new Scaling(new Orientation { Val = DocumentFormat.OpenXml.Drawing.Charts.OrientationValues.MinMax }));
+        valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
+        valueAxis.Append(new MajorGridlines());
+        valueAxis.Append(new CrossingAxis { Val = 1 });
+        valueAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
+        plotArea.Append(valueAxis);
+
+        chartElement.Append(plotArea);
+
+        var legend = new Legend();
+        legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        chartElement.Append(legend);
+
+        chartSpace.Append(chartElement);
+
+        if (!string.IsNullOrEmpty(chart.Title))
+        {
+            var title = new Title();
+            var chartText = new ChartText();
+            var richText = new RichText();
+            richText.Append(new BodyProperties());
+            richText.Append(new ListStyle());
+            
+            var paragraph = new Paragraph();
+            var run = new DocumentFormat.OpenXml.Drawing.Run();
+            run.Append(new DocumentFormat.OpenXml.Drawing.RunProperties { Language = "en-US" });
+            run.Append(new DocumentFormat.OpenXml.Drawing.Text { Text = chart.Title });
+            paragraph.Append(run);
+            
+            richText.Append(paragraph);
+            chartText.Append(richText);
+            title.Append(chartText);
+            
+            chartElement.InsertAt(title, 0);
+        }
+
+        chartPart.ChartSpace = chartSpace;
+        chartPart.ChartSpace.Save();
+    }
+
+    private static void GeneratePieChartPart(ChartPart chartPart, Components.Charts.PieChart pieChart, string sheetName, Components.Charts.Chart chart)
+    {
+        var chartSpace = new ChartSpace();
+        chartSpace.AddNamespaceDeclaration("c", "http://schemas.openxmlformats.org/drawingml/2006/chart");
+        chartSpace.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+        chartSpace.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+
+        var editingLanguage = new EditingLanguage { Val = "en-US" };
+        chartSpace.Append(editingLanguage);
+
+        var chartElement = new DocumentFormat.OpenXml.Drawing.Charts.Chart();
+        
+        var plotArea = new PlotArea();
+        var layout = new Layout();
+        plotArea.Append(layout);
+
+        var pieChartElement = new DocumentFormat.OpenXml.Drawing.Charts.PieChart();
+        pieChartElement.Append(new VaryColors { Val = true });
+
+        if (pieChart is { CategoriesRange: not null, ValuesRange: not null })
+        {
+            var pieChartSeries = new PieChartSeries();
+            pieChartSeries.Append(new DocumentFormat.OpenXml.Drawing.Charts.Index { Val = 0 });
+            pieChartSeries.Append(new Order { Val = 0 });
+
+            var categoryAxisData = new CategoryAxisData();
+            var catRef = new StringReference();
+            catRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(pieChart.CategoriesRange.Value, sheetName) });
+            categoryAxisData.Append(catRef);
+            pieChartSeries.Append(categoryAxisData);
+
+            var values = new DocumentFormat.OpenXml.Drawing.Charts.Values();
+            var numRef = new NumberReference();
+            numRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(pieChart.ValuesRange.Value, sheetName) });
+            values.Append(numRef);
+            pieChartSeries.Append(values);
+
+            pieChartElement.Append(pieChartSeries);
+        }
+
+        plotArea.Append(pieChartElement);
+        chartElement.Append(plotArea);
+
+        var legend = new Legend();
+        legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        chartElement.Append(legend);
+
+        chartSpace.Append(chartElement);
+
+        if (!string.IsNullOrEmpty(chart.Title))
+        {
+            var title = new Title();
+            var chartText = new ChartText();
+            var richText = new RichText();
+            richText.Append(new BodyProperties());
+            richText.Append(new ListStyle());
+            
+            var paragraph = new Paragraph();
+            var run = new DocumentFormat.OpenXml.Drawing.Run();
+            run.Append(new DocumentFormat.OpenXml.Drawing.RunProperties { Language = "en-US" });
+            run.Append(new DocumentFormat.OpenXml.Drawing.Text { Text = chart.Title });
+            paragraph.Append(run);
+            
+            richText.Append(paragraph);
+            chartText.Append(richText);
+            title.Append(chartText);
+            
+            chartElement.InsertAt(title, 0);
+        }
+
+        chartPart.ChartSpace = chartSpace;
+        chartPart.ChartSpace.Save();
+    }
+
+    private static void GenerateScatterChartPart(ChartPart chartPart, Components.Charts.ScatterChart scatterChart, string sheetName, Components.Charts.Chart chart)
+    {
+        var chartSpace = new ChartSpace();
+        chartSpace.AddNamespaceDeclaration("c", "http://schemas.openxmlformats.org/drawingml/2006/chart");
+        chartSpace.AddNamespaceDeclaration("a", "http://schemas.openxmlformats.org/drawingml/2006/main");
+        chartSpace.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+
+        var editingLanguage = new EditingLanguage { Val = "en-US" };
+        chartSpace.Append(editingLanguage);
+
+        var chartElement = new DocumentFormat.OpenXml.Drawing.Charts.Chart();
+        
+        var plotArea = new PlotArea();
+        var layout = new Layout();
+        plotArea.Append(layout);
+
+        var scatterChartElement = new DocumentFormat.OpenXml.Drawing.Charts.ScatterChart();
+        scatterChartElement.Append(new ScatterStyle { Val = ScatterStyleValues.LineMarker });
+        scatterChartElement.Append(new VaryColors { Val = false });
+
+        if (scatterChart is { XRange: not null, YRange: not null })
+        {
+            var scatterChartSeries = new ScatterChartSeries();
+            scatterChartSeries.Append(new DocumentFormat.OpenXml.Drawing.Charts.Index { Val = 0 });
+            scatterChartSeries.Append(new Order { Val = 0 });
+
+            var xValues = new XValues();
+            var xNumRef = new NumberReference();
+            xNumRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(scatterChart.XRange.Value, sheetName) });
+            xValues.Append(xNumRef);
+            scatterChartSeries.Append(xValues);
+
+            var yValues = new YValues();
+            var yNumRef = new NumberReference();
+            yNumRef.Append(new DocumentFormat.OpenXml.Drawing.Charts.Formula { Text = ChartDataRange.ToRangeReference(scatterChart.YRange.Value, sheetName) });
+            yValues.Append(yNumRef);
+            scatterChartSeries.Append(yValues);
+
+            scatterChartElement.Append(scatterChartSeries);
+        }
+
+        scatterChartElement.Append(new AxisId { Val = 1 });
+        scatterChartElement.Append(new AxisId { Val = 2 });
+
+        plotArea.Append(scatterChartElement);
+
+        var valueAxis1 = new ValueAxis();
+        valueAxis1.Append(new AxisId { Val = 1 });
+        valueAxis1.Append(new Scaling(new Orientation { Val = DocumentFormat.OpenXml.Drawing.Charts.OrientationValues.MinMax }));
+        valueAxis1.Append(new AxisPosition { Val = AxisPositionValues.Bottom });
+        valueAxis1.Append(new CrossingAxis { Val = 2 });
+        valueAxis1.Append(new Crosses { Val = CrossesValues.AutoZero });
+        plotArea.Append(valueAxis1);
+
+        var valueAxis2 = new ValueAxis();
+        valueAxis2.Append(new AxisId { Val = 2 });
+        valueAxis2.Append(new Scaling(new Orientation { Val = DocumentFormat.OpenXml.Drawing.Charts.OrientationValues.MinMax }));
+        valueAxis2.Append(new AxisPosition { Val = AxisPositionValues.Left });
+        valueAxis2.Append(new MajorGridlines());
+        valueAxis2.Append(new CrossingAxis { Val = 1 });
+        valueAxis2.Append(new Crosses { Val = CrossesValues.AutoZero });
+        plotArea.Append(valueAxis2);
+
+        chartElement.Append(plotArea);
+
+        var legend = new Legend();
+        legend.Append(new LegendPosition { Val = LegendPositionValues.Right });
+        chartElement.Append(legend);
+
+        chartSpace.Append(chartElement);
+
+        if (!string.IsNullOrEmpty(chart.Title))
+        {
+            var title = new Title();
+            var chartText = new ChartText();
+            var richText = new RichText();
+            richText.Append(new BodyProperties());
+            richText.Append(new ListStyle());
+            
+            var paragraph = new Paragraph();
+            var run = new DocumentFormat.OpenXml.Drawing.Run();
+            run.Append(new DocumentFormat.OpenXml.Drawing.RunProperties { Language = "en-US" });
+            run.Append(new DocumentFormat.OpenXml.Drawing.Text { Text = chart.Title });
+            paragraph.Append(run);
+            
+            richText.Append(paragraph);
+            chartText.Append(richText);
+            title.Append(chartText);
+            
+            chartElement.InsertAt(title, 0);
+        }
 
         chartPart.ChartSpace = chartSpace;
         chartPart.ChartSpace.Save();
