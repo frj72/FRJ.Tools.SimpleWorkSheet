@@ -258,6 +258,23 @@ public class WorkSheet
 
         _charts.Add(chart);
     }
+
+    public void AutoFitColumn(uint column)
+    {
+        var cellsInColumn = Cells.Cells
+            .Where(kvp => kvp.Key.X == column)
+            .Select(kvp => kvp.Value);
+
+        var estimatedWidth = cellsInColumn.EstimateMaxWidth();
+        SetColumnWith(column, estimatedWidth);
+    }
+
+    public void AutoFitAllColumns()
+    {
+        var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
+        foreach (var column in columns)
+            AutoFitColumn(column);
+    }
     
     private void EnsureCellExists(CellPosition position)
     {
