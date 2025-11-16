@@ -46,6 +46,7 @@ public class ExampleFileValidationTests
     [InlineData("34_Hyperlinks.xlsx")]
     [InlineData("35_ReadExcel.xlsx")]
     [InlineData("36_RoundTripEditing.xlsx")]
+    [InlineData("37_CellMerging.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -66,7 +67,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 36;
+        const int expectedCount = 37;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);

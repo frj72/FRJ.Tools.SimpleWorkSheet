@@ -9,12 +9,14 @@ public class WorkSheet
 {
 
 
+    private readonly List<CellRange> _mergedCells = [];
     public string Name { get; }
     public CellCollection Cells { get; }
     
     public Dictionary<uint, OneOf<double, CellWidth>> ExplicitColumnWidths { get; } = new();
     public Dictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights { get; } = new();
     public FreezePane? FrozenPane { get; private set; }
+    public IReadOnlyList<CellRange> MergedCells => _mergedCells;
 
     public WorkSheet(string name)
     {
@@ -159,6 +161,38 @@ public class WorkSheet
         FrozenPane = new(0, column);
     }
 
+    public CellRange MergeCells(uint fromX, uint fromY, uint toX, uint toY) =>
+        MergeCells(CellRange.FromBounds(fromX, fromY, toX, toY));
+
+    public CellRange MergeCells(CellPosition from, CellPosition to) =>
+        MergeCells(CellRange.FromPositions(from, to));
+
+    public CellRange MergeCells(CellRange range)
+    {
+        if (range.IsSingleCell)
+            throw new ArgumentException("Merged range must span at least two cells", nameof(range));
+
+        if (_mergedCells.Any(existing => existing.Overlaps(range)))
+            throw new ArgumentException("Merged range overlaps an existing merged range", nameof(range));
+
+        EnsureCellExists(range.From);
+        _mergedCells.Add(range);
+        return range;
+    }
+
+    internal void ImportMergedRange(CellRange range)
+    {
+        if (range.IsSingleCell)
+            return;
+
+        EnsureCellExists(range.From);
+
+        if (_mergedCells.Any(existing => existing.Overlaps(range)))
+            return;
+
+        _mergedCells.Add(range);
+    }
+
     public HashSet<int> GetAllFontSizes()
     {
         return Cells.Cells.Values.Select(cell => cell.Font?.Size ?? WorkSheetDefaults.FontSize).ToHashSet();
@@ -189,4 +223,11 @@ public class WorkSheet
         return Cells.Cells.Values.Select(cell => cell.Font ?? WorkSheetDefaults.Font).ToHashSet();
     }
     
+    private void EnsureCellExists(CellPosition position)
+    {
+        if (Cells.Cells.ContainsKey(position))
+            return;
+        AddCell(position, string.Empty);
+    }
 }
+

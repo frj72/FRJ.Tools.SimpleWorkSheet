@@ -101,10 +101,29 @@ public class WorkSheetTests
         var sheet = new WorkSheet("TestSheet");
         var position = new CellPosition(1, 1);
         var font = CellFont.Create(12, "Arial", "invalidColor");
-
+ 
         sheet.AddCell(position, new CellValue("TestValue"));
-
+ 
         Assert.Throws<ArgumentException>(() => sheet.SetFont(1, 1, font));
     }
 
+    [Fact]
+    public void MergeCells_AddsRangeAndEnsuresTopLeftCellExists()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        sheet.MergeCells(0, 0, 2, 1);
+ 
+        Assert.Single(sheet.MergedCells);
+        Assert.True(sheet.Cells.Cells.ContainsKey(new CellPosition(0, 0)));
+    }
+
+    [Fact]
+    public void MergeCells_OverlappingRange_Throws()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        sheet.MergeCells(0, 0, 1, 0);
+ 
+        Assert.Throws<ArgumentException>(() => sheet.MergeCells(1, 0, 2, 0));
+    }
 }
+

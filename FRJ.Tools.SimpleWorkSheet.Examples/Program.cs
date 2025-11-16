@@ -49,6 +49,7 @@ public static class Program
             new FreezePanesExample(),
             new TextAlignmentExample(),
             new HyperlinksExample(),
+            new CellMergingExample(),
             new ReadExcelExample(),
             new RoundTripEditingExample()
         };

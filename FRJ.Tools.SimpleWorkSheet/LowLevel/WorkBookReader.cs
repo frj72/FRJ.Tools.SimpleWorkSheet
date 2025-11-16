@@ -88,6 +88,7 @@ public class WorkBookReader
         ExtractColumnWidths(worksheetPart, workSheet);
         ExtractRowHeights(worksheetPart, workSheet);
         ExtractFrozenPanes(worksheetPart, workSheet);
+        ExtractMergedCells(worksheetPart, workSheet);
 
         return workSheet;
     }
@@ -337,5 +338,31 @@ public class WorkBookReader
 
         if (row > 0 || col > 0)
             workSheet.FreezePanes((uint)row, (uint)col);
+    }
+
+    private static void ExtractMergedCells(WorksheetPart worksheetPart, WorkSheet workSheet)
+    {
+        var mergeCells = worksheetPart.Worksheet.Elements<MergeCells>().FirstOrDefault();
+        if (mergeCells == null)
+            return;
+
+        foreach (var mergeCell in mergeCells.Elements<MergeCell>())
+        {
+            var reference = mergeCell.Reference?.Value;
+            if (string.IsNullOrEmpty(reference))
+                continue;
+
+            var parts = reference.Split(':');
+            if (parts.Length != 2)
+                continue;
+
+            var start = GetCellPosition(parts[0]);
+            var end = GetCellPosition(parts[1]);
+            if (start == null || end == null)
+                continue;
+
+            var range = CellRange.FromPositions(start.Value, end.Value);
+            workSheet.ImportMergedRange(range);
+        }
     }
 }

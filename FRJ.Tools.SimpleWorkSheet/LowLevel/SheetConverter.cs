@@ -79,34 +79,34 @@ public class SheetConverter
                 }
                 
                 var columns = new Columns();
+
                 foreach (var columnWidth in workSheet.ExplicitColumnWidths)
+                {
+                    var column = new Column
+                    {
+                        Min = columnWidth.Key + 1,
+                        Max = columnWidth.Key + 1
+                    };
+
                     if (columnWidth.Value.IsT0)
                     {
-                        var column = new Column
-                        {
-                            Min = columnWidth.Key + 1,
-                            Max = columnWidth.Key + 1,
-                            Width = columnWidth.Value.AsT0,
-                            CustomWidth = true
-                        };
-                        columns.Append(column);
+                        column.Width = columnWidth.Value.AsT0;
+                        column.CustomWidth = true;
                     }
-                    else if (columnWidth.Value is { IsT1: true, AsT1: CellWidth.AutoExpand })
+
+                    if (columnWidth.Value.IsT1)
                     {
-                        var cellsInColumn = workSheet.Cells.Cells.Where(x=> x.Key.X == columnWidth.Key).Select(x=> x.Value).ToList();
-                        if (cellsInColumn.Count == 0)
-                            continue;
-                        var maxCellWidth = cellsInColumn.EstimateMaxWidth();
-                        var column = new Column
+                        var width = columnWidth.Value.AsT1;
+                        if (width == CellWidth.AutoExpand)
                         {
-                            Min = columnWidth.Key + 1,
-                            Max = columnWidth.Key + 1,
-                            Width = maxCellWidth,
-                            CustomWidth = true
-                        };
-                        columns.Append(column);
-                        
+                            column.BestFit = true;
+                            column.CustomWidth = false;
+                        }
                     }
+
+                    columns.Append(column);
+                    
+                }
 
                 if (workSheet.FrozenPane != null)
                 {
@@ -144,6 +144,17 @@ public class SheetConverter
                     worksheetPart.Worksheet.InsertAt(sheetViews, 0);
                 }
 
+                if (workSheet.MergedCells.Count != 0)
+                {
+                    var mergeCells = new MergeCells();
+                    foreach (var range in workSheet.MergedCells)
+                    {
+                        var reference = $"{GetCellReference(range.From)}:{GetCellReference(range.To)}";
+                        mergeCells.Append(new MergeCell { Reference = reference });
+                    }
+                    worksheetPart.Worksheet.InsertAfter(mergeCells, sheetData);
+                }
+
                 if (columns.Any())
                 {
                     var insertIndex = workSheet.FrozenPane != null ? 1 : 0;
@@ -151,6 +162,7 @@ public class SheetConverter
                 }
 
                 var cellsWithHyperlinks = workSheet.Cells.Cells.Where(c => c.Value.Hyperlink != null).ToList();
+
                 if (cellsWithHyperlinks.Count != 0)
                 {
                     var hyperlinks = new Hyperlinks();
