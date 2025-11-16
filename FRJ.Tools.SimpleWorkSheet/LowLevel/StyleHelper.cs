@@ -131,7 +131,7 @@ public class StyleHelper
             font.Append(new Underline());
 
         font.Append(new FontSize { Val = fontDef.Size });
-        font.Append(new Color { Rgb = new() { Value = fontDef.Color } });
+        font.Append(new Color { Rgb = new() { Value = fontDef.Color.ToArgbColor() } });
         font.Append(new FontName { Val = fontDef.Name });
 
         _fonts.Add(font);
@@ -153,7 +153,7 @@ public class StyleHelper
         var patternFill = new PatternFill
         {
             PatternType = PatternValues.Solid,
-            ForegroundColor = new() { Rgb = new(fillColor) },
+            ForegroundColor = new() { Rgb = new(fillColor.ToArgbColor()) },
             BackgroundColor = new() { Indexed = 64 }
         };
         fill.PatternFill = patternFill;
@@ -189,7 +189,7 @@ public class StyleHelper
         if (!string.IsNullOrEmpty(borderDef.Color))
             borderProp.Color = new()
             {
-                Rgb = new(borderDef.Color)
+                Rgb = new(borderDef.Color.ToArgbColor())
             };
 
         return borderProp;

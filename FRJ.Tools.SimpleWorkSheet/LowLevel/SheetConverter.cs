@@ -107,9 +107,6 @@ public class SheetConverter
                         
                     }
 
-                if (columns.Any())
-                    worksheetPart.Worksheet.InsertAt(columns, 0);
-
                 if (workSheet.FrozenPane != null)
                 {
                     var sheetViews = new SheetViews();
@@ -143,7 +140,13 @@ public class SheetConverter
                     
                     sheetViews.Append(sheetView);
                     
-                    worksheetPart.Worksheet.InsertBefore(sheetViews, sheetData);
+                    worksheetPart.Worksheet.InsertAt(sheetViews, 0);
+                }
+
+                if (columns.Any())
+                {
+                    var insertIndex = workSheet.FrozenPane != null ? 1 : 0;
+                    worksheetPart.Worksheet.InsertAt(columns, insertIndex);
                 }
 
                 var cellsWithHyperlinks = workSheet.Cells.Cells.Where(c => c.Value.Hyperlink != null).ToList();

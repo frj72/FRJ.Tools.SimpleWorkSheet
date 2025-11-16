@@ -48,7 +48,9 @@ public static class Program
             new RowHeightExample(),
             new FreezePanesExample(),
             new TextAlignmentExample(),
-            new HyperlinksExample()
+            new HyperlinksExample(),
+            new ReadExcelExample(),
+            new RoundTripEditingExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
