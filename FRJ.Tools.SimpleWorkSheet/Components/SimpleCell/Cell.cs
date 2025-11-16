@@ -35,6 +35,7 @@ public record Cell
     public CellValue Value { get; init; }
     public CellStyle Style { get; init; }
     public CellMetadata? Metadata { get; init; }
+    public CellHyperlink? Hyperlink { get; init; }
 
     public string? Color => Style.FillColor;
     public CellFont? Font => Style.Font;

@@ -146,6 +146,34 @@ public class SheetConverter
                     worksheetPart.Worksheet.InsertBefore(sheetViews, sheetData);
                 }
 
+                var cellsWithHyperlinks = workSheet.Cells.Cells.Where(c => c.Value.Hyperlink != null).ToList();
+                if (cellsWithHyperlinks.Any())
+                {
+                    var hyperlinks = new Hyperlinks();
+                    
+                    foreach (var cellEntry in cellsWithHyperlinks)
+                    {
+                        var position = cellEntry.Key;
+                        var cell = cellEntry.Value;
+                        var hyperlinkInfo = cell.Hyperlink!;
+                        
+                        var hyperlinkRelationship = worksheetPart.AddHyperlinkRelationship(new Uri(hyperlinkInfo.Url, UriKind.Absolute), true);
+                        
+                        var hyperlink = new Hyperlink
+                        {
+                            Reference = GetCellReference(position),
+                            Id = hyperlinkRelationship.Id
+                        };
+                        
+                        if (!string.IsNullOrEmpty(hyperlinkInfo.Tooltip))
+                            hyperlink.Tooltip = hyperlinkInfo.Tooltip;
+                        
+                        hyperlinks.Append(hyperlink);
+                    }
+                    
+                    worksheetPart.Worksheet.Append(hyperlinks);
+                }
+
                 worksheetPart.Worksheet.Save();
                 var sheet = new Sheet
                 {

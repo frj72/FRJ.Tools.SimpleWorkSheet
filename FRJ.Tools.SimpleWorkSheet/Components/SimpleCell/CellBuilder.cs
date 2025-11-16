@@ -7,12 +7,14 @@ public class CellBuilder
     private CellValue _value;
     private CellStyle _style;
     private CellMetadata? _metadata;
+    private CellHyperlink? _hyperlink;
 
     public CellBuilder()
     {
         _value = string.Empty;
         _style = WorkSheetDefaults.DefaultCellStyle;
         _metadata = null;
+        _hyperlink = null;
     }
 
     public CellBuilder(Cell existingCell)
@@ -20,6 +22,7 @@ public class CellBuilder
         _value = existingCell.Value;
         _style = existingCell.Style;
         _metadata = existingCell.Metadata;
+        _hyperlink = existingCell.Hyperlink;
     }
 
     public CellBuilder WithValue(CellValue value)
@@ -105,7 +108,13 @@ public class CellBuilder
         return this;
     }
 
-    public Cell Build() => new(_value, _style, _metadata);
+    public CellBuilder WithHyperlink(string url, string? tooltip = null)
+    {
+        _hyperlink = new(url, tooltip);
+        return this;
+    }
+
+    public Cell Build() => new(_value, _style, _metadata) { Hyperlink = _hyperlink };
 
     public static CellBuilder Create() => new();
 

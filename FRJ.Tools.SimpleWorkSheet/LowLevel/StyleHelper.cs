@@ -43,13 +43,22 @@ public class StyleHelper
                 FillColor = cell.Color,
                 Font = cell.Font ?? WorkSheetDefaults.Font,
                 Borders = cell.Borders ?? WorkSheetDefaults.CellBorders, 
-                FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType
+                FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType,
+                HorizontalAlignment = cell.Style?.HorizontalAlignment,
+                VerticalAlignment = cell.Style?.VerticalAlignment,
+                TextRotation = cell.Style?.TextRotation,
+                WrapText = cell.Style?.WrapText
             };
 
             if (_styleIndexDictionary.ContainsKey(styleDef)) continue;
             var fontId = AddFont(styleDef.Font);
             var fillId = AddFill(styleDef.FillColor);
             var borderId = AddBorder(styleDef.Borders);
+
+            var hasAlignment = styleDef.HorizontalAlignment.HasValue || 
+                              styleDef.VerticalAlignment.HasValue || 
+                              styleDef.TextRotation.HasValue || 
+                              styleDef.WrapText.HasValue;
 
             var cellFormat = new CellFormat
             {
@@ -60,8 +69,12 @@ public class StyleHelper
                 ApplyFill = fillId != 0,
                 ApplyBorder = borderId != 0,
                 NumberFormatId = styleDef.FormatAsDate ? 164 : null,
-                ApplyNumberFormat = styleDef.FormatAsDate ? true : null
+                ApplyNumberFormat = styleDef.FormatAsDate ? true : null,
+                ApplyAlignment = hasAlignment ? true : null
             };
+
+            if (hasAlignment)
+                cellFormat.Alignment = CreateAlignment(styleDef);
                     
             _cellFormats.Add(cellFormat);
             var styleIndex = (uint)_cellFormats.Count - 1;
@@ -96,7 +109,11 @@ public class StyleHelper
             FillColor = cell.Color,
             Font = cell.Font ?? WorkSheetDefaults.Font,
             Borders = cell.Borders ?? WorkSheetDefaults.CellBorders,
-            FormatAsDate = cell.Value.IsDateTime() || cell.Value.IsDateTimeOffset()
+            FormatAsDate = cell.Value.IsDateTime() || cell.Value.IsDateTimeOffset(),
+            HorizontalAlignment = cell.Style?.HorizontalAlignment,
+            VerticalAlignment = cell.Style?.VerticalAlignment,
+            TextRotation = cell.Style?.TextRotation,
+            WrapText = cell.Style?.WrapText
         }];
 
 
@@ -195,5 +212,47 @@ public class StyleHelper
             CellBorderStyle.Thick => BorderStyleValues.Thick,
             CellBorderStyle.Thin => BorderStyleValues.Thin,
             _ => BorderStyleValues.None
+        };
+
+    private static Alignment CreateAlignment(StyleDefinition styleDef)
+    {
+        var alignment = new Alignment();
+
+        if (styleDef.HorizontalAlignment.HasValue)
+            alignment.Horizontal = MapHorizontalAlignment(styleDef.HorizontalAlignment.Value);
+
+        if (styleDef.VerticalAlignment.HasValue)
+            alignment.Vertical = MapVerticalAlignment(styleDef.VerticalAlignment.Value);
+
+        if (styleDef.TextRotation.HasValue)
+            alignment.TextRotation = (uint)styleDef.TextRotation.Value;
+
+        if (styleDef.WrapText.HasValue)
+            alignment.WrapText = styleDef.WrapText.Value;
+
+        return alignment;
+    }
+
+    private static HorizontalAlignmentValues MapHorizontalAlignment(HorizontalAlignment alignment) =>
+        alignment switch
+        {
+            HorizontalAlignment.Left => HorizontalAlignmentValues.Left,
+            HorizontalAlignment.Center => HorizontalAlignmentValues.Center,
+            HorizontalAlignment.Right => HorizontalAlignmentValues.Right,
+            HorizontalAlignment.Justify => HorizontalAlignmentValues.Justify,
+            HorizontalAlignment.Fill => HorizontalAlignmentValues.Fill,
+            HorizontalAlignment.Distributed => HorizontalAlignmentValues.Distributed,
+            _ => HorizontalAlignmentValues.Left
+        };
+
+    private static VerticalAlignmentValues MapVerticalAlignment(VerticalAlignment alignment) =>
+        alignment switch
+        {
+            VerticalAlignment.Top => VerticalAlignmentValues.Top,
+            VerticalAlignment.Middle => VerticalAlignmentValues.Center,
+            VerticalAlignment.Bottom => VerticalAlignmentValues.Bottom,
+            VerticalAlignment.Justify => VerticalAlignmentValues.Justify,
+            VerticalAlignment.Distributed => VerticalAlignmentValues.Distributed,
+            _ => VerticalAlignmentValues.Top
         };
 }

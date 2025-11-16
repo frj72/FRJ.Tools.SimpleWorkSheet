@@ -46,7 +46,9 @@ public static class Program
             new JsonArrayImportExample(),
             new JsonSparseArrayImportExample(),
             new RowHeightExample(),
-            new FreezePanesExample()
+            new FreezePanesExample(),
+            new TextAlignmentExample(),
+            new HyperlinksExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

@@ -6,6 +6,10 @@ public class CellStyleBuilder
     private CellFont? _font;
     private CellBorders? _borders;
     private string? _formatCode;
+    private HorizontalAlignment? _horizontalAlignment;
+    private VerticalAlignment? _verticalAlignment;
+    private int? _textRotation;
+    private bool? _wrapText;
 
     public CellStyleBuilder()
     {
@@ -13,6 +17,10 @@ public class CellStyleBuilder
         _font = null;
         _borders = null;
         _formatCode = null;
+        _horizontalAlignment = null;
+        _verticalAlignment = null;
+        _textRotation = null;
+        _wrapText = null;
     }
 
     public CellStyleBuilder(CellStyle? existingStyle)
@@ -22,6 +30,10 @@ public class CellStyleBuilder
         _font = existingStyle.Font;
         _borders = existingStyle.Borders;
         _formatCode = existingStyle.FormatCode;
+        _horizontalAlignment = existingStyle.HorizontalAlignment;
+        _verticalAlignment = existingStyle.VerticalAlignment;
+        _textRotation = existingStyle.TextRotation;
+        _wrapText = existingStyle.WrapText;
     }
 
     public CellStyleBuilder WithFillColor(string? fillColor)
@@ -62,8 +74,41 @@ public class CellStyleBuilder
         return this;
     }
 
+    public CellStyleBuilder WithHorizontalAlignment(HorizontalAlignment alignment)
+    {
+        _horizontalAlignment = alignment;
+        return this;
+    }
+
+    public CellStyleBuilder WithVerticalAlignment(VerticalAlignment alignment)
+    {
+        _verticalAlignment = alignment;
+        return this;
+    }
+
+    public CellStyleBuilder WithAlignment(HorizontalAlignment horizontal, VerticalAlignment vertical)
+    {
+        _horizontalAlignment = horizontal;
+        _verticalAlignment = vertical;
+        return this;
+    }
+
+    public CellStyleBuilder WithTextRotation(int degrees)
+    {
+        if (degrees < -90 || degrees > 90)
+            throw new ArgumentException("Text rotation must be between -90 and 90 degrees", nameof(degrees));
+        _textRotation = degrees;
+        return this;
+    }
+
+    public CellStyleBuilder WithWrapText(bool wrap)
+    {
+        _wrapText = wrap;
+        return this;
+    }
+
     public CellStyle Build() => 
-        CellStyle.Create(_fillColor, _font, _borders, _formatCode);
+        CellStyle.Create(_fillColor, _font, _borders, _formatCode, _horizontalAlignment, _verticalAlignment, _textRotation, _wrapText);
 
     public static CellStyleBuilder Create() => new();
 
