@@ -184,6 +184,15 @@ public class ScatterChartTests
     }
 
     [Fact]
+    public void WithDataSourceSheet_SetsDataSourceSheet()
+    {
+        var chart = ScatterChart.Create()
+            .WithDataSourceSheet("SourceSheet");
+
+        Assert.Equal("SourceSheet", chart.DataSourceSheet);
+    }
+
+    [Fact]
     public void DefaultValues_AreCorrect()
     {
         var chart = ScatterChart.Create();
@@ -192,6 +201,7 @@ public class ScatterChartTests
         Assert.Null(chart.Position);
         Assert.Null(chart.XRange);
         Assert.Null(chart.YRange);
+        Assert.Null(chart.DataSourceSheet);
         Assert.Equal(ChartSize.Default.WidthEmus, chart.Size.WidthEmus);
         Assert.Equal(ChartSize.Default.HeightEmus, chart.Size.HeightEmus);
         Assert.False(chart.ShowTrendline);

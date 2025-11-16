@@ -24,11 +24,7 @@ Third-party components used in this repo:
    License: MIT License
    Source: https://www.nuget.org/packages/xunit.runner.visualstudio/
 
-7. Verify.Xunit
-   License: MIT License
-   Source: https://www.nuget.org/packages/Verify.Xunit/
-
-8. Microsoft.NET.Test.Sdk
+7. Microsoft.NET.Test.Sdk
    License: MIT License
    Source: https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/
    

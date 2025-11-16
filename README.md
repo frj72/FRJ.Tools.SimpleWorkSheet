@@ -167,6 +167,89 @@ foreach (var (value, index) in values.Select((v, i) => (v, i)))
 }
 ```
 
+### Adding Charts
+
+```csharp
+var sheet = new WorkSheet("Sales Data");
+
+sheet.AddCell(new(0, 0), "Region");
+sheet.AddCell(new(1, 0), "Sales");
+sheet.AddCell(new(0, 1), new CellValue("North"));
+sheet.AddCell(new(1, 1), new CellValue(125000));
+sheet.AddCell(new(0, 2), new CellValue("South"));
+sheet.AddCell(new(1, 2), new CellValue(98000));
+sheet.AddCell(new(0, 3), new CellValue("East"));
+sheet.AddCell(new(1, 3), new CellValue(87000));
+
+var categoriesRange = CellRange.FromBounds(0, 1, 0, 3);
+var valuesRange = CellRange.FromBounds(1, 1, 1, 3);
+
+var barChart = BarChart.Create()
+    .WithTitle("Sales by Region")
+    .WithDataRange(categoriesRange, valuesRange)
+    .WithPosition(3, 0, 10, 15)
+    .WithOrientation(BarChartOrientation.Vertical);
+
+sheet.AddChart(barChart);
+```
+
+### Chart on Separate Sheet
+
+```csharp
+var dataSheet = new WorkSheet("Data");
+dataSheet.AddCell(new(0, 0), "Month");
+dataSheet.AddCell(new(1, 0), "Revenue");
+dataSheet.AddCell(new(0, 1), new CellValue("Jan"));
+dataSheet.AddCell(new(1, 1), new CellValue(50000));
+dataSheet.AddCell(new(0, 2), new CellValue("Feb"));
+dataSheet.AddCell(new(1, 2), new CellValue(55000));
+
+var dashboardSheet = new WorkSheet("Dashboard");
+
+var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
+var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
+
+var lineChart = LineChart.Create()
+    .WithTitle("Revenue Trend")
+    .WithDataRange(categoriesRange, valuesRange)
+    .WithPosition(0, 0, 8, 15)
+    .WithDataSourceSheet("Data");
+
+dashboardSheet.AddChart(lineChart);
+
+var workbook = new WorkBook("Report", [dataSheet, dashboardSheet]);
+workbook.SaveToFile("report.xlsx");
+```
+
+### Multiple Chart Types
+
+```csharp
+var sheet = new WorkSheet("Analysis");
+
+var categoriesRange = CellRange.FromBounds(0, 1, 0, 5);
+var valuesRange = CellRange.FromBounds(1, 1, 1, 5);
+
+var barChart = BarChart.Create()
+    .WithTitle("Bar Chart")
+    .WithDataRange(categoriesRange, valuesRange)
+    .WithPosition(0, 7, 8, 22);
+
+var lineChart = LineChart.Create()
+    .WithTitle("Line Chart")
+    .WithDataRange(categoriesRange, valuesRange)
+    .WithPosition(9, 7, 17, 22)
+    .WithMarkers(LineChartMarkerStyle.Circle);
+
+var pieChart = PieChart.Create()
+    .WithTitle("Pie Chart")
+    .WithDataRange(categoriesRange, valuesRange)
+    .WithPosition(0, 23, 8, 38);
+
+sheet.AddChart(barChart);
+sheet.AddChart(lineChart);
+sheet.AddChart(pieChart);
+```
+
 ## Testing
 
 ```bash
@@ -182,11 +265,11 @@ dotnet build --configuration Release
 
 ## Requirements
 
-- .NET 9.0 or later
+- .NET 10.0 or later
 - Dependencies:
   - DocumentFormat.OpenXml 3.3.0
   - OneOf 3.0.271
-  - SkiaSharp 3.119.0
+  - SkiaSharp 3.119.1
 
 
 ## License

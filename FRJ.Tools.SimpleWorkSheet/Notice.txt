@@ -11,24 +11,4 @@ Third-party components used in this repo:
 3. SkiaSharp (Microsoft)
     License: MIT License
     Source: https://www.nuget.org/packages/SkiaSharp/
-
-4. coverlet.collector
-   License: MIT License
-   Source: https://www.nuget.org/packages/coverlet.collector/
-
-5. xunit
-   License: MIT License
-   Source: https://www.nuget.org/packages/xunit/
-
-6. xunit.runner.visualstudio
-   License: MIT License
-   Source: https://www.nuget.org/packages/xunit.runner.visualstudio/
-
-7. Verify.Xunit
-   License: MIT License
-   Source: https://www.nuget.org/packages/Verify.Xunit/
-
-8. Microsoft.NET.Test.Sdk
-   License: MIT License
-   Source: https://www.nuget.org/packages/Microsoft.NET.Test.Sdk/
    

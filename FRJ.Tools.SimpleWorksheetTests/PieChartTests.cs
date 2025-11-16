@@ -216,6 +216,15 @@ public class PieChartTests
     }
 
     [Fact]
+    public void WithDataSourceSheet_SetsDataSourceSheet()
+    {
+        var chart = PieChart.Create()
+            .WithDataSourceSheet("DataSheet");
+
+        Assert.Equal("DataSheet", chart.DataSourceSheet);
+    }
+
+    [Fact]
     public void DefaultValues_AreCorrect()
     {
         var chart = PieChart.Create();
@@ -224,6 +233,7 @@ public class PieChartTests
         Assert.Null(chart.Position);
         Assert.Null(chart.CategoriesRange);
         Assert.Null(chart.ValuesRange);
+        Assert.Null(chart.DataSourceSheet);
         Assert.Equal(ChartSize.Default.WidthEmus, chart.Size.WidthEmus);
         Assert.Equal(ChartSize.Default.HeightEmus, chart.Size.HeightEmus);
         Assert.Equal(0u, chart.Explosion);
