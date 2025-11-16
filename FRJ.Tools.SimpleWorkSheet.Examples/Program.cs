@@ -53,7 +53,8 @@ public static class Program
             new ReadExcelExample(),
             new RoundTripEditingExample(),
             new DataValidationExample(),
-            new NamedRangesExample()
+            new NamedRangesExample(),
+            new AdvancedFormulasExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
