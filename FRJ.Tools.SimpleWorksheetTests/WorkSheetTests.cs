@@ -1,6 +1,7 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
+using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
@@ -190,6 +191,38 @@ public class WorkSheetTests
         sheet.AddChart(chart);
 
         Assert.IsType<IReadOnlyList<Chart>>(sheet.Charts, exactMatch: false);
+    }
+
+    [Fact]
+    public void AddChart_WithDataAndChart_GeneratesValidExcelFile()
+    {
+        var sheet = new WorkSheet("Sales");
+
+        sheet.AddCell(new(0, 0), new CellValue("Region"));
+        sheet.AddCell(new(1, 0), new CellValue("Sales"));
+        sheet.AddCell(new(0, 1), new CellValue("North"));
+        sheet.AddCell(new(1, 1), new CellValue(100));
+        sheet.AddCell(new(0, 2), new CellValue("South"));
+        sheet.AddCell(new(1, 2), new CellValue(150));
+        sheet.AddCell(new(0, 3), new CellValue("East"));
+        sheet.AddCell(new(1, 3), new CellValue(120));
+
+        var categoriesRange = CellRange.FromBounds(0, 1, 0, 3);
+        var valuesRange = CellRange.FromBounds(1, 1, 1, 3);
+
+        var chart = BarChart.Create()
+            .WithTitle("Sales by Region")
+            .WithDataRange(categoriesRange, valuesRange)
+            .WithPosition(3, 0, 10, 15)
+            .WithOrientation(BarChartOrientation.Vertical);
+
+        sheet.AddChart(chart);
+
+        var excelBytes = SheetConverter.ToBinaryExcelFile(sheet);
+
+        Assert.NotNull(excelBytes);
+        Assert.True(excelBytes.Length > 0);
+        Assert.True(excelBytes.Length > 3000, $"File size was {excelBytes.Length} bytes");
     }
 }
 

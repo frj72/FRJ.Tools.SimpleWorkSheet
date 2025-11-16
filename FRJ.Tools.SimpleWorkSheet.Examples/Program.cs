@@ -54,7 +54,8 @@ public static class Program
             new RoundTripEditingExample(),
             new DataValidationExample(),
             new NamedRangesExample(),
-            new AdvancedFormulasExample()
+            new AdvancedFormulasExample(),
+            new BarChartExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

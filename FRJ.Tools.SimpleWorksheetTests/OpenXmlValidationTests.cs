@@ -1,6 +1,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Validation;
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
@@ -145,6 +146,44 @@ public class OpenXmlValidationTests
         {
             File.Delete(tempPath1);
             File.Delete(tempPath2);
+        }
+    }
+
+    [Fact]
+    public void BarChart_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Sales");
+
+        sheet.AddCell(new(0, 0), new CellValue("Region"));
+        sheet.AddCell(new(1, 0), new CellValue("Sales"));
+        sheet.AddCell(new(0, 1), new CellValue("North"));
+        sheet.AddCell(new(1, 1), new CellValue(100));
+        sheet.AddCell(new(0, 2), new CellValue("South"));
+        sheet.AddCell(new(1, 2), new CellValue(150));
+
+        var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
+        var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
+
+        var chart = BarChart.Create()
+            .WithTitle("Sales by Region")
+            .WithDataRange(categoriesRange, valuesRange)
+            .WithPosition(3, 0, 10, 15)
+            .WithOrientation(BarChartOrientation.Vertical);
+
+        sheet.AddChart(chart);
+
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
         }
     }
 }

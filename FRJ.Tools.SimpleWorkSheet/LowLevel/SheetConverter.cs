@@ -456,6 +456,9 @@ public class SheetConverter
             new ShowPercent { Val = false }, 
             new ShowBubbleSize { Val = false }));
 
+        barChartElement.Append(new DocumentFormat.OpenXml.Drawing.Charts.AxisId { Val = 1 });
+        barChartElement.Append(new DocumentFormat.OpenXml.Drawing.Charts.AxisId { Val = 2 });
+
         plotArea.Append(barChartElement);
 
         var categoryAxis = new CategoryAxis();
