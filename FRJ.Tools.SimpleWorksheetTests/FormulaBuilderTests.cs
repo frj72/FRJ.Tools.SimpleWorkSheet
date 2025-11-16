@@ -55,7 +55,7 @@ public class FormulaBuilderTests
     [Fact]
     public void Match_GeneratesCorrectFormula()
     {
-        var formula = FormulaBuilder.Match("A2", "B1:B10", 0);
+        var formula = FormulaBuilder.Match("A2", "B1:B10");
         
         Assert.Equal("=MATCH(A2,B1:B10,0)", formula.Value);
     }
@@ -63,7 +63,7 @@ public class FormulaBuilderTests
     [Fact]
     public void IndexMatch_CombinesFormulas()
     {
-        var formula = FormulaBuilder.IndexMatch("C1:C10", "A2", "B1:B10", 0);
+        var formula = FormulaBuilder.IndexMatch("C1:C10", "A2", "B1:B10");
         
         Assert.Equal("=INDEX(C1:C10,MATCH(A2,B1:B10,0))", formula.Value);
     }

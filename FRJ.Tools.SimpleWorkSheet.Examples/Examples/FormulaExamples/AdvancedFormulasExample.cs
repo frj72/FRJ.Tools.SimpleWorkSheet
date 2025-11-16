@@ -26,7 +26,7 @@ public class AdvancedFormulasExample : IExample
 
         sheet.AddCell(new(0, row), "INDEX/MATCH", cell => cell.WithFont(font => font.Bold()));
         sheet.AddCell(new(1, row), "=INDEX(G2:G5,MATCH(\"Banana\",F2:F5,0))");
-        sheet.AddCell(new(2, row), FormulaBuilder.IndexMatch("G2:G5", "\"Banana\"", "F2:F5", 0));
+        sheet.AddCell(new(2, row), FormulaBuilder.IndexMatch("G2:G5", "\"Banana\"", "F2:F5"));
         row++;
 
         sheet.AddCell(new(0, row), "IF Statement", cell => cell.WithFont(font => font.Bold()));
@@ -97,7 +97,6 @@ public class AdvancedFormulasExample : IExample
         sheet.AddCell(new(0, row), "YEAR", cell => cell.WithFont(font => font.Bold()));
         sheet.AddCell(new(1, row), "=YEAR(TODAY())");
         sheet.AddCell(new(2, row), FormulaBuilder.Year("TODAY()"));
-        row++;
 
         sheet.AddCell(new(5, 1), "Lookup Data", cell => cell.WithFont(font => font.Bold()).WithStyle(style => style.WithFillColor("FFD966")));
         sheet.AddCell(new(6, 1), "Price", cell => cell.WithFont(font => font.Bold()).WithStyle(style => style.WithFillColor("FFD966")));
