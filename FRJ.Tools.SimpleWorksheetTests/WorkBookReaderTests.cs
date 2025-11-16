@@ -63,10 +63,10 @@ public class WorkBookReaderTests
             var loadedWorkbook = WorkBookReader.LoadFromFile(filePath);
             var sheet = loadedWorkbook.Sheets.First();
             
-            var cell00 = sheet.Cells.Cells[new CellPosition(0, 0)];
+            var cell00 = sheet.Cells.Cells[new(0, 0)];
             Assert.True(cell00.Value.IsString());
             
-            var cell11 = sheet.Cells.Cells[new CellPosition(1, 1)];
+            var cell11 = sheet.Cells.Cells[new(1, 1)];
             Assert.True(cell11.Value.IsLong() || cell11.Value.IsDecimal());
         }
         finally
@@ -85,7 +85,7 @@ public class WorkBookReaderTests
             var loadedWorkbook = WorkBookReader.LoadFromFile(filePath);
             var sheet = loadedWorkbook.Sheets.First();
             
-            var cell00 = sheet.Cells.Cells[new CellPosition(0, 0)];
+            var cell00 = sheet.Cells.Cells[new(0, 0)];
             Assert.NotNull(cell00.Font);
             Assert.True(cell00.Font.Bold);
             Assert.Equal("4472C4", cell00.Color);
@@ -106,7 +106,7 @@ public class WorkBookReaderTests
             var loadedWorkbook = WorkBookReader.LoadFromFile(filePath);
             var sheet = loadedWorkbook.Sheets.First();
             
-            var cell02 = sheet.Cells.Cells[new CellPosition(0, 2)];
+            var cell02 = sheet.Cells.Cells[new(0, 2)];
             Assert.NotNull(cell02.Hyperlink);
             Assert.Equal("https://example.com/", cell02.Hyperlink.Url);
         }
@@ -213,7 +213,7 @@ public class WorkBookReaderTests
             var loadedWorkbook = WorkBookReader.LoadFromFile(tempPath);
             
             var loadedSheet = loadedWorkbook.Sheets.First();
-            var cell00 = loadedSheet.Cells.Cells[new CellPosition(0, 0)];
+            var cell00 = loadedSheet.Cells.Cells[new(0, 0)];
             
             Assert.True(cell00.Value.IsString());
             Assert.NotNull(cell00.Font);
@@ -221,7 +221,7 @@ public class WorkBookReaderTests
             Assert.Equal(14, cell00.Font.Size);
             Assert.Equal("FF0000", cell00.Color);
             
-            var cell10 = loadedSheet.Cells.Cells[new CellPosition(1, 0)];
+            var cell10 = loadedSheet.Cells.Cells[new(1, 0)];
             Assert.True(cell10.Value.IsLong() || cell10.Value.IsDecimal());
         }
         finally
@@ -248,7 +248,7 @@ public class WorkBookReaderTests
             var loadedWorkbook = WorkBookReader.LoadFromFile(tempPath);
             
             var loadedSheet = loadedWorkbook.Sheets.First();
-            var cell = loadedSheet.Cells.Cells[new CellPosition(0, 0)];
+            var cell = loadedSheet.Cells.Cells[new(0, 0)];
             
             Assert.Equal(HorizontalAlignment.Center, cell.Style.HorizontalAlignment);
             Assert.Equal(VerticalAlignment.Middle, cell.Style.VerticalAlignment);

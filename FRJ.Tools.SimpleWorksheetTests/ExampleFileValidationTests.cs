@@ -10,6 +10,36 @@ public class ExampleFileValidationTests
         "FRJ.Tools.SimpleWorkSheet.Examples/Output");
 
     [Theory]
+    [InlineData("01_HelloWorld.xlsx")]
+    [InlineData("02_DataTypes.xlsx")]
+    [InlineData("03_SimpleTable.xlsx")]
+    [InlineData("04_CellPositioning.xlsx")]
+    [InlineData("05_ValueOnly.xlsx")]
+    [InlineData("06_FontVariations.xlsx")]
+    [InlineData("07_BackgroundColors.xlsx")]
+    [InlineData("08_BorderStyles.xlsx")]
+    [InlineData("09_CompleteStyling.xlsx")]
+    [InlineData("10_RowAddition.xlsx")]
+    [InlineData("11_ColumnAddition.xlsx")]
+    [InlineData("12_BulkUpdates.xlsx")]
+    [InlineData("13_MetadataTracking.xlsx")]
+    [InlineData("14_ImportOptions.xlsx")]
+    [InlineData("15_CsvSimulation.xlsx")]
+    [InlineData("16_ConditionalFormatting.xlsx")]
+    [InlineData("17_ReusableStyles.xlsx")]
+    [InlineData("18_ComplexTable.xlsx")]
+    [InlineData("19_InvoiceGenerator.xlsx")]
+    [InlineData("20_DataVisualization.xlsx")]
+    [InlineData("21_BasicFormulas.xlsx")]
+    [InlineData("22_SumFormula.xlsx")]
+    [InlineData("23_AverageFormula.xlsx")]
+    [InlineData("24_PercentageFormula.xlsx")]
+    [InlineData("25_ConditionalFormula.xlsx")]
+    [InlineData("26_MultiRangeFormula.xlsx")]
+    [InlineData("27_CountFormula.xlsx")]
+    [InlineData("28_MinMaxFormula.xlsx")]
+    [InlineData("29_JsonArrayImport.xlsx")]
+    [InlineData("30_JsonSparseArrayImport.xlsx")]
     [InlineData("31_RowHeight.xlsx")]
     [InlineData("32_FreezePanes.xlsx")]
     [InlineData("33_TextAlignment.xlsx")]
@@ -34,22 +64,11 @@ public class ExampleFileValidationTests
     }
 
     [Fact]
-    public void AllRecentExampleFiles_Exist()
+    public void AllExampleFiles_Exist()
     {
-        var expectedFiles = new[]
-        {
-            "31_RowHeight.xlsx",
-            "32_FreezePanes.xlsx",
-            "33_TextAlignment.xlsx",
-            "34_Hyperlinks.xlsx",
-            "35_ReadExcel.xlsx",
-            "36_RoundTripEditing.xlsx"
-        };
-
-        foreach (var fileName in expectedFiles)
-        {
-            var filePath = Path.Combine(ExamplesPath, fileName);
-            Assert.True(File.Exists(filePath), $"Example file missing: {fileName}");
-        }
+        const int expectedCount = 36;
+        var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
+        
+        Assert.Equal(expectedCount, actualFiles.Length);
     }
 }

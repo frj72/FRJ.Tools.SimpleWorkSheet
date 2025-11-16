@@ -23,18 +23,23 @@ public class WorkBookReader
     {
         using var spreadsheetDocument = SpreadsheetDocument.Open(stream, false);
         var workbookPart = spreadsheetDocument.WorkbookPart ?? throw new InvalidOperationException("Workbook part not found");
-        
-        var sheets = new List<WorkSheet>();
+
         var workbookSheets = workbookPart.Workbook.Sheets?.Elements<Sheet>() ?? [];
-        
+
+        var sheets = new List<WorkSheet>();
         foreach (var sheet in workbookSheets)
         {
-            var worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheet.Id!);
-            var workSheet = ParseWorksheet(worksheetPart, sheet.Name!, workbookPart);
-            sheets.Add(workSheet);
+            var sheetId = sheet.Id?.Value;
+            var sheetName = sheet.Name?.Value;
+            
+            if (sheetId == null || sheetName == null)
+                continue;
+            
+            var worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheetId);
+            sheets.Add(ParseWorksheet(worksheetPart, sheetName, workbookPart));
         }
-        
-        return new WorkBook("ImportedWorkbook", sheets);
+
+        return new("ImportedWorkbook", sheets);
     }
 
     private static WorkSheet ParseWorksheet(WorksheetPart worksheetPart, string sheetName, WorkbookPart workbookPart)
@@ -49,7 +54,7 @@ public class WorkBookReader
         var stylesheet = workbookPart.WorkbookStylesPart?.Stylesheet;
 
         foreach (var row in sheetData.Elements<Row>())
-        foreach (var cell in row.Elements<DocumentFormat.OpenXml.Spreadsheet.Cell>())
+        foreach (var cell in row.Elements<Cell>())
         {
             var position = GetCellPosition(cell.CellReference?.Value);
             if (position == null)
@@ -63,7 +68,6 @@ public class WorkBookReader
             
             if (cellStyle.HorizontalAlignment.HasValue || cellStyle.VerticalAlignment.HasValue || 
                 cellStyle.TextRotation.HasValue || cellStyle.WrapText.HasValue)
-            {
                 simpleCell = simpleCell with 
                 { 
                     Style = simpleCell.Style with 
@@ -74,7 +78,6 @@ public class WorkBookReader
                         WrapText = cellStyle.WrapText
                     }
                 };
-            }
 
             if (hyperlink != null)
                 simpleCell = simpleCell with { Hyperlink = hyperlink };
@@ -100,14 +103,12 @@ public class WorkBookReader
         if (!uint.TryParse(rowPart, out var row))
             return null;
 
-        var col = 0u;
-        foreach (var c in colPart)
-            col = col * 26 + (uint)(char.ToUpper(c) - 'A' + 1);
+        var col = colPart.Aggregate(0u, (current, c) => current * 26 + (uint)(char.ToUpper(c) - 'A' + 1));
 
         return new CellPosition(col - 1, row - 1);
     }
 
-    private static CellValue ExtractCellValue(DocumentFormat.OpenXml.Spreadsheet.Cell cell, SharedStringTable? sharedStringTable)
+    private static CellValue ExtractCellValue(Cell cell, SharedStringTable? sharedStringTable)
     {
         if (cell.CellFormula != null)
             return new CellFormula(cell.CellFormula.Text);
@@ -117,16 +118,13 @@ public class WorkBookReader
             return string.Empty;
 
         if (cell.DataType?.Value == CellValues.SharedString && sharedStringTable != null)
-        {
             if (int.TryParse(cellValue, out var stringIndex))
                 return sharedStringTable.Elements<SharedStringItem>().ElementAt(stringIndex).InnerText;
-        }
 
         if (cell.DataType?.Value == CellValues.Boolean)
             return (cellValue == "1").ToString();
 
         if (cell.DataType?.Value == CellValues.Number || cell.DataType == null)
-        {
             if (double.TryParse(cellValue, out var doubleValue))
             {
                 if (cell.StyleIndex != null)
@@ -137,7 +135,6 @@ public class WorkBookReader
                 
                 return doubleValue;
             }
-        }
 
         if (cell.DataType?.Value == CellValues.Date && DateTime.TryParse(cellValue, out var dateValue))
             return dateValue;
@@ -145,7 +142,7 @@ public class WorkBookReader
         return cellValue;
     }
 
-    private static CellStyle ExtractCellStyle(DocumentFormat.OpenXml.Spreadsheet.Cell cell, Stylesheet? stylesheet)
+    private static CellStyle ExtractCellStyle(Cell cell, Stylesheet? stylesheet)
     {
         if (stylesheet == null || cell.StyleIndex == null)
             return CellStyle.Create();
@@ -196,29 +193,29 @@ public class WorkBookReader
                 var bottom = ParseBorder(border.BottomBorder);
 
                 if (left != null || right != null || top != null || bottom != null)
-                    borders = new CellBorders(left, right, top, bottom);
+                    borders = new(left, right, top, bottom);
             }
         }
 
-        if (cellFormat.Alignment != null)
+        if (cellFormat.Alignment == null)
+            return CellStyle.Create(fillColor, font, borders, null, horizontalAlignment, verticalAlignment,
+                textRotation, wrapText);
+        var alignment = cellFormat.Alignment;
+            
+        if (alignment.Horizontal != null)
+            horizontalAlignment = MapHorizontalAlignment(alignment.Horizontal.Value);
+            
+        if (alignment.Vertical != null)
+            verticalAlignment = MapVerticalAlignment(alignment.Vertical.Value);
+            
+        if (alignment.TextRotation != null)
         {
-            var alignment = cellFormat.Alignment;
-            
-            if (alignment.Horizontal != null)
-                horizontalAlignment = MapHorizontalAlignment(alignment.Horizontal.Value);
-            
-            if (alignment.Vertical != null)
-                verticalAlignment = MapVerticalAlignment(alignment.Vertical.Value);
-            
-            if (alignment.TextRotation != null)
-            {
-                var rotationValue = alignment.TextRotation.Value;
-                textRotation = rotationValue <= 90 ? (int)rotationValue : (int)(rotationValue - 90);
-            }
-            
-            if (alignment.WrapText != null)
-                wrapText = alignment.WrapText.Value;
+            var rotationValue = alignment.TextRotation.Value;
+            textRotation = rotationValue <= 90 ? (int)rotationValue : (int)(rotationValue - 90);
         }
+            
+        if (alignment.WrapText != null)
+            wrapText = alignment.WrapText.Value;
 
         return CellStyle.Create(fillColor, font, borders, null, horizontalAlignment, verticalAlignment, textRotation, wrapText);
     }
@@ -231,13 +228,13 @@ public class WorkBookReader
         var style = MapBorderStyle(borderProp.Style.Value);
         var color = borderProp.Color?.Rgb?.Value;
 
-        return new CellBorder(color != null ? NormalizeColor(color) : null, style);
+        return new(color != null ? NormalizeColor(color) : null, style);
     }
 
     private static string NormalizeColor(string color)
     {
         if (color.Length == 8 && color.StartsWith("FF"))
-            return color.Substring(2);
+            return color[2..];
         return color;
     }
 
@@ -255,8 +252,7 @@ public class WorkBookReader
         if (style == BorderStyleValues.MediumDashDot) return CellBorderStyle.MediumDashDot;
         if (style == BorderStyleValues.DashDotDot) return CellBorderStyle.DashDotDot;
         if (style == BorderStyleValues.MediumDashDotDot) return CellBorderStyle.MediumDashDotDot;
-        if (style == BorderStyleValues.SlantDashDot) return CellBorderStyle.SlantDashDot;
-        return CellBorderStyle.None;
+        return style == BorderStyleValues.SlantDashDot ? CellBorderStyle.SlantDashDot : CellBorderStyle.None;
     }
 
     private static HorizontalAlignment MapHorizontalAlignment(HorizontalAlignmentValues alignment)
@@ -266,8 +262,7 @@ public class WorkBookReader
         if (alignment == HorizontalAlignmentValues.Right) return HorizontalAlignment.Right;
         if (alignment == HorizontalAlignmentValues.Justify) return HorizontalAlignment.Justify;
         if (alignment == HorizontalAlignmentValues.Fill) return HorizontalAlignment.Fill;
-        if (alignment == HorizontalAlignmentValues.Distributed) return HorizontalAlignment.Distributed;
-        return HorizontalAlignment.Left;
+        return alignment == HorizontalAlignmentValues.Distributed ? HorizontalAlignment.Distributed : HorizontalAlignment.Left;
     }
 
     private static VerticalAlignment MapVerticalAlignment(VerticalAlignmentValues alignment)
@@ -276,8 +271,7 @@ public class WorkBookReader
         if (alignment == VerticalAlignmentValues.Center) return VerticalAlignment.Middle;
         if (alignment == VerticalAlignmentValues.Bottom) return VerticalAlignment.Bottom;
         if (alignment == VerticalAlignmentValues.Justify) return VerticalAlignment.Justify;
-        if (alignment == VerticalAlignmentValues.Distributed) return VerticalAlignment.Distributed;
-        return VerticalAlignment.Top;
+        return alignment == VerticalAlignmentValues.Distributed ? VerticalAlignment.Distributed : VerticalAlignment.Top;
     }
 
     private static CellHyperlink? ExtractHyperlink(WorksheetPart worksheetPart, string? cellReference)
@@ -286,10 +280,8 @@ public class WorkBookReader
             return null;
 
         var hyperlinks = worksheetPart.Worksheet.Elements<Hyperlinks>().FirstOrDefault();
-        if (hyperlinks == null)
-            return null;
 
-        var hyperlink = hyperlinks.Elements<Hyperlink>().FirstOrDefault(h => h.Reference?.Value == cellReference);
+        var hyperlink = hyperlinks?.Elements<Hyperlink>().FirstOrDefault(h => h.Reference?.Value == cellReference);
         if (hyperlink?.Id?.Value == null)
             return null;
 
@@ -297,7 +289,7 @@ public class WorkBookReader
         if (relationship?.Uri == null)
             return null;
 
-        return new CellHyperlink(relationship.Uri.ToString(), hyperlink.Tooltip?.Value);
+        return new(relationship.Uri.ToString(), hyperlink.Tooltip?.Value);
     }
 
     private static void ExtractColumnWidths(WorksheetPart worksheetPart, WorkSheet workSheet)
@@ -308,12 +300,10 @@ public class WorkBookReader
 
         foreach (var column in columns.Elements<Column>())
         {
-            if (column.Min?.Value != null && column.Width?.Value != null && column.CustomWidth?.Value == true)
-            {
-                var colIndex = column.Min.Value - 1;
-                OneOf<double, CellWidth> width = column.Width.Value;
-                workSheet.SetColumnWith(colIndex, width);
-            }
+            if (column.Min?.Value == null || column.Width?.Value == null || column.CustomWidth?.Value != true) continue;
+            var colIndex = column.Min.Value - 1;
+            OneOf<double, CellWidth> width = column.Width.Value;
+            workSheet.SetColumnWith(colIndex, width);
         }
     }
 
@@ -324,14 +314,12 @@ public class WorkBookReader
             return;
 
         foreach (var row in sheetData.Elements<Row>())
-        {
             if (row.RowIndex?.Value != null && row.Height?.Value != null && row.CustomHeight?.Value == true)
             {
                 var rowIndex = row.RowIndex.Value - 1;
                 OneOf<double, RowHeight> height = row.Height.Value;
                 workSheet.SetRowHeight(rowIndex, height);
             }
-        }
     }
 
     private static void ExtractFrozenPanes(WorksheetPart worksheetPart, WorkSheet workSheet)
@@ -343,13 +331,11 @@ public class WorkBookReader
         var sheetView = sheetViews.Elements<SheetView>().FirstOrDefault();
         var pane = sheetView?.Elements<Pane>().FirstOrDefault();
 
-        if (pane?.State?.Value == PaneStateValues.Frozen)
-        {
-            var row = pane.VerticalSplit?.Value ?? 0;
-            var col = pane.HorizontalSplit?.Value ?? 0;
+        if (pane?.State?.Value != PaneStateValues.Frozen) return;
+        var row = pane.VerticalSplit?.Value ?? 0;
+        var col = pane.HorizontalSplit?.Value ?? 0;
 
-            if (row > 0 || col > 0)
-                workSheet.FreezePanes((uint)row, (uint)col);
-        }
+        if (row > 0 || col > 0)
+            workSheet.FreezePanes((uint)row, (uint)col);
     }
 }

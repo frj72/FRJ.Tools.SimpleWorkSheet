@@ -44,10 +44,10 @@ public class StyleHelper
                 Font = cell.Font ?? WorkSheetDefaults.Font,
                 Borders = cell.Borders ?? WorkSheetDefaults.CellBorders, 
                 FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType,
-                HorizontalAlignment = cell.Style?.HorizontalAlignment,
-                VerticalAlignment = cell.Style?.VerticalAlignment,
-                TextRotation = cell.Style?.TextRotation,
-                WrapText = cell.Style?.WrapText
+                HorizontalAlignment = cell.Style.HorizontalAlignment,
+                VerticalAlignment = cell.Style.VerticalAlignment,
+                TextRotation = cell.Style.TextRotation,
+                WrapText = cell.Style.WrapText
             };
 
             if (_styleIndexDictionary.ContainsKey(styleDef)) continue;
@@ -110,10 +110,10 @@ public class StyleHelper
             Font = cell.Font ?? WorkSheetDefaults.Font,
             Borders = cell.Borders ?? WorkSheetDefaults.CellBorders,
             FormatAsDate = cell.Value.IsDateTime() || cell.Value.IsDateTimeOffset(),
-            HorizontalAlignment = cell.Style?.HorizontalAlignment,
-            VerticalAlignment = cell.Style?.VerticalAlignment,
-            TextRotation = cell.Style?.TextRotation,
-            WrapText = cell.Style?.WrapText
+            HorizontalAlignment = cell.Style.HorizontalAlignment,
+            VerticalAlignment = cell.Style.VerticalAlignment,
+            TextRotation = cell.Style.TextRotation,
+            WrapText = cell.Style.WrapText
         }];
 
 

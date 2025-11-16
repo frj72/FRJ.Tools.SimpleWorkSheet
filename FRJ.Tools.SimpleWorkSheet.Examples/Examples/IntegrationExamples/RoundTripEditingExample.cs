@@ -1,5 +1,4 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
@@ -47,8 +46,8 @@ public class RoundTripEditingExample : IExample
         loadedSheet.AddCell(new(3, 3), "Active", cell => cell
             .WithColor("90EE90"));
         
-        var existingCell = loadedSheet.Cells.Cells[new CellPosition(3, 1)];
-        loadedSheet.Cells.Cells[new CellPosition(3, 1)] = existingCell with 
+        var existingCell = loadedSheet.Cells.Cells[new(3, 1)];
+        loadedSheet.Cells.Cells[new(3, 1)] = existingCell with 
         { 
             Style = existingCell.Style with { FillColor = "FFD700" }
         };
@@ -60,8 +59,8 @@ public class RoundTripEditingExample : IExample
         
         Console.WriteLine("Step 4: Saved modified file");
         Console.WriteLine($"  Total cells now: {loadedSheet.Cells.Cells.Count}");
-        Console.WriteLine($"  New employee added at row 3");
-        Console.WriteLine($"  Status cell highlighted for employee 101");
+        Console.WriteLine("  New employee added at row 3");
+        Console.WriteLine("  Status cell highlighted for employee 101");
         
         File.Delete(tempPath);
     }

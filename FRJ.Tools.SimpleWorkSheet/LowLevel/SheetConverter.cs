@@ -1,3 +1,4 @@
+using System.Globalization;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -150,7 +151,7 @@ public class SheetConverter
                 }
 
                 var cellsWithHyperlinks = workSheet.Cells.Cells.Where(c => c.Value.Hyperlink != null).ToList();
-                if (cellsWithHyperlinks.Any())
+                if (cellsWithHyperlinks.Count != 0)
                 {
                     var hyperlinks = new Hyperlinks();
                     
@@ -158,9 +159,12 @@ public class SheetConverter
                     {
                         var position = cellEntry.Key;
                         var cell = cellEntry.Value;
-                        var hyperlinkInfo = cell.Hyperlink!;
+                        var hyperlinkInfo = cell.Hyperlink;
                         
-                        var hyperlinkRelationship = worksheetPart.AddHyperlinkRelationship(new Uri(hyperlinkInfo.Url, UriKind.Absolute), true);
+                        if (hyperlinkInfo == null)
+                            continue;
+                        
+                        var hyperlinkRelationship = worksheetPart.AddHyperlinkRelationship(new(hyperlinkInfo.Url, UriKind.Absolute), true);
                         
                         var hyperlink = new Hyperlink
                         {
@@ -223,7 +227,7 @@ public class SheetConverter
         if (cellValue.IsDecimal())
         {
             newCell.DataType = CellValues.Number;
-            newCell.CellValue = new(cellValue.AsDecimal().ToString(System.Globalization.CultureInfo.InvariantCulture));
+            newCell.CellValue = new(cellValue.AsDecimal().ToString(CultureInfo.InvariantCulture));
         }
         else if (cellValue.IsLong())
         {
@@ -234,14 +238,14 @@ public class SheetConverter
         {
             var dateTime = cellValue.AsDateTime();
             var oaDate = dateTime.ToOADate();
-            newCell.CellValue = new(oaDate.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            newCell.CellValue = new(oaDate.ToString(CultureInfo.InvariantCulture));
             newCell.DataType = CellValues.Number;
         }
         else if (cellValue.IsDateTimeOffset())
         {
             var dateTimeOffset = cellValue.AsDateTimeOffset();
             var oaDate = dateTimeOffset.DateTime.ToOADate();
-            newCell.CellValue = new(oaDate.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            newCell.CellValue = new(oaDate.ToString(CultureInfo.InvariantCulture));
             newCell.DataType = CellValues.Number;
         }
         else if (cellValue.IsString())

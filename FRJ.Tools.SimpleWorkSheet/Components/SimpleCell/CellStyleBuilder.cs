@@ -95,7 +95,7 @@ public class CellStyleBuilder
 
     public CellStyleBuilder WithTextRotation(int degrees)
     {
-        if (degrees < -90 || degrees > 90)
+        if (degrees is < -90 or > 90)
             throw new ArgumentException("Text rotation must be between -90 and 90 degrees", nameof(degrees));
         _textRotation = degrees;
         return this;

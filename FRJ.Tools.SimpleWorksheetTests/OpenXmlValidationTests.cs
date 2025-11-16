@@ -14,13 +14,11 @@ public class OpenXmlValidationTests
         using var doc = SpreadsheetDocument.Open(filePath, false);
         var validator = new OpenXmlValidator();
         var errors = validator.Validate(doc).ToList();
-        
-        if (errors.Any())
-        {
-            var errorMessages = string.Join("\n", errors.Select(e => 
-                $"  - {e.Description}\n    Path: {e.Path?.XPath}\n    Part: {e.Part?.Uri}"));
-            Assert.Fail($"OpenXML validation failed:\n{errorMessages}");
-        }
+
+        if (errors.Count == 0) return;
+        var errorMessages = string.Join("\n", errors.Select(e => 
+            $"  - {e.Description}\n    Path: {e.Path?.XPath}\n    Part: {e.Part?.Uri}"));
+        Assert.Fail($"OpenXML validation failed:\n{errorMessages}");
     }
 
     [Fact]
