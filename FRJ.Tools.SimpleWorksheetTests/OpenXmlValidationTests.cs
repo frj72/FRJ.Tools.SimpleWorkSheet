@@ -186,4 +186,115 @@ public class OpenXmlValidationTests
             File.Delete(tempPath);
         }
     }
+
+    [Fact]
+    public void LineChart_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Trends");
+
+        sheet.AddCell(new(0, 0), new CellValue("Month"));
+        sheet.AddCell(new(1, 0), new CellValue("Sales"));
+        sheet.AddCell(new(0, 1), new CellValue("Jan"));
+        sheet.AddCell(new(1, 1), new CellValue(100));
+        sheet.AddCell(new(0, 2), new CellValue("Feb"));
+        sheet.AddCell(new(1, 2), new CellValue(120));
+
+        var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
+        var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
+
+        var chart = LineChart.Create()
+            .WithTitle("Sales Trend")
+            .WithDataRange(categoriesRange, valuesRange)
+            .WithPosition(3, 0, 10, 15);
+
+        sheet.AddChart(chart);
+
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    [Fact]
+    public void PieChart_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Distribution");
+
+        sheet.AddCell(new(0, 0), new CellValue("Category"));
+        sheet.AddCell(new(1, 0), new CellValue("Value"));
+        sheet.AddCell(new(0, 1), new CellValue("A"));
+        sheet.AddCell(new(1, 1), new CellValue(30));
+        sheet.AddCell(new(0, 2), new CellValue("B"));
+        sheet.AddCell(new(1, 2), new CellValue(70));
+
+        var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
+        var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
+
+        var chart = PieChart.Create()
+            .WithTitle("Distribution")
+            .WithDataRange(categoriesRange, valuesRange)
+            .WithPosition(3, 0, 10, 15);
+
+        sheet.AddChart(chart);
+
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    [Fact]
+    public void ScatterChart_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Correlation");
+
+        sheet.AddCell(new(0, 0), new CellValue("X"));
+        sheet.AddCell(new(1, 0), new CellValue("Y"));
+        sheet.AddCell(new(0, 1), new CellValue(1));
+        sheet.AddCell(new(1, 1), new CellValue(10));
+        sheet.AddCell(new(0, 2), new CellValue(2));
+        sheet.AddCell(new(1, 2), new CellValue(20));
+
+        var xRange = CellRange.FromBounds(0, 1, 0, 2);
+        var yRange = CellRange.FromBounds(1, 1, 1, 2);
+
+        var chart = ScatterChart.Create()
+            .WithTitle("X vs Y")
+            .WithXyData(xRange, yRange)
+            .WithPosition(3, 0, 10, 15);
+
+        sheet.AddChart(chart);
+
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
 }

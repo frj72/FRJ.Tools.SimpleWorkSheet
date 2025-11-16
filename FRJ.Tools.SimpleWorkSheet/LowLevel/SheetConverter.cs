@@ -9,7 +9,6 @@ using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
-using BarChart = FRJ.Tools.SimpleWorkSheet.Components.Charts.BarChart;
 using Cell = DocumentFormat.OpenXml.Spreadsheet.Cell;
 using Hyperlink = DocumentFormat.OpenXml.Spreadsheet.Hyperlink;
 using Selection = DocumentFormat.OpenXml.Spreadsheet.Selection;

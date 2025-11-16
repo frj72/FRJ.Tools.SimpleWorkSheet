@@ -25,7 +25,7 @@ public class ScatterChart : Chart
         return this;
     }
 
-    public ScatterChart WithXYData(CellRange xRange, CellRange yRange)
+    public ScatterChart WithXyData(CellRange xRange, CellRange yRange)
     {
         ChartDataRange.ValidateDataRange(xRange);
         ChartDataRange.ValidateDataRange(yRange);

@@ -55,7 +55,10 @@ public static class Program
             new DataValidationExample(),
             new NamedRangesExample(),
             new AdvancedFormulasExample(),
-            new BarChartExample()
+            new BarChartExample(),
+            new LineChartExample(),
+            new PieChartExample(),
+            new ScatterChartExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
