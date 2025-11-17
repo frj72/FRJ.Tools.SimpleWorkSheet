@@ -62,7 +62,8 @@ public static class Program
             new ChartSheetExample(),
             new AutoFitColumnsExample(),
             new SheetTabColorsExample(),
-            new SheetVisibilityExample()
+            new SheetVisibilityExample(),
+            new ExcelTablesExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

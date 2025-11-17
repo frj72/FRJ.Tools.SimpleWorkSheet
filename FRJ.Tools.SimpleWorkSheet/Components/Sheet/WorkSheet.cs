@@ -12,6 +12,7 @@ public class WorkSheet
 
     private readonly List<CellRange> _mergedCells = [];
     private readonly List<Chart> _charts = [];
+    private readonly List<ExcelTable> _tables = [];
     public string Name { get; }
     public CellCollection Cells { get; }
     
@@ -23,6 +24,7 @@ public class WorkSheet
     public bool IsVisible { get; private set; } = true;
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
     public IReadOnlyList<Chart> Charts => _charts;
+    public IReadOnlyList<ExcelTable> Tables => _tables;
 
     public WorkSheet(string name)
     {
@@ -288,6 +290,25 @@ public class WorkSheet
     public void SetVisible(bool visible)
     {
         IsVisible = visible;
+    }
+
+    public ExcelTable AddTable(string name, CellRange range, bool showFilterButton = true)
+    {
+        if (_tables.Any(t => t.Name == name))
+            throw new ArgumentException($"Table with name '{name}' already exists", nameof(name));
+        
+        if (_tables.Any(t => t.Range.Overlaps(range)))
+            throw new ArgumentException("Table range overlaps an existing table", nameof(range));
+        
+        var table = new ExcelTable(name, range, showFilterButton);
+        _tables.Add(table);
+        return table;
+    }
+
+    public ExcelTable AddTable(string name, uint fromX, uint fromY, uint toX, uint toY, bool showFilterButton = true)
+    {
+        var range = CellRange.FromBounds(fromX, fromY, toX, toY);
+        return AddTable(name, range, showFilterButton);
     }
     
     private void EnsureCellExists(CellPosition position)

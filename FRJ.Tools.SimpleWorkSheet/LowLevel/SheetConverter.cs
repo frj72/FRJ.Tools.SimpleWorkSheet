@@ -12,6 +12,7 @@ using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using Cell = DocumentFormat.OpenXml.Spreadsheet.Cell;
 using Hyperlink = DocumentFormat.OpenXml.Spreadsheet.Hyperlink;
 using Selection = DocumentFormat.OpenXml.Spreadsheet.Selection;
+using Table = DocumentFormat.OpenXml.Spreadsheet.Table;
 // ReSharper disable UnusedMember.Global
 
 namespace FRJ.Tools.SimpleWorkSheet.LowLevel;
@@ -288,6 +289,87 @@ public class SheetConverter
                     
                     drawingsPart.WorksheetDrawing = worksheetDrawing;
                     drawingsPart.WorksheetDrawing.Save();
+                }
+
+                if (workSheet.Tables.Count != 0)
+                {
+                    uint tableId = 1;
+                    foreach (var excelTable in workSheet.Tables)
+                    {
+                        var tablePart = worksheetPart.AddNewPart<TableDefinitionPart>();
+                        var tablePartId = worksheetPart.GetIdOfPart(tablePart);
+                        
+                        var table = new Table
+                        {
+                            Id = tableId,
+                            Name = excelTable.Name,
+                            DisplayName = excelTable.DisplayName,
+                            Reference = $"{GetCellReference(excelTable.Range.From)}:{GetCellReference(excelTable.Range.To)}",
+                            TotalsRowShown = false
+                        };
+                        
+                        if (excelTable.ShowFilterButton)
+                        {
+                            var autoFilter = new AutoFilter
+                            {
+                                Reference = $"{GetCellReference(excelTable.Range.From)}:{GetCellReference(excelTable.Range.To)}"
+                            };
+                            table.Append(autoFilter);
+                        }
+                        
+                        var tableColumns = new TableColumns { Count = excelTable.Range.To.X - excelTable.Range.From.X + 1 };
+                        for (uint colIndex = 0; colIndex < tableColumns.Count; colIndex++)
+                        {
+                            var headerPosition = excelTable.Range.From with { X = excelTable.Range.From.X + colIndex };
+                            var columnName = $"Column{colIndex + 1}";
+                            
+                            if (workSheet.Cells.Cells.TryGetValue(headerPosition, out var headerCell))
+                            {
+                                var index = colIndex;
+                                columnName = headerCell.Value.Value.Match(
+                                    d => d.ToString(CultureInfo.InvariantCulture),
+                                    l => l.ToString(),
+                                    s => s,
+                                    dt => dt.ToString(CultureInfo.InvariantCulture),
+                                    dto => dto.ToString(),
+                                    _ => $"Column{index + 1}"
+                                );
+                            }
+
+                            var tableColumn = new TableColumn
+                            {
+                                Id = colIndex + 1,
+                                Name = columnName
+                            };
+                            tableColumns.Append(tableColumn);
+                        }
+                        table.Append(tableColumns);
+                        
+                        var tableStyleInfo = new TableStyleInfo
+                        {
+                            Name = "TableStyleMedium2",
+                            ShowFirstColumn = false,
+                            ShowLastColumn = false,
+                            ShowRowStripes = true,
+                            ShowColumnStripes = false
+                        };
+                        table.Append(tableStyleInfo);
+                        
+                        tablePart.Table = table;
+                        tablePart.Table.Save();
+                        
+                        var tableParts = worksheetPart.Worksheet.Elements<TableParts>().FirstOrDefault();
+                        if (tableParts == null)
+                        {
+                            tableParts = new();
+                            worksheetPart.Worksheet.Append(tableParts);
+                        }
+                        
+                        tableParts.Append(new TablePart { Id = tablePartId });
+                        tableParts.Count = (uint)workSheet.Tables.Count;
+                        
+                        tableId++;
+                    }
                 }
 
                 worksheetPart.Worksheet.Save();

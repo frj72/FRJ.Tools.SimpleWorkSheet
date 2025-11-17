@@ -93,6 +93,7 @@ public class WorkBookReader
         ExtractFrozenPanes(worksheetPart, workSheet);
         ExtractMergedCells(worksheetPart, workSheet);
         ExtractTabColor(worksheetPart, workSheet);
+        ExtractTables(worksheetPart, workSheet);
 
         return workSheet;
     }
@@ -377,5 +378,39 @@ public class WorkBookReader
         var tabColor = sheetProperties?.Elements<TabColor>().FirstOrDefault();
         if (tabColor?.Rgb?.Value != null)
             workSheet.SetTabColor(tabColor.Rgb.Value);
+    }
+
+    private static void ExtractTables(WorksheetPart worksheetPart, WorkSheet workSheet)
+    {
+        var tableParts = worksheetPart.Worksheet.Elements<TableParts>().FirstOrDefault();
+        if (tableParts == null)
+            return;
+
+        foreach (var tablePart in tableParts.Elements<TablePart>())
+        {
+            var tablePartId = tablePart.Id?.Value;
+            if (tablePartId == null)
+                continue;
+
+            var tableDefinitionPart = (TableDefinitionPart)worksheetPart.GetPartById(tablePartId);
+            var table = tableDefinitionPart.Table;
+            
+            if (table.Name?.Value == null || table.Reference?.Value == null)
+                continue;
+
+            var referenceParts = table.Reference.Value.Split(':');
+            if (referenceParts.Length != 2)
+                continue;
+
+            var start = GetCellPosition(referenceParts[0]);
+            var end = GetCellPosition(referenceParts[1]);
+            if (start == null || end == null)
+                continue;
+
+            var range = CellRange.FromPositions(start.Value, end.Value);
+            var showFilter = table.Elements<AutoFilter>().Any();
+            
+            workSheet.AddTable(table.Name.Value, range, showFilter);
+        }
     }
 }

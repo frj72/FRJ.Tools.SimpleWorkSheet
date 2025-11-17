@@ -337,5 +337,30 @@ public class OpenXmlValidationTests
         }
     }
 
+    [Fact]
+    public void ExcelTable_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Test");
+        sheet.AddCell(new(0, 0), "Name");
+        sheet.AddCell(new(1, 0), "Age");
+        sheet.AddCell(new(0, 1), "Alice");
+        sheet.AddCell(new(1, 1), 30);
+        sheet.AddTable("TestTable", 0, 0, 1, 1);
+        
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+        
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+            
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
 
 }
