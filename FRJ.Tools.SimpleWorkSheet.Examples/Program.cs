@@ -61,7 +61,8 @@ public static class Program
             new ScatterChartExample(),
             new ChartSheetExample(),
             new AutoFitColumnsExample(),
-            new SheetTabColorsExample()
+            new SheetTabColorsExample(),
+            new SheetVisibilityExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

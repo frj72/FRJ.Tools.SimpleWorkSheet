@@ -36,15 +36,18 @@ public class WorkBookReader
                 continue;
             
             var worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheetId);
-            sheets.Add(ParseWorksheet(worksheetPart, sheetName, workbookPart));
+            sheets.Add(ParseWorksheet(worksheetPart, sheet, workbookPart));
         }
 
         return new("ImportedWorkbook", sheets);
     }
 
-    private static WorkSheet ParseWorksheet(WorksheetPart worksheetPart, string sheetName, WorkbookPart workbookPart)
+    private static WorkSheet ParseWorksheet(WorksheetPart worksheetPart, Sheet sheetElement, WorkbookPart workbookPart)
     {
-        var workSheet = new WorkSheet(sheetName);
+        var workSheet = new WorkSheet(sheetElement.Name?.Value ?? "Sheet");
+        
+        if (sheetElement.State?.Value == SheetStateValues.Hidden)
+            workSheet.SetVisible(false);
         var sheetData = worksheetPart.Worksheet.Elements<SheetData>().FirstOrDefault();
         
         if (sheetData == null)

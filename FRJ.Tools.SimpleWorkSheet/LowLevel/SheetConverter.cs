@@ -297,9 +297,16 @@ public class SheetConverter
                     SheetId = sheetId++,
                     Name = workSheet.Name
                 };
+                
+                if (!workSheet.IsVisible)
+                    sheet.State = SheetStateValues.Hidden;
+                
                 sheets.Append(sheet);
                 workbookPart.Workbook.Save();
             }
+
+            var calculationProperties = new CalculationProperties { FullCalculationOnLoad = true };
+            workbookPart.Workbook.Append(calculationProperties);
 
             workbookPart.Workbook.Save();
         }

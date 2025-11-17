@@ -20,6 +20,7 @@ public class WorkSheet
     public Dictionary<CellRange, CellValidation> Validations { get; } = new();
     public FreezePane? FrozenPane { get; private set; }
     public string? TabColor { get; private set; }
+    public bool IsVisible { get; private set; } = true;
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
     public IReadOnlyList<Chart> Charts => _charts;
 
@@ -282,6 +283,11 @@ public class WorkSheet
         if (!color.IsValidColor())
             throw new ArgumentException("Invalid color format", nameof(color));
         TabColor = color;
+    }
+
+    public void SetVisible(bool visible)
+    {
+        IsVisible = visible;
     }
     
     private void EnsureCellExists(CellPosition position)
