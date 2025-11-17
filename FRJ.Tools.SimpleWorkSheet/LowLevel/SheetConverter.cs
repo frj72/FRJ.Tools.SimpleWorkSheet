@@ -60,6 +60,11 @@ public class SheetConverter
                 worksheetPart.Worksheet = new(new SheetData());
                 var sheetData = worksheetPart.Worksheet.GetFirstChild<SheetData>() ?? throw new InvalidOperationException();
 
+                if (!string.IsNullOrEmpty(workSheet.TabColor))
+                {
+                    var sheetProperties = new SheetProperties(new TabColor { Rgb = workSheet.TabColor });
+                    worksheetPart.Worksheet.InsertAt(sheetProperties, 0);
+                }
                
                 var rows = workSheet.Cells.Cells.GroupBy(cellEntry => cellEntry.Key.Y)
                     .OrderBy(g => g.Key);

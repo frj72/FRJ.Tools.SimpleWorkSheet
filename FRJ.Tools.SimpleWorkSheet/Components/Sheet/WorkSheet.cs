@@ -19,6 +19,7 @@ public class WorkSheet
     public Dictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights { get; } = new();
     public Dictionary<CellRange, CellValidation> Validations { get; } = new();
     public FreezePane? FrozenPane { get; private set; }
+    public string? TabColor { get; private set; }
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
     public IReadOnlyList<Chart> Charts => _charts;
 
@@ -274,6 +275,13 @@ public class WorkSheet
         var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
         foreach (var column in columns)
             AutoFitColumn(column);
+    }
+
+    public void SetTabColor(string color)
+    {
+        if (!color.IsValidColor())
+            throw new ArgumentException("Invalid color format", nameof(color));
+        TabColor = color;
     }
     
     private void EnsureCellExists(CellPosition position)

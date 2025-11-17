@@ -89,6 +89,7 @@ public class WorkBookReader
         ExtractRowHeights(worksheetPart, workSheet);
         ExtractFrozenPanes(worksheetPart, workSheet);
         ExtractMergedCells(worksheetPart, workSheet);
+        ExtractTabColor(worksheetPart, workSheet);
 
         return workSheet;
     }
@@ -364,5 +365,14 @@ public class WorkBookReader
             var range = CellRange.FromPositions(start.Value, end.Value);
             workSheet.ImportMergedRange(range);
         }
+    }
+
+    private static void ExtractTabColor(WorksheetPart worksheetPart, WorkSheet workSheet)
+    {
+        var sheetProperties = worksheetPart.Worksheet.Elements<SheetProperties>().FirstOrDefault();
+
+        var tabColor = sheetProperties?.Elements<TabColor>().FirstOrDefault();
+        if (tabColor?.Rgb?.Value != null)
+            workSheet.SetTabColor(tabColor.Rgb.Value);
     }
 }

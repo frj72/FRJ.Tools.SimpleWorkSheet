@@ -60,7 +60,8 @@ public static class Program
             new PieChartExample(),
             new ScatterChartExample(),
             new ChartSheetExample(),
-            new AutoFitColumnsExample()
+            new AutoFitColumnsExample(),
+            new SheetTabColorsExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
