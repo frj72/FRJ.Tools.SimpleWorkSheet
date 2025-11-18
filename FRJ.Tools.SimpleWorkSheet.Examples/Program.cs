@@ -66,7 +66,8 @@ public static class Program
             new ExcelTablesExample(),
             new InsertImagesExample(),
             new AreaChartExample(),
-            new StackedAreaChartExample()
+            new StackedAreaChartExample(),
+            new ChartFormattingExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

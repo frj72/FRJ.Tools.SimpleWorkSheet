@@ -62,6 +62,7 @@ public class ExampleFileValidationTests
     [InlineData("50_InsertImages.xlsx")]
     [InlineData("51_AreaChart.xlsx")]
     [InlineData("52_StackedAreaChart.xlsx")]
+    [InlineData("53_ChartFormatting.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -82,7 +83,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 52;
+        const int expectedCount = 53;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);

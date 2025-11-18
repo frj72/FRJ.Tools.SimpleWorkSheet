@@ -8,6 +8,11 @@ public abstract class Chart
     public string? Title { get; protected set; }
     public string? DataSourceSheet { get; protected set; }
     public List<ChartSeries> Series { get; } = [];
+    public ChartLegendPosition LegendPosition { get; protected set; } = ChartLegendPosition.Right;
+    public string? CategoryAxisTitle { get; protected set; }
+    public string? ValueAxisTitle { get; protected set; }
+    public bool ShowDataLabels { get; protected set; }
+    public bool ShowMajorGridlines { get; protected set; } = true;
 
     protected Chart(ChartType type)
     {

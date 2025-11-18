@@ -62,4 +62,34 @@ public class AreaChart : Chart
         base.AddSeries(name, dataRange);
         return this;
     }
+
+    public AreaChart WithLegendPosition(ChartLegendPosition position)
+    {
+        LegendPosition = position;
+        return this;
+    }
+
+    public AreaChart WithCategoryAxisTitle(string title)
+    {
+        CategoryAxisTitle = title;
+        return this;
+    }
+
+    public AreaChart WithValueAxisTitle(string title)
+    {
+        ValueAxisTitle = title;
+        return this;
+    }
+
+    public AreaChart WithDataLabels(bool show)
+    {
+        ShowDataLabels = show;
+        return this;
+    }
+
+    public AreaChart WithMajorGridlines(bool show)
+    {
+        ShowMajorGridlines = show;
+        return this;
+    }
 }
