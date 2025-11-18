@@ -362,5 +362,30 @@ public class OpenXmlValidationTests
         }
     }
 
+    [Fact]
+    public void InsertImage_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Test");
+        sheet.AddCell(new(0, 0), "Test with Image");
+        
+        var imageData = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
+        var image = new WorksheetImage(imageData, ImageFormat.Png, new(2, 2), 100, 100);
+        sheet.AddImage(image);
+        
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+        
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+            
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
 
 }

@@ -13,6 +13,7 @@ public class WorkSheet
     private readonly List<CellRange> _mergedCells = [];
     private readonly List<Chart> _charts = [];
     private readonly List<ExcelTable> _tables = [];
+    private readonly List<WorksheetImage> _images = [];
     public string Name { get; }
     public CellCollection Cells { get; }
     
@@ -25,6 +26,7 @@ public class WorkSheet
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
     public IReadOnlyList<Chart> Charts => _charts;
     public IReadOnlyList<ExcelTable> Tables => _tables;
+    public IReadOnlyList<WorksheetImage> Images => _images;
 
     public WorkSheet(string name)
     {
@@ -309,6 +311,17 @@ public class WorkSheet
     {
         var range = CellRange.FromBounds(fromX, fromY, toX, toY);
         return AddTable(name, range, showFilterButton);
+    }
+
+    public void AddImage(WorksheetImage image)
+    {
+        _images.Add(image);
+    }
+
+    public void AddImage(string filePath, CellPosition position, uint widthInPixels, uint heightInPixels)
+    {
+        var image = WorksheetImage.FromFile(filePath, position, widthInPixels, heightInPixels);
+        AddImage(image);
     }
     
     private void EnsureCellExists(CellPosition position)

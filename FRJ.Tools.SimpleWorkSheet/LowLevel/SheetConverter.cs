@@ -264,7 +264,7 @@ public class SheetConverter
                     worksheetPart.Worksheet.Append(dataValidations);
                 }
 
-                if (workSheet.Charts.Count != 0)
+                if (workSheet.Charts.Count != 0 || workSheet.Images.Count != 0)
                 {
                     var drawingsPart = worksheetPart.AddNewPart<DrawingsPart>();
                     var drawingId = worksheetPart.GetIdOfPart(drawingsPart);
@@ -285,6 +285,21 @@ public class SheetConverter
                         
                         var twoCellAnchor = CreateTwoCellAnchor(chart, chartRelId, chartIndex++);
                         worksheetDrawing.Append(twoCellAnchor);
+                    }
+                    
+                    uint imageIndex = 1;
+                    foreach (var image in workSheet.Images)
+                    {
+                        var imagePartType = image.Format == ImageFormat.Png 
+                            ? ImagePartType.Png 
+                            : ImagePartType.Jpeg;
+                        var imagePart = drawingsPart.AddImagePart(imagePartType);
+                        using var imageStream = new MemoryStream(image.ImageData);
+                        imagePart.FeedData(imageStream);
+                        
+                        var imageRelId = drawingsPart.GetIdOfPart(imagePart);
+                        var imageTwoCellAnchor = CreateImageTwoCellAnchor(image, imageRelId, imageIndex++);
+                        worksheetDrawing.Append(imageTwoCellAnchor);
                     }
                     
                     drawingsPart.WorksheetDrawing = worksheetDrawing;
@@ -972,6 +987,62 @@ public class SheetConverter
         twoCellAnchor.Append(new ClientData());
 
         return twoCellAnchor;
+    }
+
+    private static OneCellAnchor CreateImageTwoCellAnchor(WorksheetImage image, string imageRelId, uint imageIndex)
+    {
+        var oneCellAnchor = new OneCellAnchor();
+
+        var fromMarker = new DocumentFormat.OpenXml.Drawing.Spreadsheet.FromMarker();
+        fromMarker.Append(new ColumnId { Text = image.Position.X.ToString() });
+        fromMarker.Append(new ColumnOffset { Text = "0" });
+        fromMarker.Append(new RowId { Text = image.Position.Y.ToString() });
+        fromMarker.Append(new RowOffset { Text = "0" });
+        oneCellAnchor.Append(fromMarker);
+
+        const int emusPerPixel = 9525;
+        var extent = new Extent
+        {
+            Cx = image.WidthInPixels * emusPerPixel,
+            Cy = image.HeightInPixels * emusPerPixel
+        };
+        oneCellAnchor.Append(extent);
+
+        var picture = new DocumentFormat.OpenXml.Drawing.Spreadsheet.Picture();
+        picture.Append(new DocumentFormat.OpenXml.Drawing.Spreadsheet.NonVisualPictureProperties(
+            new DocumentFormat.OpenXml.Drawing.Spreadsheet.NonVisualDrawingProperties 
+            { 
+                Id = imageIndex, 
+                Name = $"Image {imageIndex}" 
+            },
+            new DocumentFormat.OpenXml.Drawing.Spreadsheet.NonVisualPictureDrawingProperties(
+                new PictureLocks { NoChangeAspect = true }
+            )
+        ));
+
+        var blipFill = new DocumentFormat.OpenXml.Drawing.Spreadsheet.BlipFill();
+        var blip = new Blip { Embed = imageRelId };
+        blip.Append(new BlipExtensionList());
+        blipFill.Append(blip);
+        blipFill.Append(new Stretch(new FillRectangle()));
+        picture.Append(blipFill);
+
+        var shapeProperties = new DocumentFormat.OpenXml.Drawing.Spreadsheet.ShapeProperties();
+        var transform2D = new Transform2D();
+        transform2D.Append(new Offset { X = 0, Y = 0 });
+        transform2D.Append(new Extents { Cx = image.WidthInPixels * emusPerPixel, Cy = image.HeightInPixels * emusPerPixel });
+        shapeProperties.Append(transform2D);
+        
+        var presetGeometry = new PresetGeometry { Preset = ShapeTypeValues.Rectangle };
+        presetGeometry.Append(new AdjustValueList());
+        shapeProperties.Append(presetGeometry);
+        
+        picture.Append(shapeProperties);
+
+        oneCellAnchor.Append(picture);
+        oneCellAnchor.Append(new ClientData());
+
+        return oneCellAnchor;
     }
 }
 
