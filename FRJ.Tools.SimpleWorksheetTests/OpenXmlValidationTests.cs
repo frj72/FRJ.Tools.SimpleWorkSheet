@@ -387,5 +387,78 @@ public class OpenXmlValidationTests
         }
     }
 
+    [Fact]
+    public void AreaChart_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Data");
+        sheet.AddCell(new(0, 0), "Month");
+        sheet.AddCell(new(1, 0), "Sales");
+        sheet.AddCell(new(0, 1), "Jan");
+        sheet.AddCell(new(1, 1), 1000);
+        sheet.AddCell(new(0, 2), "Feb");
+        sheet.AddCell(new(1, 2), 1500);
+        
+        var chart = AreaChart.Create()
+            .WithTitle("Sales")
+            .WithDataRange(CellRange.FromBounds(0, 1, 0, 2), CellRange.FromBounds(1, 1, 1, 2))
+            .WithPosition(3, 0, 10, 15)
+            .WithSize(5000000, 3000000);
+        
+        sheet.AddChart(chart);
+        
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+        
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+            
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
+    [Fact]
+    public void StackedAreaChart_ValidatesCorrectly()
+    {
+        var sheet = new WorkSheet("Data");
+        sheet.AddCell(new(0, 0), "Month");
+        sheet.AddCell(new(1, 0), "Product A");
+        sheet.AddCell(new(2, 0), "Product B");
+        sheet.AddCell(new(0, 1), "Jan");
+        sheet.AddCell(new(1, 1), 1000);
+        sheet.AddCell(new(2, 1), 800);
+        sheet.AddCell(new(0, 2), "Feb");
+        sheet.AddCell(new(1, 2), 1500);
+        sheet.AddCell(new(2, 2), 900);
+        
+        var chart = AreaChart.Create()
+            .WithTitle("Stacked Sales")
+            .WithPosition(4, 0, 11, 15)
+            .WithSize(5000000, 3000000)
+            .WithStacked(true)
+            .AddSeries("Product A", CellRange.FromBounds(1, 1, 1, 2))
+            .AddSeries("Product B", CellRange.FromBounds(2, 1, 2, 2));
+        
+        sheet.AddChart(chart);
+        
+        var tempPath = Path.GetTempFileName() + ".xlsx";
+        
+        try
+        {
+            var workbook = new WorkBook("Test", [sheet]);
+            workbook.SaveToFile(tempPath);
+            
+            ValidateExcelFile(tempPath);
+        }
+        finally
+        {
+            File.Delete(tempPath);
+        }
+    }
+
 
 }

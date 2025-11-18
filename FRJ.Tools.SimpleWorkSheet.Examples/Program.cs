@@ -64,7 +64,9 @@ public static class Program
             new SheetTabColorsExample(),
             new SheetVisibilityExample(),
             new ExcelTablesExample(),
-            new InsertImagesExample()
+            new InsertImagesExample(),
+            new AreaChartExample(),
+            new StackedAreaChartExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
