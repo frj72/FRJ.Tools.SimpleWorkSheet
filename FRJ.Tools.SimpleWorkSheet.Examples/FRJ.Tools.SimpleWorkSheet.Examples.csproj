@@ -15,6 +15,9 @@
     <None Update="Resources\Images\Wikipedia_logo_593.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Resources\Data\Json\Prices.Json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <PropertyGroup>
