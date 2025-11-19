@@ -71,6 +71,9 @@ public class ExampleFileValidationTests
     [InlineData("59_JsonMultiColumnAllFeatures.xlsx")]
     [InlineData("60_JsonNestedObjects.xlsx")]
     [InlineData("61_JsonToWorkbook.xlsx")]
+    [InlineData("62_JsonToWorkbookLineChart.xlsx")]
+    [InlineData("63_JsonToWorkbookBarChart.xlsx")]
+    [InlineData("64_JsonToWorkbookMultipleCharts.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -91,7 +94,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 61;
+        const int expectedCount = 64;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);

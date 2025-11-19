@@ -8,15 +8,17 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 public class JsonWorkbookBuilder
 {
     private string _workbookName = "Workbook";
-    private string _dataSheetName = "Data";
     private readonly JsonWorksheetBuilder _worksheetBuilder;
+    private readonly List<Func<WorkSheet, WorkSheet>> _chartBuilders = [];
+
+    internal string DataSheetName { get; private set; } = "Data";
 
     private JsonWorkbookBuilder(JsonElement jsonRoot)
     {
         if (jsonRoot.ValueKind != JsonValueKind.Array && jsonRoot.ValueKind != JsonValueKind.Object)
             throw new ArgumentException("JSON must be an array or object", nameof(jsonRoot));
         
-        _worksheetBuilder = JsonWorksheetBuilder.FromJson(jsonRoot.GetRawText()).WithSheetName(_dataSheetName);
+        _worksheetBuilder = JsonWorksheetBuilder.FromJson(jsonRoot.GetRawText()).WithSheetName(DataSheetName);
     }
 
     public static JsonWorkbookBuilder FromJson(string jsonContent)
@@ -45,7 +47,7 @@ public class JsonWorkbookBuilder
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Data sheet name cannot be empty", nameof(name));
         
-        _dataSheetName = name;
+        DataSheetName = name;
         _worksheetBuilder.WithSheetName(name);
         return this;
     }
@@ -80,10 +82,24 @@ public class JsonWorkbookBuilder
         return this;
     }
 
+    public JsonWorkbookBuilder WithChart(Action<JsonChartBuilder> chartConfig)
+    {
+        ArgumentNullException.ThrowIfNull(chartConfig);
+
+        var builder = new JsonChartBuilder(this);
+        chartConfig(builder);
+        _chartBuilders.Add(builder.Build);
+        
+        return this;
+    }
+
     public WorkBook Build()
     {
         var dataSheet = _worksheetBuilder.Build();
-        return new(_workbookName, [dataSheet]);
+        var sheets = new List<WorkSheet> { dataSheet };
+        sheets.AddRange(_chartBuilders.Select(buildChartAction => buildChartAction(dataSheet)));
+
+        return new(_workbookName, [..sheets]);
     }
 
     public int? GetColumnIndexByName(string columnName)
@@ -125,3 +141,4 @@ public class JsonWorkbookBuilder
         return maxRow;
     }
 }
+

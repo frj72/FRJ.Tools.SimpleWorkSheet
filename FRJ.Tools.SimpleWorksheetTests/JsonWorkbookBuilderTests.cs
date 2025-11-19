@@ -1,3 +1,4 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Import;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
@@ -238,4 +239,298 @@ public class JsonWorkbookBuilderTests
         Assert.Equal(150m, sheet.GetValue(0, 1)?.Value.AsT0);
         Assert.Equal(20m, sheet.GetValue(1, 1)?.Value.AsT0);
     }
+
+    [Fact]
+    public void WithChart_CreatesChartSheet()
+    {
+        const string json = """[{"month": "Jan", "sales": 1000}, {"month": "Feb", "sales": 1500}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("month", "sales")
+                .AsLineChart())
+            .Build();
+        
+        Assert.Equal(2, workbook.Sheets.Count());
+        Assert.Equal("Data", workbook.Sheets.First().Name);
+        Assert.Equal("Chart", workbook.Sheets.Last().Name);
+    }
+
+    [Fact]
+    public void WithChart_OnSheet_SetsCustomChartSheetName()
+    {
+        const string json = """[{"x": 1, "y": 2}, {"x": 2, "y": 3}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .OnSheet("SalesChart")
+                .UseColumns("x", "y")
+                .AsLineChart())
+            .Build();
+        
+        Assert.Equal("SalesChart", workbook.Sheets.Last().Name);
+    }
+
+    [Fact]
+    public void WithChart_UseColumns_ResolvesColumnNames()
+    {
+        const string json = """[{"date": "2025-01-01", "price": 100}, {"date": "2025-01-02", "price": 110}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("date", "price")
+                .AsLineChart())
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.NotEmpty(chartSheet.Charts);
+    }
+
+    [Fact]
+    public void WithChart_AsLineChart_CreatesLineChart()
+    {
+        const string json = """[{"a": 1, "b": 2}, {"a": 2, "b": 3}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("a", "b")
+                .AsLineChart())
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+        Assert.IsType<LineChart>(chartSheet.Charts[0]);
+    }
+
+    [Fact]
+    public void WithChart_AsBarChart_CreatesBarChart()
+    {
+        const string json = """[{"category": "A", "value": 10}, {"category": "B", "value": 20}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("category", "value")
+                .AsBarChart())
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+        Assert.IsType<BarChart>(chartSheet.Charts[0]);
+    }
+
+    [Fact]
+    public void WithChart_AsAreaChart_CreatesAreaChart()
+    {
+        const string json = """[{"time": "Q1", "revenue": 5000}, {"time": "Q2", "revenue": 6000}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("time", "revenue")
+                .AsAreaChart())
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+        Assert.IsType<AreaChart>(chartSheet.Charts[0]);
+    }
+
+    [Fact]
+    public void WithChart_WithTitle_SetsChartTitle()
+    {
+        const string json = """[{"x": 1, "y": 2}, {"x": 2, "y": 4}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("x", "y")
+                .AsLineChart()
+                .WithTitle("Test Chart"))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var lineChart = (LineChart)chartSheet.Charts[0];
+        Assert.Equal("Test Chart", lineChart.Title);
+    }
+
+    [Fact]
+    public void WithChart_InvalidColumnName_ThrowsException()
+    {
+        const string json = """[{"a": 1}]""";
+        
+        var builder = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("nonexistent", "a")
+                .AsLineChart());
+        
+        Assert.Throws<InvalidOperationException>(() => builder.Build());
+    }
+
+    [Fact]
+    public void WithChart_MultipleCharts_CreatesMultipleSheets()
+    {
+        const string json = """[{"x": 1, "y": 2, "z": 3}, {"x": 2, "y": 4, "z": 6}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("x", "y")
+                .AsLineChart())
+            .WithChart(chart => chart
+                .UseColumns("x", "z")
+                .AsBarChart())
+            .Build();
+        
+        Assert.Equal(3, workbook.Sheets.Count());
+        Assert.Equal("Data", workbook.Sheets.ElementAt(0).Name);
+        Assert.Equal("Chart", workbook.Sheets.ElementAt(1).Name);
+        Assert.Equal("Chart", workbook.Sheets.ElementAt(2).Name);
+    }
+
+    [Fact]
+    public void WithChart_AsPieChart_CreatesPieChart()
+    {
+        const string json = """[{"category": "A", "value": 30}, {"category": "B", "value": 70}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("category", "value")
+                .AsPieChart())
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+        Assert.IsType<PieChart>(chartSheet.Charts[0]);
+    }
+
+    [Fact]
+    public void WithChart_AsScatterChart_CreatesScatterChart()
+    {
+        const string json = """[{"x": 1.5, "y": 2.3}, {"x": 2.1, "y": 3.7}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("x", "y")
+                .AsScatterChart())
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+        Assert.IsType<ScatterChart>(chartSheet.Charts[0]);
+    }
+
+    [Fact]
+    public void WithChart_WithCategoryAxisTitle_SetsTitle()
+    {
+        const string json = """[{"month": "Jan", "sales": 100}, {"month": "Feb", "sales": 150}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("month", "sales")
+                .AsLineChart()
+                .WithCategoryAxisTitle("Month"))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var lineChart = (LineChart)chartSheet.Charts[0];
+        Assert.Equal("Month", lineChart.CategoryAxisTitle);
+    }
+
+    [Fact]
+    public void WithChart_WithValueAxisTitle_SetsTitle()
+    {
+        const string json = """[{"month": "Jan", "revenue": 1000}, {"month": "Feb", "revenue": 1200}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("month", "revenue")
+                .AsAreaChart()
+                .WithValueAxisTitle("Revenue ($)"))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var areaChart = (AreaChart)chartSheet.Charts[0];
+        Assert.Equal("Revenue ($)", areaChart.ValueAxisTitle);
+    }
+
+    [Fact]
+    public void WithChart_WithLegendPosition_SetsPosition()
+    {
+        const string json = """[{"cat": "A", "val": 10}, {"cat": "B", "val": 20}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("cat", "val")
+                .AsBarChart()
+                .WithLegendPosition(ChartLegendPosition.Bottom))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var barChart = (BarChart)chartSheet.Charts[0];
+        Assert.Equal(ChartLegendPosition.Bottom, barChart.LegendPosition);
+    }
+
+    [Fact]
+    public void WithChart_AllFormatting_AppliesCorrectly()
+    {
+        const string json = """[{"x": 1, "y": 100}, {"x": 2, "y": 200}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .OnSheet("CustomChart")
+                .UseColumns("x", "y")
+                .AsLineChart()
+                .WithTitle("Test Chart")
+                .WithCategoryAxisTitle("X Axis")
+                .WithValueAxisTitle("Y Axis")
+                .WithLegendPosition(ChartLegendPosition.Right))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Equal("CustomChart", chartSheet.Name);
+        
+        var lineChart = (LineChart)chartSheet.Charts[0];
+        Assert.Equal("Test Chart", lineChart.Title);
+        Assert.Equal("X Axis", lineChart.CategoryAxisTitle);
+        Assert.Equal("Y Axis", lineChart.ValueAxisTitle);
+        Assert.Equal(ChartLegendPosition.Right, lineChart.LegendPosition);
+    }
+
+    [Fact]
+    public void WithChart_AsScatterChartChained_ReturnsBuilderForChaining()
+    {
+        const string json = """[{"x": 1.5, "y": 2.5}, {"x": 2.5, "y": 3.5}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("x", "y")
+                .AsScatterChart()
+                .WithTitle("Scatter Plot")
+                .WithCategoryAxisTitle("X Values")
+                .WithValueAxisTitle("Y Values"))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var scatterChart = (ScatterChart)chartSheet.Charts[0];
+        Assert.Equal("Scatter Plot", scatterChart.Title);
+        Assert.Equal("X Values", scatterChart.CategoryAxisTitle);
+        Assert.Equal("Y Values", scatterChart.ValueAxisTitle);
+    }
+
+    [Fact]
+    public void WithChart_WithLegendPositionChained_ReturnsBuilderForChaining()
+    {
+        const string json = """[{"category": "A", "value": 10}, {"category": "B", "value": 20}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("category", "value")
+                .AsPieChart()
+                .WithLegendPosition(ChartLegendPosition.Left)
+                .WithTitle("Distribution"))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var pieChart = (PieChart)chartSheet.Charts[0];
+        Assert.Equal(ChartLegendPosition.Left, pieChart.LegendPosition);
+        Assert.Equal("Distribution", pieChart.Title);
+    }
 }
+
