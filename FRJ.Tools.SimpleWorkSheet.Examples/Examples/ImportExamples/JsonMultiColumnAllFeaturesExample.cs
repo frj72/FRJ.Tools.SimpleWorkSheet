@@ -12,7 +12,7 @@ public class JsonMultiColumnAllFeaturesExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Persons Complete")
             .WithHeaderStyle(style => style
                 .WithFillColor("70AD47")

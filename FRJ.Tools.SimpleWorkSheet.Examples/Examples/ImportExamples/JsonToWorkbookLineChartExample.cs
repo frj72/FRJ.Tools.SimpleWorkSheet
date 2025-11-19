@@ -12,7 +12,7 @@ public class JsonToWorkbookLineChartExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
         
-        var workbook = JsonWorkbookBuilder.FromJsonFile(jsonPath)
+        var workbook = WorkbookBuilder.FromJsonFile(jsonPath)
             .WithWorkbookName("Price Trend Analysis")
             .WithDataSheetName("Historical Prices")
             .WithHeaderStyle(style => style

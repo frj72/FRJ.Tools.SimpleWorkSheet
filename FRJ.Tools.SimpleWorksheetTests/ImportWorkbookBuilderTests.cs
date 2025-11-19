@@ -3,14 +3,14 @@ using FRJ.Tools.SimpleWorkSheet.Components.Import;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
-public class JsonWorkbookBuilderTests
+public class ImportWorkbookBuilderTests
 {
     [Fact]
     public void FromJson_ValidJsonArray_ReturnsBuilder()
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         
         Assert.NotNull(builder);
     }
@@ -20,7 +20,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """{"a": 1, "b": 2}""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         
         Assert.NotNull(builder);
     }
@@ -30,7 +30,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John"}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json).Build();
+        var workbook = WorkbookBuilder.FromJson(json).Build();
         
         Assert.NotNull(workbook);
         Assert.Equal("Workbook", workbook.Name);
@@ -41,7 +41,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John"}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json).Build();
+        var workbook = WorkbookBuilder.FromJson(json).Build();
         
         Assert.Single(workbook.Sheets);
         Assert.Equal("Data", workbook.Sheets.First().Name);
@@ -52,7 +52,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"test": "value"}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithWorkbookName("CustomWorkbook")
             .Build();
         
@@ -63,7 +63,7 @@ public class JsonWorkbookBuilderTests
     public void WithWorkbookName_EmptyString_ThrowsException()
     {
         const string json = """[{"test": "value"}]""";
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithWorkbookName(""));
     }
@@ -73,7 +73,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"test": "value"}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithDataSheetName("CustomSheet")
             .Build();
         
@@ -84,7 +84,7 @@ public class JsonWorkbookBuilderTests
     public void WithDataSheetName_EmptyString_ThrowsException()
     {
         const string json = """[{"test": "value"}]""";
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithDataSheetName(""));
     }
@@ -94,7 +94,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         var index = builder.GetColumnIndexByName("age");
         
         Assert.NotNull(index);
@@ -106,7 +106,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John"}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         var index = builder.GetColumnIndexByName("nonexistent");
         
         Assert.Null(index);
@@ -117,7 +117,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John"}, {"name": "Jane"}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         var range = builder.GetColumnRangeByName("name");
         
         Assert.NotNull(range);
@@ -130,7 +130,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John"}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         var range = builder.GetColumnRangeByName("nonexistent");
         
         Assert.Null(range);
@@ -141,7 +141,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithWorkbookName("People")
             .WithDataSheetName("PersonData")
             .WithTrimWhitespace(true)
@@ -158,7 +158,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"user": {"name": "John"}}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         var index = builder.GetColumnIndexByName("user.name");
         
         Assert.NotNull(index);
@@ -170,7 +170,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"user": {"age": 30}}, {"user": {"age": 25}}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json);
+        var builder = WorkbookBuilder.FromJson(json);
         var range = builder.GetColumnRangeByName("user.age");
         
         Assert.NotNull(range);
@@ -185,7 +185,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"price": 19.99}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithPreserveOriginalValue(true)
             .Build();
         
@@ -201,7 +201,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"price": 19.99}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithPreserveOriginalValue(false)
             .Build();
         
@@ -215,7 +215,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"price": 100}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithColumnParser("price", value => new(value.Value.AsT0 * 2))
             .Build();
         
@@ -230,7 +230,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"price": 100, "tax": 10}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithColumnParser("price", value => new(value.Value.AsT0 * 1.5m))
             .WithColumnParser("tax", value => new(value.Value.AsT0 * 2))
             .Build();
@@ -245,7 +245,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"month": "Jan", "sales": 1000}, {"month": "Feb", "sales": 1500}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("month", "sales")
                 .AsLineChart())
@@ -261,7 +261,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1, "y": 2}, {"x": 2, "y": 3}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .OnSheet("SalesChart")
                 .UseColumns("x", "y")
@@ -276,7 +276,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"date": "2025-01-01", "price": 100}, {"date": "2025-01-02", "price": 110}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("date", "price")
                 .AsLineChart())
@@ -291,7 +291,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"a": 1, "b": 2}, {"a": 2, "b": 3}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("a", "b")
                 .AsLineChart())
@@ -307,7 +307,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"category": "A", "value": 10}, {"category": "B", "value": 20}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("category", "value")
                 .AsBarChart())
@@ -323,7 +323,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"time": "Q1", "revenue": 5000}, {"time": "Q2", "revenue": 6000}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("time", "revenue")
                 .AsAreaChart())
@@ -339,7 +339,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1, "y": 2}, {"x": 2, "y": 4}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("x", "y")
                 .AsLineChart()
@@ -356,7 +356,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"a": 1}]""";
         
-        var builder = JsonWorkbookBuilder.FromJson(json)
+        var builder = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("nonexistent", "a")
                 .AsLineChart());
@@ -369,7 +369,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1, "y": 2, "z": 3}, {"x": 2, "y": 4, "z": 6}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("x", "y")
                 .AsLineChart())
@@ -389,7 +389,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"category": "A", "value": 30}, {"category": "B", "value": 70}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("category", "value")
                 .AsPieChart())
@@ -405,7 +405,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1.5, "y": 2.3}, {"x": 2.1, "y": 3.7}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("x", "y")
                 .AsScatterChart())
@@ -421,7 +421,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"month": "Jan", "sales": 100}, {"month": "Feb", "sales": 150}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("month", "sales")
                 .AsLineChart()
@@ -438,7 +438,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"month": "Jan", "revenue": 1000}, {"month": "Feb", "revenue": 1200}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("month", "revenue")
                 .AsAreaChart()
@@ -455,7 +455,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"cat": "A", "val": 10}, {"cat": "B", "val": 20}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("cat", "val")
                 .AsBarChart()
@@ -472,7 +472,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1, "y": 100}, {"x": 2, "y": 200}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .OnSheet("CustomChart")
                 .UseColumns("x", "y")
@@ -498,7 +498,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1.5, "y": 2.5}, {"x": 2.5, "y": 3.5}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("x", "y")
                 .AsScatterChart()
@@ -519,7 +519,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"category": "A", "value": 10}, {"category": "B", "value": 20}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("category", "value")
                 .AsPieChart()
@@ -538,7 +538,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}, {"name": "Jane", "age": 25}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithFreezeHeaderRow()
             .Build();
         
@@ -553,7 +553,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1, "y": 10}, {"x": 2, "y": 20}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("x", "y")
                 .AsLineChart()
@@ -574,7 +574,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"a": 1, "b": 100}, {"a": 2, "b": 200}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("a", "b")
                 .AsBarChart()
@@ -592,7 +592,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"cat": "A", "val": 50}, {"cat": "B", "val": 75}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithChart(chart => chart
                 .UseColumns("cat", "val")
                 .AsPieChart()
@@ -609,7 +609,7 @@ public class JsonWorkbookBuilderTests
     {
         const string json = """[{"x": 1, "y": 100}, {"x": 2, "y": 200}]""";
         
-        var workbook = JsonWorkbookBuilder.FromJson(json)
+        var workbook = WorkbookBuilder.FromJson(json)
             .WithFreezeHeaderRow()
             .WithChart(chart => chart
                 .OnSheet("Analysis")

@@ -12,7 +12,7 @@ public class JsonToWorkbookBarChartExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
         
-        var workbook = JsonWorkbookBuilder.FromJsonFile(jsonPath)
+        var workbook = WorkbookBuilder.FromJsonFile(jsonPath)
             .WithWorkbookName("Person Data Analysis")
             .WithDataSheetName("Persons")
             .WithHeaderStyle(style => style

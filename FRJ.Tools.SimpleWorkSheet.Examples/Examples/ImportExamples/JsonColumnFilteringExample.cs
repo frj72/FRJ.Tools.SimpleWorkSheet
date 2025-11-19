@@ -12,7 +12,7 @@ public class JsonColumnFilteringExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Orders Filtered")
             .WithIncludeColumns("orderId", "orderDate", "totalAmount", "status")
             .WithHeaderStyle(style => style

@@ -12,7 +12,7 @@ public class JsonConditionalStylingExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Orders with Styling")
             .WithHeaderStyle(style => style
                 .WithFillColor("ED7D31")

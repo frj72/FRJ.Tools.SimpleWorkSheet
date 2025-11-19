@@ -12,7 +12,7 @@ public class JsonFlatObjectWithParsersExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices_flat.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Prices Parsed")
             .WithColumnParser("price_1", value => new(value.Value.AsT0 * 100))
             .WithColumnParser("price_10", value => new(value.Value.AsT0 * 100))

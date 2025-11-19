@@ -13,7 +13,7 @@ public class JsonToWorkbookMultipleChartsExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
         
-        var workbook = JsonWorkbookBuilder.FromJsonFile(jsonPath)
+        var workbook = WorkbookBuilder.FromJsonFile(jsonPath)
             .WithWorkbookName("Order Analysis")
             .WithDataSheetName("Orders")
             .WithHeaderStyle(style => style

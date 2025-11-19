@@ -12,7 +12,7 @@ public class JsonFluentImportPricesFlatExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices_flat.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Price Data Flat")
             .WithPreserveOriginalValue(false)
             .Build();

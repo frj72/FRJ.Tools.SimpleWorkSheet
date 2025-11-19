@@ -5,36 +5,36 @@ using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 
-public class JsonWorkbookBuilder
+public class WorkbookBuilder
 {
     private string _workbookName = "Workbook";
-    private readonly JsonWorksheetBuilder _worksheetBuilder;
+    private readonly WorksheetBuilder _worksheetBuilder;
     private readonly List<Func<WorkSheet, WorkSheet>> _chartBuilders = [];
     private bool _freezeHeaderRow;
 
     internal string DataSheetName { get; private set; } = "Data";
 
-    private JsonWorkbookBuilder(JsonElement jsonRoot)
+    private WorkbookBuilder(JsonElement jsonRoot)
     {
         if (jsonRoot.ValueKind != JsonValueKind.Array && jsonRoot.ValueKind != JsonValueKind.Object)
             throw new ArgumentException("JSON must be an array or object", nameof(jsonRoot));
         
-        _worksheetBuilder = JsonWorksheetBuilder.FromJson(jsonRoot.GetRawText()).WithSheetName(DataSheetName);
+        _worksheetBuilder = WorksheetBuilder.FromJson(jsonRoot.GetRawText()).WithSheetName(DataSheetName);
     }
 
-    public static JsonWorkbookBuilder FromJson(string jsonContent)
+    public static WorkbookBuilder FromJson(string jsonContent)
     {
         var jsonDoc = JsonDocument.Parse(jsonContent);
         return new(jsonDoc.RootElement);
     }
 
-    public static JsonWorkbookBuilder FromJsonFile(string filePath)
+    public static WorkbookBuilder FromJsonFile(string filePath)
     {
         var jsonContent = File.ReadAllText(filePath);
         return FromJson(jsonContent);
     }
 
-    public JsonWorkbookBuilder WithWorkbookName(string name)
+    public WorkbookBuilder WithWorkbookName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Workbook name cannot be empty", nameof(name));
@@ -43,7 +43,7 @@ public class JsonWorkbookBuilder
         return this;
     }
 
-    public JsonWorkbookBuilder WithDataSheetName(string name)
+    public WorkbookBuilder WithDataSheetName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Data sheet name cannot be empty", nameof(name));
@@ -53,47 +53,47 @@ public class JsonWorkbookBuilder
         return this;
     }
 
-    public JsonWorkbookBuilder WithPreserveOriginalValue(bool preserve)
+    public WorkbookBuilder WithPreserveOriginalValue(bool preserve)
     {
         _worksheetBuilder.WithPreserveOriginalValue(preserve);
         return this;
     }
 
-    public JsonWorkbookBuilder WithTrimWhitespace(bool trim)
+    public WorkbookBuilder WithTrimWhitespace(bool trim)
     {
         _worksheetBuilder.WithTrimWhitespace(trim);
         return this;
     }
 
-    public JsonWorkbookBuilder WithHeaderStyle(Action<CellStyleBuilder> styleAction)
+    public WorkbookBuilder WithHeaderStyle(Action<CellStyleBuilder> styleAction)
     {
         _worksheetBuilder.WithHeaderStyle(styleAction);
         return this;
     }
 
-    public JsonWorkbookBuilder WithColumnParser(string columnName, Func<CellValue, CellValue> parser)
+    public WorkbookBuilder WithColumnParser(string columnName, Func<CellValue, CellValue> parser)
     {
         _worksheetBuilder.WithColumnParser(columnName, parser);
         return this;
     }
 
-    public JsonWorkbookBuilder AutoFitAllColumns()
+    public WorkbookBuilder AutoFitAllColumns()
     {
         _worksheetBuilder.AutoFitAllColumns();
         return this;
     }
 
-    public JsonWorkbookBuilder WithFreezeHeaderRow()
+    public WorkbookBuilder WithFreezeHeaderRow()
     {
         _freezeHeaderRow = true;
         return this;
     }
 
-    public JsonWorkbookBuilder WithChart(Action<JsonChartBuilder> chartConfig)
+    public WorkbookBuilder WithChart(Action<ChartBuilder> chartConfig)
     {
         ArgumentNullException.ThrowIfNull(chartConfig);
 
-        var builder = new JsonChartBuilder(this);
+        var builder = new ChartBuilder(this);
         chartConfig(builder);
         _chartBuilders.Add(builder.Build);
         

@@ -3,13 +3,13 @@ using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 
-public class JsonChartBuilder
+public class ChartBuilder
 {
-    private readonly JsonWorkbookBuilder _parent;
+    private readonly WorkbookBuilder _parent;
     private string _chartSheetName = "Chart";
     private string? _categoryColumn;
     private string? _valueColumn;
-    private JsonChartType _chartType = JsonChartType.Line;
+    private ChartType _chartType = ChartType.Line;
     private string? _title;
     private string? _categoryAxisTitle;
     private string? _valueAxisTitle;
@@ -18,12 +18,12 @@ public class JsonChartBuilder
     private (int width, int height)? _chartSize;
     private bool _showDataLabels;
 
-    internal JsonChartBuilder(JsonWorkbookBuilder parent)
+    internal ChartBuilder(WorkbookBuilder parent)
     {
         _parent = parent;
     }
 
-    public JsonChartBuilder OnSheet(string sheetName)
+    public ChartBuilder OnSheet(string sheetName)
     {
         if (string.IsNullOrWhiteSpace(sheetName))
             throw new ArgumentException("Chart sheet name cannot be empty", nameof(sheetName));
@@ -32,7 +32,7 @@ public class JsonChartBuilder
         return this;
     }
 
-    public JsonChartBuilder UseColumns(string categoryColumn, string valueColumn)
+    public ChartBuilder UseColumns(string categoryColumn, string valueColumn)
     {
         if (string.IsNullOrWhiteSpace(categoryColumn))
             throw new ArgumentException("Category column cannot be empty", nameof(categoryColumn));
@@ -44,67 +44,67 @@ public class JsonChartBuilder
         return this;
     }
 
-    public JsonChartBuilder AsLineChart()
+    public ChartBuilder AsLineChart()
     {
-        _chartType = JsonChartType.Line;
+        _chartType = ChartType.Line;
         return this;
     }
 
-    public JsonChartBuilder AsBarChart()
+    public ChartBuilder AsBarChart()
     {
-        _chartType = JsonChartType.Bar;
+        _chartType = ChartType.Bar;
         return this;
     }
 
-    public JsonChartBuilder AsAreaChart()
+    public ChartBuilder AsAreaChart()
     {
-        _chartType = JsonChartType.Area;
+        _chartType = ChartType.Area;
         return this;
     }
 
-    public JsonChartBuilder AsPieChart()
+    public ChartBuilder AsPieChart()
     {
-        _chartType = JsonChartType.Pie;
+        _chartType = ChartType.Pie;
         return this;
     }
 
-    public JsonChartBuilder AsScatterChart()
+    public ChartBuilder AsScatterChart()
     {
-        _chartType = JsonChartType.Scatter;
+        _chartType = ChartType.Scatter;
         return this;
     }
 
-    public JsonChartBuilder WithTitle(string title)
+    public ChartBuilder WithTitle(string title)
     {
         _title = title;
         return this;
     }
 
-    public JsonChartBuilder WithCategoryAxisTitle(string title)
+    public ChartBuilder WithCategoryAxisTitle(string title)
     {
         _categoryAxisTitle = title;
         return this;
     }
 
-    public JsonChartBuilder WithValueAxisTitle(string title)
+    public ChartBuilder WithValueAxisTitle(string title)
     {
         _valueAxisTitle = title;
         return this;
     }
 
-    public JsonChartBuilder WithLegendPosition(ChartLegendPosition position)
+    public ChartBuilder WithLegendPosition(ChartLegendPosition position)
     {
         _legendPosition = position;
         return this;
     }
 
-    public JsonChartBuilder WithChartPosition(uint fromCol, uint fromRow, uint toCol, uint toRow)
+    public ChartBuilder WithChartPosition(uint fromCol, uint fromRow, uint toCol, uint toRow)
     {
         _chartPosition = (fromCol, fromRow, toCol, toRow);
         return this;
     }
 
-    public JsonChartBuilder WithChartSize(int width, int height)
+    public ChartBuilder WithChartSize(int width, int height)
     {
         if (width <= 0)
             throw new ArgumentException("Width must be positive", nameof(width));
@@ -115,7 +115,7 @@ public class JsonChartBuilder
         return this;
     }
 
-    public JsonChartBuilder WithDataLabels(bool show)
+    public ChartBuilder WithDataLabels(bool show)
     {
         _showDataLabels = show;
         return this;
@@ -138,11 +138,11 @@ public class JsonChartBuilder
 
         Chart chart = _chartType switch
         {
-            JsonChartType.Line => CreateLineChart(categoryRange.Value, valueRange.Value),
-            JsonChartType.Bar => CreateBarChart(categoryRange.Value, valueRange.Value),
-            JsonChartType.Area => CreateAreaChart(categoryRange.Value, valueRange.Value),
-            JsonChartType.Pie => CreatePieChart(categoryRange.Value, valueRange.Value),
-            JsonChartType.Scatter => CreateScatterChart(categoryRange.Value, valueRange.Value),
+            ChartType.Line => CreateLineChart(categoryRange.Value, valueRange.Value),
+            ChartType.Bar => CreateBarChart(categoryRange.Value, valueRange.Value),
+            ChartType.Area => CreateAreaChart(categoryRange.Value, valueRange.Value),
+            ChartType.Pie => CreatePieChart(categoryRange.Value, valueRange.Value),
+            ChartType.Scatter => CreateScatterChart(categoryRange.Value, valueRange.Value),
             _ => throw new NotSupportedException($"Chart type {_chartType} not supported")
         };
 
@@ -271,13 +271,4 @@ public class JsonChartBuilder
 
         return chart;
     }
-}
-
-internal enum JsonChartType
-{
-    Line,
-    Bar,
-    Area,
-    Pie,
-    Scatter
 }

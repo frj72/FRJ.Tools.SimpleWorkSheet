@@ -5,14 +5,14 @@ using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
-public class JsonWorksheetBuilderTests
+public class ImportWorksheetBuilderTests
 {
     [Fact]
     public void FromJson_ValidJsonArray_ReturnsBuilder()
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.NotNull(builder);
     }
@@ -22,7 +22,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """{"valid": "this is a flat object"}""";
         
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.NotNull(builder);
     }
@@ -32,7 +32,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = "[]";
         
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.NotNull(builder);
     }
@@ -42,7 +42,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = "[]";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.NotNull(sheet);
         Assert.Equal("Sheet1", sheet.Name);
@@ -54,7 +54,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.NotNull(sheet);
         Assert.Equal(4, sheet.Cells.Cells.Count);
@@ -79,7 +79,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John"}, {"name": "Jane"}, {"name": "Bob"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal(4, sheet.Cells.Cells.Count);
         Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
@@ -93,7 +93,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"text": "hello"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var value = sheet.GetValue(0, 1);
         Assert.NotNull(value);
@@ -106,7 +106,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"count": 42}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var value = sheet.GetValue(0, 1);
         Assert.NotNull(value);
@@ -119,7 +119,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 19.99}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var value = sheet.GetValue(0, 1);
         Assert.NotNull(value);
@@ -132,7 +132,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"date": "2025-01-15"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var value = sheet.GetValue(0, 1);
         Assert.NotNull(value);
@@ -145,7 +145,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"active": true}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var value = sheet.GetValue(0, 1);
         Assert.NotNull(value);
@@ -158,7 +158,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"active": false}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var value = sheet.GetValue(0, 1);
         Assert.NotNull(value);
@@ -171,7 +171,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": null}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal(3, sheet.Cells.Cells.Count);
         Assert.NotNull(sheet.GetValue(0, 0));
@@ -185,7 +185,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"test": "value"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithSheetName("CustomSheet")
             .Build();
         
@@ -196,7 +196,7 @@ public class JsonWorksheetBuilderTests
     public void WithSheetName_EmptyString_ThrowsException()
     {
         const string json = """[{"test": "value"}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithSheetName(""));
     }
@@ -205,7 +205,7 @@ public class JsonWorksheetBuilderTests
     public void WithSheetName_Whitespace_ThrowsException()
     {
         const string json = """[{"test": "value"}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithSheetName("   "));
     }
@@ -215,7 +215,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 19.99}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithPreserveOriginalValue(true)
             .Build();
         
@@ -230,7 +230,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 19.99}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithPreserveOriginalValue(false)
             .Build();
         
@@ -243,7 +243,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "  John  "}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithTrimWhitespace(true)
             .Build();
         
@@ -257,7 +257,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "  John  "}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithTrimWhitespace(false)
             .Build();
         
@@ -271,7 +271,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"a": 1, "b": 2}, {"a": 3, "c": 4}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var headers = new List<string?>
         {
@@ -290,7 +290,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}, {"name": "Jane"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.NotNull(sheet.GetValue(0, 1));
         Assert.NotNull(sheet.GetValue(1, 1));
@@ -303,7 +303,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"id": 1, "name": "John", "age": 30, "active": true}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal(8, sheet.Cells.Cells.Count);
         Assert.Equal(1m, sheet.GetValue(0, 1)?.Value.AsT0);
@@ -317,7 +317,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "  Test  ", "price": 99.99}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithSheetName("Products")
             .WithTrimWhitespace(true)
             .WithPreserveOriginalValue(false)
@@ -335,7 +335,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """{"price_1": 0.12, "price_2": 0.25, "price_3": 0.1}""";
         
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.NotNull(builder);
     }
@@ -345,7 +345,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """{"name": "John", "age": 30, "city": "NYC"}""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.NotNull(sheet);
         Assert.Equal(6, sheet.Cells.Cells.Count);
@@ -364,7 +364,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """{"price_1": 0.12, "price_2": 0.25, "price_3": 0.1}""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal(6, sheet.Cells.Cells.Count);
         Assert.Equal("price_1", sheet.GetValue(0, 0)?.Value.AsT2);
@@ -378,7 +378,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """{"value": 42.5}""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithPreserveOriginalValue(true)
             .Build();
         
@@ -393,7 +393,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = "{}";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.NotNull(sheet);
         Assert.Empty(sheet.Cells.Cells);
@@ -404,7 +404,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = "123";
         
-        Assert.Throws<ArgumentException>(() => JsonWorksheetBuilder.FromJson(json));
+        Assert.Throws<ArgumentException>(() => WorksheetBuilder.FromJson(json));
     }
 
     [Fact]
@@ -412,7 +412,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithHeaderStyle(style => style.WithFillColor("FF0000").WithFont(f => f.Bold()))
             .Build();
         
@@ -426,7 +426,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 100}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithColumnParser("price", value => new(value.Value.AsT0 * 1.1m))
             .Build();
         
@@ -439,7 +439,7 @@ public class JsonWorksheetBuilderTests
     public void WithColumnParser_EmptyColumnName_ThrowsException()
     {
         const string json = """[{"test": "value"}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithColumnParser("", v => v));
     }
@@ -449,7 +449,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 100, "quantity": 5}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithColumnParser("price", value => new(value.Value.AsT0 * 2))
             .WithColumnParser("quantity", value => new(value.Value.AsT0 * 3))
             .Build();
@@ -463,7 +463,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .AutoFitAllColumns()
             .Build();
         
@@ -476,7 +476,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """{"a": 1, "b": 2, "c": 3}""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .AutoFitAllColumns()
             .Build();
         
@@ -489,7 +489,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 100, "name": "Item"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithSheetName("Products")
             .WithHeaderStyle(style => style.WithFillColor("4472C4"))
             .WithColumnParser("price", value => new(value.Value.AsT0 * 1.2m))
@@ -507,7 +507,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30}, {"name": "Jane"}, {"age": 25, "city": "NYC"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
         Assert.Equal(30m, sheet.GetValue(1, 1)?.Value.AsT0);
@@ -523,7 +523,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "address": {"city": "NYC", "zip": "10001"}}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
         Assert.Equal("address.city", sheet.GetValue(1, 0)?.Value.AsT2);
@@ -538,7 +538,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"user": {"profile": {"name": "John"}}}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal("user.profile.name", sheet.GetValue(0, 0)?.Value.AsT2);
         Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
@@ -549,7 +549,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"id": 1, "data": {"value": 100}, "name": "Test"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var headers = new[]
         {
@@ -568,7 +568,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "tags": ["a", "b"], "age": 30}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         var headers = new[]
         {
@@ -586,7 +586,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "address": {}}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
         Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
@@ -597,7 +597,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"id": 1}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal(2, sheet.Cells.Cells.Count);
         Assert.Equal("id", sheet.GetValue(0, 0)?.Value.AsT2);
@@ -609,7 +609,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"value": "text"}, {"value": 123}, {"value": true}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal("text", sheet.GetValue(0, 1)?.Value.AsT2);
         Assert.Equal(123m, sheet.GetValue(0, 2)?.Value.AsT0);
@@ -621,7 +621,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"id": 1, "data": null}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         
         Assert.Equal("id", sheet.GetValue(0, 0)?.Value.AsT2);
         Assert.Equal(1m, sheet.GetValue(0, 1)?.Value.AsT0);
@@ -633,7 +633,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30, "address": {"city": "NYC"}}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var sheet = WorksheetBuilder.FromJson(json).Build();
         var workbook = new WorkBook("Test", [sheet]);
         var tempFile = Path.Combine(Path.GetTempPath(), $"roundtrip_{Guid.NewGuid()}.xlsx");
         
@@ -662,7 +662,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"c": 3, "a": 1, "b": 2}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithColumnOrder("a", "b", "c")
             .Build();
         
@@ -676,7 +676,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"d": 4, "c": 3, "b": 2, "a": 1}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithColumnOrder("b", "d")
             .Build();
         
@@ -688,7 +688,7 @@ public class JsonWorksheetBuilderTests
     public void WithColumnOrder_EmptyArray_ThrowsException()
     {
         const string json = """[{"a": 1}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithColumnOrder());
     }
@@ -698,7 +698,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30, "internal": "secret"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithExcludeColumns("internal")
             .Build();
         
@@ -713,7 +713,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"a": 1, "b": 2, "c": 3, "d": 4}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithExcludeColumns("b", "d")
             .Build();
         
@@ -733,7 +733,7 @@ public class JsonWorksheetBuilderTests
     public void WithExcludeColumns_EmptyArray_ThrowsException()
     {
         const string json = """[{"a": 1}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithExcludeColumns());
     }
@@ -743,7 +743,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"name": "John", "age": 30, "email": "test@test.com", "phone": "123"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithIncludeColumns("name", "email")
             .Build();
         
@@ -757,7 +757,7 @@ public class JsonWorksheetBuilderTests
     public void WithIncludeColumns_EmptyArray_ThrowsException()
     {
         const string json = """[{"a": 1}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithIncludeColumns());
     }
@@ -767,7 +767,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"d": 4, "c": 3, "b": 2, "a": 1}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithExcludeColumns("c")
             .WithColumnOrder("b", "a", "d")
             .Build();
@@ -783,7 +783,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"date": "2025-01-15"}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithDateFormat(DateFormat.DateOnly)
             .Build();
         
@@ -797,7 +797,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"price": 19.99, "quantity": 5}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithNumberFormat("price", NumberFormat.Float2)
             .Build();
         
@@ -809,7 +809,7 @@ public class JsonWorksheetBuilderTests
     public void WithNumberFormat_EmptyColumnName_ThrowsException()
     {
         const string json = """[{"a": 1}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithNumberFormat("", NumberFormat.Integer));
     }
@@ -819,7 +819,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"value": -10}, {"value": 20}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithPreserveOriginalValue(false)
             .WithConditionalStyle("value", 
                 val => val.IsDecimal() && val.Value.AsT0 < 0,
@@ -838,7 +838,7 @@ public class JsonWorksheetBuilderTests
     public void WithConditionalStyle_EmptyColumnName_ThrowsException()
     {
         const string json = """[{"a": 1}]""";
-        var builder = JsonWorksheetBuilder.FromJson(json);
+        var builder = WorksheetBuilder.FromJson(json);
         
         Assert.Throws<ArgumentException>(() => builder.WithConditionalStyle("", _ => true, _ => { }));
     }
@@ -848,7 +848,7 @@ public class JsonWorksheetBuilderTests
     {
         const string json = """[{"status": "ERROR", "count": 100}]""";
         
-        var sheet = JsonWorksheetBuilder.FromJson(json)
+        var sheet = WorksheetBuilder.FromJson(json)
             .WithConditionalStyle("status",
                 val => val.IsString() && val.Value.AsT2 == "ERROR",
                 style => style.WithFillColor("FF0000"))

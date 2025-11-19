@@ -12,7 +12,7 @@ public class JsonColumnOrderingExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Persons Ordered")
             .WithColumnOrder("firstName", "lastName", "age", "email")
             .WithHeaderStyle(style => style

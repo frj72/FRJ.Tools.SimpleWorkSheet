@@ -13,7 +13,7 @@ public class JsonDateNumberFormattingExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Formatted Prices")
             .WithDateFormat(DateFormat.DateOnly)
             .WithNumberFormat("Price", NumberFormat.Float2)

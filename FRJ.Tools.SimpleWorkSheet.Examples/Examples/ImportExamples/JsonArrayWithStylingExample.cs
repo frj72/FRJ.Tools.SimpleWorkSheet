@@ -12,7 +12,7 @@ public class JsonArrayWithStylingExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
         
-        var sheet = JsonWorksheetBuilder.FromJsonFile(jsonPath)
+        var sheet = WorksheetBuilder.FromJsonFile(jsonPath)
             .WithSheetName("Prices with Styling")
             .WithHeaderStyle(style => style
                 .WithFillColor("4472C4")

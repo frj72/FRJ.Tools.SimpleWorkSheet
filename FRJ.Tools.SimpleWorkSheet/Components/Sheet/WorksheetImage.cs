@@ -2,12 +2,6 @@ using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
-public enum ImageFormat
-{
-    Png,
-    Jpeg
-}
-
 public record WorksheetImage
 {
     public byte[] ImageData { get; init; }

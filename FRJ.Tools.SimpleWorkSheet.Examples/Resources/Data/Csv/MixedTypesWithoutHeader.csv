@@ -1,0 +1,100 @@
+1,Simple text,275.0,False,2024-06-29
+2,"Value with, comma",840.12,True,2025-02-15
+3,"Comma, then ""quote""",566.7,False,2023-04-17
+4,"Text with ""quotes""",143.71,False,2024-05-17
+5,"Text with ""quotes""",11.65,False,2023-06-29
+6,Plain,383.82,True,2024-10-08
+7,"Ends with quote""",111.02,True,2023-07-09
+8,"Text with ""quotes""",134.99,True,2024-08-20
+9,"""Quoted"" at start",577.67,False,2025-08-19
+10,Simple text,771.11,False,2025-12-04
+11,"Ends with quote""",214.79,False,2023-01-26
+12,"""Quoted"" at start",894.01,False,2025-09-22
+13,"Comma, then ""quote""",671.79,False,2025-11-10
+14,Simple text,848.87,True,2023-06-19
+15,"Ends with quote""",661.49,True,2024-11-16
+16,"Hello, world",558.66,True,2025-07-24
+17,"""Quoted"" at start",577.44,False,2023-02-03
+18,"Mixed, ""comma and quotes""",590.34,False,2023-01-27
+19,"Hello, world",997.58,False,2025-12-25
+20,"Comma, then ""quote""",726.43,True,2024-08-12
+21,"Ends with quote""",964.42,True,2025-09-17
+22,"Text with ""quotes""",162.22,False,2025-02-14
+23,"Ends with quote""",53.69,True,2025-07-23
+24,"Mixed, ""comma and quotes""",30.8,False,2024-07-10
+25,"""Quoted"" at start",637.93,True,2023-08-11
+26,Plain,71.98,False,2023-07-01
+27,"Value with, comma",438.87,True,2025-02-12
+28,"Value with, comma",551.12,False,2023-03-01
+29,"Hello, world",269.91,False,2023-03-09
+30,"Comma, then ""quote""",341.48,False,2023-02-18
+31,"Text with ""quotes""",885.04,False,2023-05-12
+32,"Text with ""quotes""",378.39,True,2023-06-10
+33,Simple text,760.48,False,2024-09-19
+34,"Text with ""quotes""",914.58,False,2025-03-08
+35,"Hello, world",135.21,False,2025-11-25
+36,"Value with, comma",633.32,False,2025-06-04
+37,Simple text,743.95,False,2023-02-12
+38,"Hello, world",455.23,False,2024-09-14
+39,"""Quoted"" at start",793.2,True,2023-11-21
+40,"Comma, then ""quote""",331.61,True,2024-12-04
+41,"Comma, then ""quote""",113.73,False,2024-04-05
+42,Plain,346.68,False,2025-11-02
+43,"Mixed, ""comma and quotes""",211.24,False,2024-06-25
+44,"""Quoted"" at start",52.59,True,2024-02-08
+45,"Comma, then ""quote""",207.5,True,2024-02-02
+46,Another value,568.98,True,2024-10-11
+47,"Value with, comma",347.73,True,2025-12-30
+48,"Text with ""quotes""",788.22,False,2025-10-05
+49,"""Quoted"" at start",779.18,False,2025-09-22
+50,"Hello, world",401.86,True,2025-10-23
+51,"Text with ""quotes""",613.65,True,2025-10-09
+52,"Hello, world",698.82,True,2023-04-18
+53,"Hello, world",863.03,False,2025-05-11
+54,"Hello, world",365.08,False,2024-12-03
+55,"Mixed, ""comma and quotes""",822.27,True,2025-02-22
+56,Simple text,843.21,False,2025-10-21
+57,Another value,831.06,True,2025-02-09
+58,"Hello, world",78.47,False,2023-09-08
+59,Another value,507.8,False,2023-04-23
+60,"""Quoted"" at start",61.09,False,2024-09-03
+61,"Value with, comma",470.89,False,2024-05-11
+62,"Ends with quote""",273.26,False,2024-12-05
+63,"Mixed, ""comma and quotes""",949.3,False,2025-10-23
+64,Plain,906.41,False,2024-11-21
+65,Simple text,190.38,True,2025-05-26
+66,"Ends with quote""",736.42,False,2025-12-31
+67,Simple text,475.6,True,2024-10-29
+68,"Hello, world",892.62,True,2023-03-07
+69,"Ends with quote""",509.08,False,2023-01-29
+70,"Hello, world",732.55,True,2023-05-09
+71,Another value,292.24,False,2025-01-02
+72,"""Quoted"" at start",52.97,True,2025-10-14
+73,"Text with ""quotes""",206.26,False,2025-12-10
+74,"Text with ""quotes""",766.22,True,2024-09-12
+75,"Ends with quote""",867.02,False,2024-04-04
+76,Another value,532.53,True,2025-06-25
+77,Plain,549.51,False,2024-02-04
+78,"Comma, then ""quote""",941.48,True,2025-03-14
+79,"""Quoted"" at start",799.79,False,2023-08-16
+80,Simple text,574.31,False,2025-11-25
+81,"Hello, world",162.31,True,2024-02-03
+82,"Mixed, ""comma and quotes""",977.17,True,2024-05-15
+83,"Mixed, ""comma and quotes""",82.71,True,2023-01-23
+84,"""Quoted"" at start",659.65,True,2023-03-27
+85,"Mixed, ""comma and quotes""",733.46,False,2024-08-19
+86,"Text with ""quotes""",311.14,False,2024-10-27
+87,"Mixed, ""comma and quotes""",520.34,False,2023-11-10
+88,"Ends with quote""",232.68,True,2025-11-11
+89,"""Quoted"" at start",396.77,True,2025-03-09
+90,"Value with, comma",983.83,False,2023-03-29
+91,Another value,147.83,True,2023-09-16
+92,"Value with, comma",465.5,False,2023-02-05
+93,"Ends with quote""",525.66,False,2025-01-12
+94,"Mixed, ""comma and quotes""",396.68,True,2023-08-05
+95,"Comma, then ""quote""",831.4,True,2024-10-27
+96,"Value with, comma",782.71,True,2025-02-26
+97,"Text with ""quotes""",424.6,False,2023-10-15
+98,Simple text,170.94,True,2024-11-08
+99,Simple text,107.23,True,2025-07-26
+100,"""Quoted"" at start",937.59,False,2023-05-03

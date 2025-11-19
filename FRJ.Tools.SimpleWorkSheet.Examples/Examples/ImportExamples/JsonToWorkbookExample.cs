@@ -12,7 +12,7 @@ public class JsonToWorkbookExample : IExample
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
         
-        var workbook = JsonWorkbookBuilder.FromJsonFile(jsonPath)
+        var workbook = WorkbookBuilder.FromJsonFile(jsonPath)
             .WithWorkbookName("Price Analysis")
             .WithDataSheetName("Price Data")
             .WithPreserveOriginalValue(true)

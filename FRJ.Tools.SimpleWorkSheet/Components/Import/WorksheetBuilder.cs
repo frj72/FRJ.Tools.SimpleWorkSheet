@@ -6,7 +6,7 @@ using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 
-public class JsonWorksheetBuilder
+public class WorksheetBuilder
 {
     private readonly JsonElement _jsonRoot;
     private string _sheetName = "Sheet1";
@@ -22,7 +22,7 @@ public class JsonWorksheetBuilder
     private Dictionary<string, NumberFormat>? _numberFormats;
     private Dictionary<string, (Func<CellValue, bool> condition, Action<CellStyleBuilder> style)>? _conditionalStyles;
 
-    private JsonWorksheetBuilder(JsonElement jsonRoot)
+    private WorksheetBuilder(JsonElement jsonRoot)
     {
         if (jsonRoot.ValueKind != JsonValueKind.Array && jsonRoot.ValueKind != JsonValueKind.Object)
             throw new ArgumentException("JSON must be an array or object", nameof(jsonRoot));
@@ -30,19 +30,19 @@ public class JsonWorksheetBuilder
         _jsonRoot = jsonRoot;
     }
 
-    public static JsonWorksheetBuilder FromJson(string jsonContent)
+    public static WorksheetBuilder FromJson(string jsonContent)
     {
         var jsonDoc = JsonDocument.Parse(jsonContent);
         return new(jsonDoc.RootElement);
     }
 
-    public static JsonWorksheetBuilder FromJsonFile(string filePath)
+    public static WorksheetBuilder FromJsonFile(string filePath)
     {
         var jsonContent = File.ReadAllText(filePath);
         return FromJson(jsonContent);
     }
 
-    public JsonWorksheetBuilder WithSheetName(string name)
+    public WorksheetBuilder WithSheetName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Sheet name cannot be empty", nameof(name));
@@ -51,25 +51,25 @@ public class JsonWorksheetBuilder
         return this;
     }
 
-    public JsonWorksheetBuilder WithPreserveOriginalValue(bool preserve)
+    public WorksheetBuilder WithPreserveOriginalValue(bool preserve)
     {
         _preserveOriginalValue = preserve;
         return this;
     }
 
-    public JsonWorksheetBuilder WithTrimWhitespace(bool trim)
+    public WorksheetBuilder WithTrimWhitespace(bool trim)
     {
         _trimWhitespace = trim;
         return this;
     }
 
-    public JsonWorksheetBuilder WithHeaderStyle(Action<CellStyleBuilder> styleAction)
+    public WorksheetBuilder WithHeaderStyle(Action<CellStyleBuilder> styleAction)
     {
         _headerStyleAction = styleAction ?? throw new ArgumentNullException(nameof(styleAction));
         return this;
     }
 
-    public JsonWorksheetBuilder WithColumnParser(string columnName, Func<CellValue, CellValue> parser)
+    public WorksheetBuilder WithColumnParser(string columnName, Func<CellValue, CellValue> parser)
     {
         if (string.IsNullOrWhiteSpace(columnName))
             throw new ArgumentException("Column name cannot be empty", nameof(columnName));
@@ -79,13 +79,13 @@ public class JsonWorksheetBuilder
         return this;
     }
 
-    public JsonWorksheetBuilder AutoFitAllColumns()
+    public WorksheetBuilder AutoFitAllColumns()
     {
         _autoFitColumns = true;
         return this;
     }
 
-    public JsonWorksheetBuilder WithColumnOrder(params string[] columnNames)
+    public WorksheetBuilder WithColumnOrder(params string[] columnNames)
     {
         if (columnNames == null || columnNames.Length == 0)
             throw new ArgumentException("Column order must contain at least one column", nameof(columnNames));
@@ -94,7 +94,7 @@ public class JsonWorksheetBuilder
         return this;
     }
 
-    public JsonWorksheetBuilder WithExcludeColumns(params string[] columnNames)
+    public WorksheetBuilder WithExcludeColumns(params string[] columnNames)
     {
         if (columnNames == null || columnNames.Length == 0)
             throw new ArgumentException("Exclude columns must contain at least one column", nameof(columnNames));
@@ -103,7 +103,7 @@ public class JsonWorksheetBuilder
         return this;
     }
 
-    public JsonWorksheetBuilder WithIncludeColumns(params string[] columnNames)
+    public WorksheetBuilder WithIncludeColumns(params string[] columnNames)
     {
         if (columnNames == null || columnNames.Length == 0)
             throw new ArgumentException("Include columns must contain at least one column", nameof(columnNames));
@@ -112,13 +112,13 @@ public class JsonWorksheetBuilder
         return this;
     }
 
-    public JsonWorksheetBuilder WithDateFormat(DateFormat format)
+    public WorksheetBuilder WithDateFormat(DateFormat format)
     {
         _dateFormat = format;
         return this;
     }
 
-    public JsonWorksheetBuilder WithNumberFormat(string columnName, NumberFormat format)
+    public WorksheetBuilder WithNumberFormat(string columnName, NumberFormat format)
     {
         if (string.IsNullOrWhiteSpace(columnName))
             throw new ArgumentException("Column name cannot be empty", nameof(columnName));
@@ -128,7 +128,7 @@ public class JsonWorksheetBuilder
         return this;
     }
 
-    public JsonWorksheetBuilder WithConditionalStyle(string columnName, Func<CellValue, bool> condition, Action<CellStyleBuilder> style)
+    public WorksheetBuilder WithConditionalStyle(string columnName, Func<CellValue, bool> condition, Action<CellStyleBuilder> style)
     {
         if (string.IsNullOrWhiteSpace(columnName))
             throw new ArgumentException("Column name cannot be empty", nameof(columnName));
