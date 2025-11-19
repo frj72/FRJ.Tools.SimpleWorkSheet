@@ -1,3 +1,5 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+
 namespace FRJ.Tools.SimpleWorkSheet.Components.Charts;
 
 public abstract class Chart
@@ -19,7 +21,7 @@ public abstract class Chart
         Type = type;
     }
 
-    public void AddSeries(string name, Sheet.CellRange dataRange)
+    public void AddSeries(string name, CellRange dataRange)
     {
         ChartDataRange.ValidateDataRange(dataRange);
         var series = new ChartSeries(name, dataRange);

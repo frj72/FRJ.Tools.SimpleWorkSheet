@@ -74,7 +74,8 @@ public static class Program
             new JsonArrayWithStylingExample(),
             new JsonFlatObjectWithParsersExample(),
             new JsonMultiColumnAllFeaturesExample(),
-            new JsonNestedObjectsExample()
+            new JsonNestedObjectsExample(),
+            new JsonToWorkbookExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

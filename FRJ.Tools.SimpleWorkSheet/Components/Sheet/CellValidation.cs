@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public record CellValidation
@@ -45,8 +47,8 @@ public record CellValidation
         {
             Type = ValidationType.Decimal,
             Operator = op,
-            Formula1 = value1.ToString(System.Globalization.CultureInfo.InvariantCulture),
-            Formula2 = value2?.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Formula1 = value1.ToString(CultureInfo.InvariantCulture),
+            Formula2 = value2?.ToString(CultureInfo.InvariantCulture),
             AllowBlank = allowBlank
         };
     }
@@ -57,8 +59,8 @@ public record CellValidation
         {
             Type = ValidationType.Date,
             Operator = op,
-            Formula1 = value1.ToOADate().ToString(System.Globalization.CultureInfo.InvariantCulture),
-            Formula2 = value2?.ToOADate().ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Formula1 = value1.ToOADate().ToString(CultureInfo.InvariantCulture),
+            Formula2 = value2?.ToOADate().ToString(CultureInfo.InvariantCulture),
             AllowBlank = allowBlank
         };
     }

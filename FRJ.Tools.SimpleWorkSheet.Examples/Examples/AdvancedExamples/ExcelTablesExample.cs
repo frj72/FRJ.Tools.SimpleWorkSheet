@@ -1,4 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 
 namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
@@ -45,7 +46,7 @@ public class ExcelTablesExample : IExample
                 string s => new(s),
                 decimal d => new(d),
                 int i => new(i),
-                _ => new Components.SimpleCell.CellValue(Data[row][col].ToString() ?? string.Empty)
+                _ => new CellValue(Data[row][col].ToString() ?? string.Empty)
             };
             sheet.AddCell(new(col, row + 2), value);
         }
