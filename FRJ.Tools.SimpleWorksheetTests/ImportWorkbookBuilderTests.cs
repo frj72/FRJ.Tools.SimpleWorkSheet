@@ -634,5 +634,66 @@ public class ImportWorkbookBuilderTests
         Assert.NotEqual(ChartSize.Default, lineChart.Size);
         Assert.True(lineChart.ShowDataLabels);
     }
+
+    [Fact]
+    public void FromCsv_WithHeader_CreatesWorkbook()
+    {
+        const string csv = "name,age\nJohn,30\nJane,25";
+        
+        var workbook = WorkbookBuilder.FromCsv(csv).Build();
+        
+        Assert.NotNull(workbook);
+        Assert.Single(workbook.Sheets);
+        var dataSheet = workbook.Sheets.First();
+        Assert.Equal("name", dataSheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("John", dataSheet.GetValue(0, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_WithChart_CreatesWorkbookWithChart()
+    {
+        const string csv = "month,sales\nJan,1000\nFeb,1500\nMar,1200";
+        
+        var workbook = WorkbookBuilder.FromCsv(csv)
+            .WithChart(chart => chart
+                .UseColumns("month", "sales")
+                .AsLineChart()
+                .WithTitle("Sales Trend"))
+            .Build();
+        
+        Assert.Equal(2, workbook.Sheets.Count());
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+        var lineChart = (LineChart)chartSheet.Charts[0];
+        Assert.Equal("Sales Trend", lineChart.Title);
+    }
+
+    [Fact]
+    public void FromCsv_AllFeatures_WorkTogether()
+    {
+        const string csv = "date,amount,category\n2025-01-01,100,A\n2025-01-02,200,B";
+        
+        var workbook = WorkbookBuilder.FromCsv(csv)
+            .WithWorkbookName("CSV Analysis")
+            .WithDataSheetName("CSV Data")
+            .WithFreezeHeaderRow()
+            .WithHeaderStyle(style => style.WithFillColor("70AD47"))
+            .AutoFitAllColumns()
+            .WithChart(chart => chart
+                .OnSheet("Trend")
+                .UseColumns("date", "amount")
+                .AsAreaChart()
+                .WithTitle("Amount Trend"))
+            .Build();
+        
+        Assert.Equal("CSV Analysis", workbook.Name);
+        var dataSheet = workbook.Sheets.First();
+        Assert.Equal("CSV Data", dataSheet.Name);
+        Assert.NotNull(dataSheet.FrozenPane);
+        
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Equal("Trend", chartSheet.Name);
+        Assert.Single(chartSheet.Charts);
+    }
 }
 

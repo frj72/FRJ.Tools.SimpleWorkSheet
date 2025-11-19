@@ -34,6 +34,37 @@ public class WorkbookBuilder
         return FromJson(jsonContent);
     }
 
+    public static WorkbookBuilder FromCsv(string csvContent, bool hasHeader = true)
+    {
+        var data = CsvParser.Parse(csvContent, hasHeader, out var headers);
+        
+        if (headers == null || headers.Count == 0)
+            return FromJson("[]");
+
+        var jsonArray = new List<string>();
+        
+        foreach (var row in data)
+        {
+            var properties = new List<string>();
+            for (var i = 0; i < Math.Min(headers.Count, row.Count); i++)
+                properties.Add($"\"{headers[i]}\":\"{EscapeJsonString(row[i])}\"");
+            
+            jsonArray.Add("{" + string.Join(",", properties) + "}");
+        }
+
+        var jsonContent = "[" + string.Join(",", jsonArray) + "]";
+        return FromJson(jsonContent);
+    }
+
+    private static string EscapeJsonString(string value) =>
+        value.Replace("\\", @"\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r");
+
+    public static WorkbookBuilder FromCsvFile(string filePath, bool hasHeader = true)
+    {
+        var csvContent = File.ReadAllText(filePath);
+        return FromCsv(csvContent, hasHeader);
+    }
+
     public WorkbookBuilder WithWorkbookName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))

@@ -83,7 +83,11 @@ public static class Program
             new JsonColumnFilteringExample(),
             new JsonDateNumberFormattingExample(),
             new JsonConditionalStylingExample(),
-            new JsonAdvancedWorkbookExample()
+            new JsonAdvancedWorkbookExample(),
+            new CsvWithHeaderExample(),
+            new CsvWithoutHeaderExample(),
+            new CsvAdvancedFeaturesExample(),
+            new CsvToWorkbookWithChartExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

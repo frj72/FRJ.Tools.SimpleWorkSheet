@@ -79,6 +79,10 @@ public class ExampleFileValidationTests
     [InlineData("67_JsonDateNumberFormatting.xlsx")]
     [InlineData("68_JsonConditionalStyling.xlsx")]
     [InlineData("69_JsonAdvancedWorkbook.xlsx")]
+    [InlineData("70_CsvWithHeader.xlsx")]
+    [InlineData("71_CsvWithoutHeader.xlsx")]
+    [InlineData("72_CsvAdvancedFeatures.xlsx")]
+    [InlineData("73_CsvToWorkbookWithChart.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -99,7 +103,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 69;
+        const int expectedCount = 73;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);

@@ -863,4 +863,156 @@ public class ImportWorksheetBuilderTests
         var countCell = sheet.Cells.Cells[new(1, 1)];
         Assert.Equal("00FF00", countCell.Style.FillColor);
     }
+
+    [Fact]
+    public void FromCsv_WithHeader_CreatesWorksheet()
+    {
+        const string csv = "name,age\nJohn,30\nJane,25";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv).Build();
+        
+        Assert.NotNull(sheet);
+        Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("age", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
+        Assert.Equal("30", sheet.GetValue(1, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_WithoutHeader_GeneratesColumnNames()
+    {
+        const string csv = "John,30\nJane,25";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv, false).Build();
+        
+        Assert.Equal("Column1", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("Column2", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
+        Assert.Equal("30", sheet.GetValue(1, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_QuotedFieldsWithCommas_ParsesCorrectly()
+    {
+        const string csv = "name,description\nJohn,\"Value with, comma\"";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv).Build();
+        
+        Assert.Equal("Value with, comma", sheet.GetValue(1, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_QuotedFieldsWithQuotes_ParsesCorrectly()
+    {
+        const string csv = "name,text\nJohn,\"Text with \"\"quotes\"\"\"";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv).Build();
+        
+        Assert.Equal("Text with \"quotes\"", sheet.GetValue(1, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_EmptyContent_ReturnsEmptySheet()
+    {
+        const string csv = "";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv).Build();
+        
+        Assert.NotNull(sheet);
+        Assert.Empty(sheet.Cells.Cells);
+    }
+
+    [Fact]
+    public void FromCsv_WithHeaderStyle_AppliesStyling()
+    {
+        const string csv = "name,age\nJohn,30";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv)
+            .WithHeaderStyle(style => style.WithFillColor("FF0000"))
+            .Build();
+        
+        var headerCell = sheet.Cells.Cells[new(0, 0)];
+        Assert.Equal("FF0000", headerCell.Style.FillColor);
+    }
+
+    [Fact]
+    public void FromCsv_WithColumnParser_TransformsValues()
+    {
+        const string csv = "price\n100\n200";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv)
+            .WithColumnParser("price", value => new(value.Value.AsT2 + "0"))
+            .Build();
+        
+        Assert.Equal("1000", sheet.GetValue(0, 1)?.Value.AsT2);
+        Assert.Equal("2000", sheet.GetValue(0, 2)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_WithColumnOrder_OrdersColumns()
+    {
+        const string csv = "c,b,a\n3,2,1";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv)
+            .WithColumnOrder("a", "b", "c")
+            .Build();
+        
+        Assert.Equal("a", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("b", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("c", sheet.GetValue(2, 0)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromCsv_WithExcludeColumns_FiltersColumns()
+    {
+        const string csv = "id,name,internal\n1,John,secret";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv)
+            .WithExcludeColumns("internal")
+            .Build();
+        
+        Assert.Equal(4, sheet.Cells.Cells.Count);
+        Assert.Equal("id", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("name", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(2, 0));
+    }
+
+    [Fact]
+    public void FromCsv_AutoFitColumns_SetsWidths()
+    {
+        const string csv = "name,age\nJohn,30";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv)
+            .AutoFitAllColumns()
+            .Build();
+        
+        Assert.NotEmpty(sheet.ExplicitColumnWidths);
+    }
+
+    [Fact]
+    public void FromCsv_AllFeaturesCombined_WorksTogether()
+    {
+        const string csv = "id,name,value,status\n1,Test,100,active\n2,Demo,200,inactive";
+        
+        var sheet = WorksheetBuilder.FromCsv(csv)
+            .WithSheetName("CSV Advanced")
+            .WithHeaderStyle(style => style.WithFillColor("4472C4"))
+            .WithColumnOrder("name", "value", "status")
+            .WithExcludeColumns("id")
+            .WithColumnParser("value", val => new(val.Value.AsT2 + ".00"))
+            .WithConditionalStyle("status",
+                val => val.IsString() && val.Value.AsT2 == "active",
+                style => style.WithFillColor("00FF00"))
+            .AutoFitAllColumns()
+            .Build();
+        
+        Assert.Equal("CSV Advanced", sheet.Name);
+        Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("value", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("status", sheet.GetValue(2, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(3, 0));
+        
+        var statusCell = sheet.Cells.Cells[new(2, 1)];
+        Assert.Equal("00FF00", statusCell.Style.FillColor);
+    }
 }
