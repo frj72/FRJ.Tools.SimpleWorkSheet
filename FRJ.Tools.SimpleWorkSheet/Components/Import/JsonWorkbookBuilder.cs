@@ -10,6 +10,7 @@ public class JsonWorkbookBuilder
     private string _workbookName = "Workbook";
     private readonly JsonWorksheetBuilder _worksheetBuilder;
     private readonly List<Func<WorkSheet, WorkSheet>> _chartBuilders = [];
+    private bool _freezeHeaderRow;
 
     internal string DataSheetName { get; private set; } = "Data";
 
@@ -82,6 +83,12 @@ public class JsonWorkbookBuilder
         return this;
     }
 
+    public JsonWorkbookBuilder WithFreezeHeaderRow()
+    {
+        _freezeHeaderRow = true;
+        return this;
+    }
+
     public JsonWorkbookBuilder WithChart(Action<JsonChartBuilder> chartConfig)
     {
         ArgumentNullException.ThrowIfNull(chartConfig);
@@ -96,6 +103,10 @@ public class JsonWorkbookBuilder
     public WorkBook Build()
     {
         var dataSheet = _worksheetBuilder.Build();
+        
+        if (_freezeHeaderRow)
+            dataSheet.FreezePanes(1, 0);
+        
         var sheets = new List<WorkSheet> { dataSheet };
         sheets.AddRange(_chartBuilders.Select(buildChartAction => buildChartAction(dataSheet)));
 

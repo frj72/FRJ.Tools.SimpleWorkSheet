@@ -78,7 +78,12 @@ public static class Program
             new JsonToWorkbookExample(),
             new JsonToWorkbookLineChartExample(),
             new JsonToWorkbookBarChartExample(),
-            new JsonToWorkbookMultipleChartsExample()
+            new JsonToWorkbookMultipleChartsExample(),
+            new JsonColumnOrderingExample(),
+            new JsonColumnFilteringExample(),
+            new JsonDateNumberFormattingExample(),
+            new JsonConditionalStylingExample(),
+            new JsonAdvancedWorkbookExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

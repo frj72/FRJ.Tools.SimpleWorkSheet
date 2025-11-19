@@ -1,4 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
+using FRJ.Tools.SimpleWorkSheet.Components.Formatting;
 using FRJ.Tools.SimpleWorkSheet.Components.Import;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
@@ -654,5 +655,212 @@ public class JsonWorksheetBuilderTests
             if (File.Exists(tempFile))
                 File.Delete(tempFile);
         }
+    }
+
+    [Fact]
+    public void WithColumnOrder_OrdersColumnsAsSpecified()
+    {
+        const string json = """[{"c": 3, "a": 1, "b": 2}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithColumnOrder("a", "b", "c")
+            .Build();
+        
+        Assert.Equal("a", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("b", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("c", sheet.GetValue(2, 0)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void WithColumnOrder_PartialOrder_SpecifiedFirstThenRest()
+    {
+        const string json = """[{"d": 4, "c": 3, "b": 2, "a": 1}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithColumnOrder("b", "d")
+            .Build();
+        
+        Assert.Equal("b", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("d", sheet.GetValue(1, 0)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void WithColumnOrder_EmptyArray_ThrowsException()
+    {
+        const string json = """[{"a": 1}]""";
+        var builder = JsonWorksheetBuilder.FromJson(json);
+        
+        Assert.Throws<ArgumentException>(() => builder.WithColumnOrder());
+    }
+
+    [Fact]
+    public void WithExcludeColumns_RemovesSpecifiedColumns()
+    {
+        const string json = """[{"name": "John", "age": 30, "internal": "secret"}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithExcludeColumns("internal")
+            .Build();
+        
+        Assert.Equal(4, sheet.Cells.Cells.Count);
+        Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("age", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(2, 0));
+    }
+
+    [Fact]
+    public void WithExcludeColumns_MultipleColumns_RemovesAll()
+    {
+        const string json = """[{"a": 1, "b": 2, "c": 3, "d": 4}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithExcludeColumns("b", "d")
+            .Build();
+        
+        var headers = new[]
+        {
+            sheet.GetValue(0, 0)?.Value.AsT2,
+            sheet.GetValue(1, 0)?.Value.AsT2
+        };
+        
+        Assert.Contains("a", headers);
+        Assert.Contains("c", headers);
+        Assert.DoesNotContain("b", headers);
+        Assert.DoesNotContain("d", headers);
+    }
+
+    [Fact]
+    public void WithExcludeColumns_EmptyArray_ThrowsException()
+    {
+        const string json = """[{"a": 1}]""";
+        var builder = JsonWorksheetBuilder.FromJson(json);
+        
+        Assert.Throws<ArgumentException>(() => builder.WithExcludeColumns());
+    }
+
+    [Fact]
+    public void WithIncludeColumns_IncludesOnlySpecifiedColumns()
+    {
+        const string json = """[{"name": "John", "age": 30, "email": "test@test.com", "phone": "123"}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithIncludeColumns("name", "email")
+            .Build();
+        
+        Assert.Equal(4, sheet.Cells.Cells.Count);
+        Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("email", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(2, 0));
+    }
+
+    [Fact]
+    public void WithIncludeColumns_EmptyArray_ThrowsException()
+    {
+        const string json = """[{"a": 1}]""";
+        var builder = JsonWorksheetBuilder.FromJson(json);
+        
+        Assert.Throws<ArgumentException>(() => builder.WithIncludeColumns());
+    }
+
+    [Fact]
+    public void WithColumnOrder_AndExclude_WorksTogether()
+    {
+        const string json = """[{"d": 4, "c": 3, "b": 2, "a": 1}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithExcludeColumns("c")
+            .WithColumnOrder("b", "a", "d")
+            .Build();
+        
+        Assert.Equal("b", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("a", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("d", sheet.GetValue(2, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(3, 0));
+    }
+
+    [Fact]
+    public void WithDateFormat_AppliesFormatToDateColumns()
+    {
+        const string json = """[{"date": "2025-01-15"}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithDateFormat(DateFormat.DateOnly)
+            .Build();
+        
+        var cell = sheet.Cells.Cells[new(0, 1)];
+        Assert.NotNull(cell.Style.FormatCode);
+        Assert.Equal("dd/mm/yyyy", cell.Style.FormatCode);
+    }
+
+    [Fact]
+    public void WithNumberFormat_AppliesFormatToSpecificColumn()
+    {
+        const string json = """[{"price": 19.99, "quantity": 5}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithNumberFormat("price", NumberFormat.Float2)
+            .Build();
+        
+        var priceCell = sheet.Cells.Cells[new(0, 1)];
+        Assert.NotNull(priceCell.Style.FormatCode);
+    }
+
+    [Fact]
+    public void WithNumberFormat_EmptyColumnName_ThrowsException()
+    {
+        const string json = """[{"a": 1}]""";
+        var builder = JsonWorksheetBuilder.FromJson(json);
+        
+        Assert.Throws<ArgumentException>(() => builder.WithNumberFormat("", NumberFormat.Integer));
+    }
+
+    [Fact]
+    public void WithConditionalStyle_AppliesStyleWhenConditionTrue()
+    {
+        const string json = """[{"value": -10}, {"value": 20}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithPreserveOriginalValue(false)
+            .WithConditionalStyle("value", 
+                val => val.IsDecimal() && val.Value.AsT0 < 0,
+                style => style.WithFillColor("FF0000"))
+            .Build();
+        
+        var negativeCell = sheet.Cells.Cells[new(0, 1)];
+        Assert.Equal("FF0000", negativeCell.Style.FillColor);
+        
+        var positiveCell = sheet.Cells.Cells.GetValueOrDefault(new(0, 2));
+        if (positiveCell != null)
+            Assert.NotEqual("FF0000", positiveCell.Style.FillColor);
+    }
+
+    [Fact]
+    public void WithConditionalStyle_EmptyColumnName_ThrowsException()
+    {
+        const string json = """[{"a": 1}]""";
+        var builder = JsonWorksheetBuilder.FromJson(json);
+        
+        Assert.Throws<ArgumentException>(() => builder.WithConditionalStyle("", _ => true, _ => { }));
+    }
+
+    [Fact]
+    public void WithConditionalStyle_MultipleColumns_AppliesIndependently()
+    {
+        const string json = """[{"status": "ERROR", "count": 100}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json)
+            .WithConditionalStyle("status",
+                val => val.IsString() && val.Value.AsT2 == "ERROR",
+                style => style.WithFillColor("FF0000"))
+            .WithConditionalStyle("count",
+                val => val.IsDecimal() && val.Value.AsT0 > 50,
+                style => style.WithFillColor("00FF00"))
+            .Build();
+        
+        var statusCell = sheet.Cells.Cells[new(0, 1)];
+        Assert.Equal("FF0000", statusCell.Style.FillColor);
+        
+        var countCell = sheet.Cells.Cells[new(1, 1)];
+        Assert.Equal("00FF00", countCell.Style.FillColor);
     }
 }

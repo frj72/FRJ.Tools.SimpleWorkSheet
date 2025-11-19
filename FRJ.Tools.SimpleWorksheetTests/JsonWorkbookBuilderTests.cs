@@ -532,5 +532,107 @@ public class JsonWorkbookBuilderTests
         Assert.Equal(ChartLegendPosition.Left, pieChart.LegendPosition);
         Assert.Equal("Distribution", pieChart.Title);
     }
+
+    [Fact]
+    public void WithFreezeHeaderRow_FreezesFirstRow()
+    {
+        const string json = """[{"name": "John", "age": 30}, {"name": "Jane", "age": 25}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithFreezeHeaderRow()
+            .Build();
+        
+        var dataSheet = workbook.Sheets.First();
+        Assert.NotNull(dataSheet.FrozenPane);
+        Assert.Equal(1u, dataSheet.FrozenPane.Row);
+        Assert.Equal(0u, dataSheet.FrozenPane.Column);
+    }
+
+    [Fact]
+    public void WithChart_WithChartPosition_SetsCustomPosition()
+    {
+        const string json = """[{"x": 1, "y": 10}, {"x": 2, "y": 20}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("x", "y")
+                .AsLineChart()
+                .WithChartPosition(5, 5, 20, 25))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var lineChart = (LineChart)chartSheet.Charts[0];
+        Assert.NotNull(lineChart.Position);
+        Assert.Equal(5u, lineChart.Position.FromColumn);
+        Assert.Equal(5u, lineChart.Position.FromRow);
+        Assert.Equal(20u, lineChart.Position.ToColumn);
+        Assert.Equal(25u, lineChart.Position.ToRow);
+    }
+
+    [Fact]
+    public void WithChart_WithChartSize_SetsCustomSize()
+    {
+        const string json = """[{"a": 1, "b": 100}, {"a": 2, "b": 200}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("a", "b")
+                .AsBarChart()
+                .WithChartSize(800, 600))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var barChart = (BarChart)chartSheet.Charts[0];
+        Assert.NotEqual(ChartSize.Default.WidthEmus, barChart.Size.WidthEmus);
+        Assert.NotEqual(ChartSize.Default.HeightEmus, barChart.Size.HeightEmus);
+    }
+
+    [Fact]
+    public void WithChart_WithDataLabels_ShowsLabels()
+    {
+        const string json = """[{"cat": "A", "val": 50}, {"cat": "B", "val": 75}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithChart(chart => chart
+                .UseColumns("cat", "val")
+                .AsPieChart()
+                .WithDataLabels(true))
+            .Build();
+        
+        var chartSheet = workbook.Sheets.Last();
+        var pieChart = (PieChart)chartSheet.Charts[0];
+        Assert.True(pieChart.ShowDataLabels);
+    }
+
+    [Fact]
+    public void WithChart_AllPhase3Features_WorkTogether()
+    {
+        const string json = """[{"x": 1, "y": 100}, {"x": 2, "y": 200}]""";
+        
+        var workbook = JsonWorkbookBuilder.FromJson(json)
+            .WithFreezeHeaderRow()
+            .WithChart(chart => chart
+                .OnSheet("Analysis")
+                .UseColumns("x", "y")
+                .AsLineChart()
+                .WithTitle("Data Analysis")
+                .WithChartPosition(0, 2, 10, 15)
+                .WithChartSize(600, 400)
+                .WithDataLabels(true)
+                .WithLegendPosition(ChartLegendPosition.Bottom))
+            .Build();
+        
+        var dataSheet = workbook.Sheets.First();
+        Assert.NotNull(dataSheet.FrozenPane);
+        
+        var chartSheet = workbook.Sheets.Last();
+        var lineChart = (LineChart)chartSheet.Charts[0];
+        Assert.Equal("Analysis", chartSheet.Name);
+        Assert.NotNull(lineChart.Position);
+        Assert.Equal(0u, lineChart.Position.FromColumn);
+        Assert.Equal(2u, lineChart.Position.FromRow);
+        Assert.NotEqual(ChartSize.Default, lineChart.Size);
+        Assert.True(lineChart.ShowDataLabels);
+    }
 }
 

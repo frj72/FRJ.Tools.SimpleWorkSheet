@@ -14,6 +14,9 @@ public class JsonChartBuilder
     private string? _categoryAxisTitle;
     private string? _valueAxisTitle;
     private ChartLegendPosition? _legendPosition;
+    private (uint fromCol, uint fromRow, uint toCol, uint toRow)? _chartPosition;
+    private (int width, int height)? _chartSize;
+    private bool _showDataLabels;
 
     internal JsonChartBuilder(JsonWorkbookBuilder parent)
     {
@@ -95,6 +98,29 @@ public class JsonChartBuilder
         return this;
     }
 
+    public JsonChartBuilder WithChartPosition(uint fromCol, uint fromRow, uint toCol, uint toRow)
+    {
+        _chartPosition = (fromCol, fromRow, toCol, toRow);
+        return this;
+    }
+
+    public JsonChartBuilder WithChartSize(int width, int height)
+    {
+        if (width <= 0)
+            throw new ArgumentException("Width must be positive", nameof(width));
+        if (height <= 0)
+            throw new ArgumentException("Height must be positive", nameof(height));
+
+        _chartSize = (width, height);
+        return this;
+    }
+
+    public JsonChartBuilder WithDataLabels(bool show)
+    {
+        _showDataLabels = show;
+        return this;
+    }
+
     internal WorkSheet Build(WorkSheet dataSheet)
     {
         if (_categoryColumn == null || _valueColumn == null)
@@ -128,8 +154,12 @@ public class JsonChartBuilder
     {
         var chart = LineChart.Create()
             .WithDataRange(categoryRange, valueRange)
-            .WithPosition(0, 0, 15, 20)
             .WithDataSourceSheet(_parent.DataSheetName);
+
+        chart = _chartPosition != null ? chart.WithPosition(_chartPosition.Value.fromCol, _chartPosition.Value.fromRow, _chartPosition.Value.toCol, _chartPosition.Value.toRow) : chart.WithPosition(0, 0, 15, 20);
+
+        if (_chartSize != null)
+            chart = chart.WithSize(_chartSize.Value.width, _chartSize.Value.height);
 
         if (_title != null)
             chart = chart.WithTitle(_title);
@@ -139,6 +169,8 @@ public class JsonChartBuilder
             chart = chart.WithValueAxisTitle(_valueAxisTitle);
         if (_legendPosition != null)
             chart = chart.WithLegendPosition(_legendPosition.Value);
+        if (_showDataLabels)
+            chart = chart.WithDataLabels(true);
 
         return chart;
     }
@@ -147,9 +179,13 @@ public class JsonChartBuilder
     {
         var chart = BarChart.Create()
             .WithDataRange(categoryRange, valueRange)
-            .WithPosition(0, 0, 15, 20)
             .WithOrientation(BarChartOrientation.Vertical)
             .WithDataSourceSheet(_parent.DataSheetName);
+
+        chart = _chartPosition != null ? chart.WithPosition(_chartPosition.Value.fromCol, _chartPosition.Value.fromRow, _chartPosition.Value.toCol, _chartPosition.Value.toRow) : chart.WithPosition(0, 0, 15, 20);
+
+        if (_chartSize != null)
+            chart = chart.WithSize(_chartSize.Value.width, _chartSize.Value.height);
 
         if (_title != null)
             chart = chart.WithTitle(_title);
@@ -159,6 +195,8 @@ public class JsonChartBuilder
             chart = chart.WithValueAxisTitle(_valueAxisTitle);
         if (_legendPosition != null)
             chart = chart.WithLegendPosition(_legendPosition.Value);
+        if (_showDataLabels)
+            chart = chart.WithDataLabels(true);
 
         return chart;
     }
@@ -167,8 +205,12 @@ public class JsonChartBuilder
     {
         var chart = AreaChart.Create()
             .WithDataRange(categoryRange, valueRange)
-            .WithPosition(0, 0, 15, 20)
             .WithDataSourceSheet(_parent.DataSheetName);
+
+        chart = _chartPosition != null ? chart.WithPosition(_chartPosition.Value.fromCol, _chartPosition.Value.fromRow, _chartPosition.Value.toCol, _chartPosition.Value.toRow) : chart.WithPosition(0, 0, 15, 20);
+
+        if (_chartSize != null)
+            chart = chart.WithSize(_chartSize.Value.width, _chartSize.Value.height);
 
         if (_title != null)
             chart = chart.WithTitle(_title);
@@ -178,6 +220,8 @@ public class JsonChartBuilder
             chart = chart.WithValueAxisTitle(_valueAxisTitle);
         if (_legendPosition != null)
             chart = chart.WithLegendPosition(_legendPosition.Value);
+        if (_showDataLabels)
+            chart = chart.WithDataLabels(true);
 
         return chart;
     }
@@ -186,13 +230,19 @@ public class JsonChartBuilder
     {
         var chart = PieChart.Create()
             .WithDataRange(categoryRange, valueRange)
-            .WithPosition(0, 0, 15, 20)
             .WithDataSourceSheet(_parent.DataSheetName);
+
+        chart = _chartPosition != null ? chart.WithPosition(_chartPosition.Value.fromCol, _chartPosition.Value.fromRow, _chartPosition.Value.toCol, _chartPosition.Value.toRow) : chart.WithPosition(0, 0, 15, 20);
+
+        if (_chartSize != null)
+            chart = chart.WithSize(_chartSize.Value.width, _chartSize.Value.height);
 
         if (_title != null)
             chart = chart.WithTitle(_title);
         if (_legendPosition != null)
             chart = chart.WithLegendPosition(_legendPosition.Value);
+        if (_showDataLabels)
+            chart = chart.WithDataLabels(true);
 
         return chart;
     }
@@ -201,8 +251,12 @@ public class JsonChartBuilder
     {
         var chart = ScatterChart.Create()
             .WithXyData(categoryRange, valueRange)
-            .WithPosition(0, 0, 15, 20)
             .WithDataSourceSheet(_parent.DataSheetName);
+
+        chart = _chartPosition != null ? chart.WithPosition(_chartPosition.Value.fromCol, _chartPosition.Value.fromRow, _chartPosition.Value.toCol, _chartPosition.Value.toRow) : chart.WithPosition(0, 0, 15, 20);
+
+        if (_chartSize != null)
+            chart = chart.WithSize(_chartSize.Value.width, _chartSize.Value.height);
 
         if (_title != null)
             chart = chart.WithTitle(_title);
@@ -212,6 +266,8 @@ public class JsonChartBuilder
             chart = chart.WithValueAxisTitle(_valueAxisTitle);
         if (_legendPosition != null)
             chart = chart.WithLegendPosition(_legendPosition.Value);
+        if (_showDataLabels)
+            chart = chart.WithDataLabels(true);
 
         return chart;
     }

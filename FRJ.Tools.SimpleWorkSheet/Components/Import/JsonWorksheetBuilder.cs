@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using FRJ.Tools.SimpleWorkSheet.Components.Formatting;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
@@ -14,6 +15,12 @@ public class JsonWorksheetBuilder
     private Action<CellStyleBuilder>? _headerStyleAction;
     private Dictionary<string, Func<CellValue, CellValue>>? _columnParsers;
     private bool _autoFitColumns;
+    private List<string>? _columnOrder;
+    private HashSet<string>? _excludeColumns;
+    private HashSet<string>? _includeColumns;
+    private DateFormat? _dateFormat;
+    private Dictionary<string, NumberFormat>? _numberFormats;
+    private Dictionary<string, (Func<CellValue, bool> condition, Action<CellStyleBuilder> style)>? _conditionalStyles;
 
     private JsonWorksheetBuilder(JsonElement jsonRoot)
     {
@@ -78,6 +85,61 @@ public class JsonWorksheetBuilder
         return this;
     }
 
+    public JsonWorksheetBuilder WithColumnOrder(params string[] columnNames)
+    {
+        if (columnNames == null || columnNames.Length == 0)
+            throw new ArgumentException("Column order must contain at least one column", nameof(columnNames));
+
+        _columnOrder = [..columnNames];
+        return this;
+    }
+
+    public JsonWorksheetBuilder WithExcludeColumns(params string[] columnNames)
+    {
+        if (columnNames == null || columnNames.Length == 0)
+            throw new ArgumentException("Exclude columns must contain at least one column", nameof(columnNames));
+
+        _excludeColumns = [..columnNames];
+        return this;
+    }
+
+    public JsonWorksheetBuilder WithIncludeColumns(params string[] columnNames)
+    {
+        if (columnNames == null || columnNames.Length == 0)
+            throw new ArgumentException("Include columns must contain at least one column", nameof(columnNames));
+
+        _includeColumns = [..columnNames];
+        return this;
+    }
+
+    public JsonWorksheetBuilder WithDateFormat(DateFormat format)
+    {
+        _dateFormat = format;
+        return this;
+    }
+
+    public JsonWorksheetBuilder WithNumberFormat(string columnName, NumberFormat format)
+    {
+        if (string.IsNullOrWhiteSpace(columnName))
+            throw new ArgumentException("Column name cannot be empty", nameof(columnName));
+
+        _numberFormats ??= new();
+        _numberFormats[columnName] = format;
+        return this;
+    }
+
+    public JsonWorksheetBuilder WithConditionalStyle(string columnName, Func<CellValue, bool> condition, Action<CellStyleBuilder> style)
+    {
+        if (string.IsNullOrWhiteSpace(columnName))
+            throw new ArgumentException("Column name cannot be empty", nameof(columnName));
+        ArgumentNullException.ThrowIfNull(condition);
+        ArgumentNullException.ThrowIfNull(style);
+
+        _conditionalStyles ??= new();
+        _conditionalStyles[columnName] = (condition, style);
+        return this;
+    }
+
     public WorkSheet Build()
     {
         var sheet = new WorkSheet(_sheetName);
@@ -91,6 +153,7 @@ public class JsonWorksheetBuilder
             return sheet;
 
         var properties = DiscoverSchemaFromArray(_jsonRoot);
+        properties = FilterAndOrderColumns(properties);
         
         if (properties.Count == 0)
             return sheet;
@@ -108,6 +171,7 @@ public class JsonWorksheetBuilder
     private WorkSheet BuildFromObject(WorkSheet sheet)
     {
         var properties = _jsonRoot.EnumerateObject().Select(p => p.Name).ToList();
+        properties = FilterAndOrderColumns(properties);
         
         if (properties.Count == 0)
             return sheet;
@@ -143,6 +207,25 @@ public class JsonWorksheetBuilder
             else if (property.Value.ValueKind != JsonValueKind.Array)
                 propertyNames.Add(propertyName);
         }
+    }
+
+    private List<string> FilterAndOrderColumns(List<string> properties)
+    {
+        var filtered = properties;
+
+        if (_includeColumns != null)
+            filtered = filtered.Where(p => _includeColumns.Contains(p)).ToList();
+
+        if (_excludeColumns != null)
+            filtered = filtered.Where(p => !_excludeColumns.Contains(p)).ToList();
+
+        if (_columnOrder == null) 
+            return filtered;
+        
+        var ordered = _columnOrder.Where(filtered.Contains).ToList();
+        ordered.AddRange(filtered.Where(c => !_columnOrder.Contains(c)));
+
+        return ordered;
     }
 
     private void AddHeaders(WorkSheet sheet, List<string> properties)
@@ -212,16 +295,22 @@ public class JsonWorksheetBuilder
         if (_columnParsers != null && propertyName != null && _columnParsers.TryGetValue(propertyName, out var parser))
             cellValue = parser(cellValue);
 
-        if (_preserveOriginalValue)
+        sheet.AddCell(new(col, row), cellValue, builder =>
         {
-            var originalValue = propertyValue.GetRawText();
-            sheet.AddCell(new(col, row), cellValue, builder =>
-            {
-                builder.WithMetadata(metadata => metadata.WithOriginalValue(originalValue));
-            });
-        }
-        else
-            sheet.AddCell(new(col, row), cellValue);
+            if (_preserveOriginalValue)
+                builder.WithMetadata(metadata => metadata.WithOriginalValue(propertyValue.GetRawText()));
+
+            if (cellValue.IsDateTime() && _dateFormat != null)
+                builder.WithStyle(style => style.WithFormatCode(GetDateFormatCode(_dateFormat.Value)));
+
+            if (cellValue.IsDecimal() && _numberFormats != null && propertyName != null && _numberFormats.TryGetValue(propertyName, out var numberFormat))
+                builder.WithStyle(style => style.WithFormatCode(GetNumberFormatCode(numberFormat)));
+
+            if (_conditionalStyles == null || propertyName == null ||
+                !_conditionalStyles.TryGetValue(propertyName, out var conditionalStyle)) return;
+            if (conditionalStyle.condition(cellValue))
+                builder.WithStyle(conditionalStyle.style);
+        });
     }
 
     private CellValue? ConvertJsonValueToCellValue(JsonElement jsonValue)
@@ -259,4 +348,23 @@ public class JsonWorksheetBuilder
                 return null;
         }
     }
+
+    private static string GetDateFormatCode(DateFormat format) => format switch
+    {
+        DateFormat.IsoDateTime => "yyyy-mm-dd hh:mm:ss",
+        DateFormat.IsoDate => "yyyy-mm-dd",
+        DateFormat.DateTime => "dd/mm/yyyy hh:mm:ss",
+        DateFormat.DateOnly => "dd/mm/yyyy",
+        DateFormat.TimeOnly => "hh:mm:ss",
+        _ => "yyyy-mm-dd hh:mm:ss"
+    };
+
+    private static string GetNumberFormatCode(NumberFormat format) => format switch
+    {
+        NumberFormat.Integer => "0",
+        NumberFormat.Float2 => "0.00",
+        NumberFormat.Float3 => "0.000",
+        NumberFormat.Float4 => "0.0000",
+        _ => "0.00"
+    };
 }
