@@ -87,7 +87,11 @@ public static class Program
             new CsvWithHeaderExample(),
             new CsvWithoutHeaderExample(),
             new CsvAdvancedFeaturesExample(),
-            new CsvToWorkbookWithChartExample()
+            new CsvToWorkbookWithChartExample(),
+            new GenericTableBasicExample(),
+            new GenericTableAdvancedExample(),
+            new GenericTableToWorkbookExample(),
+            new GenericTableWorkbookAdvancedExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

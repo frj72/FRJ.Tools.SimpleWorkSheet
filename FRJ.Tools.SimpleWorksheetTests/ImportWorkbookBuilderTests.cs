@@ -1,5 +1,7 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
+using FRJ.Tools.SimpleWorkSheet.Components.Formatting;
 using FRJ.Tools.SimpleWorkSheet.Components.Import;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
@@ -695,5 +697,159 @@ public class ImportWorkbookBuilderTests
         Assert.Equal("Trend", chartSheet.Name);
         Assert.Single(chartSheet.Charts);
     }
+
+    [Fact]
+    public void FromGenericTable_WithColumnOrder_OrdersColumnsCorrectly()
+    {
+        var table = GenericTable.Create("A", "B", "C");
+        table.AddRow(new CellValue("1"), new CellValue("2"), new CellValue("3"));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithColumnOrder("C", "A", "B")
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        Assert.Equal("C", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("A", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("B", sheet.GetValue(2, 0)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromGenericTable_WithExcludeColumns_ExcludesSpecifiedColumns()
+    {
+        var table = GenericTable.Create("Name", "Age", "Email", "Phone");
+        table.AddRow(new CellValue("John"), new CellValue(30), new CellValue("john@test.com"), new CellValue("555-1234"));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithExcludeColumns("Email", "Phone")
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        Assert.Equal("Name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("Age", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(2, 0));
+    }
+
+    [Fact]
+    public void FromGenericTable_WithIncludeColumns_IncludesOnlySpecifiedColumns()
+    {
+        var table = GenericTable.Create("ID", "Name", "Age", "Score");
+        table.AddRow(new CellValue(1), new CellValue("Alice"), new CellValue(25), new CellValue(95.5m));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithIncludeColumns("Name", "Score")
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        Assert.Equal("Name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("Score", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Null(sheet.GetValue(2, 0));
+    }
+
+    [Fact]
+    public void FromGenericTable_WithDateFormat_FormatsDateColumns()
+    {
+        var date = new DateTime(2024, 11, 19, 14, 30, 0);
+        var table = GenericTable.Create("Event", "Date");
+        table.AddRow(new CellValue("Meeting"), new CellValue(date));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithDateFormat(DateFormat.IsoDate)
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        var dateCell = sheet.Cells.Cells[new(1, 1)];
+        Assert.NotNull(dateCell);
+        Assert.Equal("yyyy-mm-dd", dateCell.Style.FormatCode);
+    }
+
+    [Fact]
+    public void FromGenericTable_WithNumberFormat_FormatsSpecificColumn()
+    {
+        var table = GenericTable.Create("Item", "Price", "Quantity");
+        table.AddRow(new CellValue("Widget"), new CellValue(19.99m), new CellValue(5));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithNumberFormat("Price", NumberFormat.Float2)
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        var priceCell = sheet.Cells.Cells[new(1, 1)];
+        Assert.NotNull(priceCell);
+        Assert.Equal("0.00", priceCell.Style.FormatCode);
+    }
+
+    [Fact]
+    public void FromGenericTable_WithConditionalStyle_AppliesStyleBasedOnCondition()
+    {
+        var table = GenericTable.Create("Student", "Grade");
+        table.AddRow(new CellValue("Alice"), new CellValue(92m));
+        table.AddRow(new CellValue("Bob"), new CellValue(67m));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithConditionalStyle("Grade",
+                value => value.Value.AsT0 >= 90,
+                style => style.WithFillColor(Colors.Green))
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        var aliceGradeCell = sheet.Cells.Cells[new(1, 1)];
+        var bobGradeCell = sheet.Cells.Cells[new(1, 2)];
+        
+        Assert.Equal(Colors.Green, aliceGradeCell.Style.FillColor);
+        Assert.NotEqual(Colors.Green, bobGradeCell.Style.FillColor);
+    }
+
+    [Fact]
+    public void FromGenericTable_AllNewMethods_WorkTogether()
+    {
+        var table = GenericTable.Create("Name", "Department", "Salary", "HireDate", "Status");
+        table.AddRow(
+            new CellValue("Alice"),
+            new CellValue("Engineering"),
+            new CellValue(75000m),
+            new CellValue(new DateTime(2020, 1, 15)),
+            new CellValue("Active"));
+        table.AddRow(
+            new CellValue("Bob"),
+            new CellValue("Sales"),
+            new CellValue(65000m),
+            new CellValue(new DateTime(2019, 6, 1)),
+            new CellValue("Active"));
+        
+        var workbook = WorkbookBuilder.FromGenericTable(table)
+            .WithWorkbookName("Employee Report")
+            .WithDataSheetName("Employees")
+            .WithColumnOrder("Name", "Salary", "HireDate", "Department")
+            .WithExcludeColumns("Status")
+            .WithDateFormat(DateFormat.IsoDate)
+            .WithNumberFormat("Salary", NumberFormat.Float2)
+            .WithConditionalStyle("Salary",
+                value => value.Value.AsT0 > 70000,
+                style => style.WithFillColor(Colors.Yellow))
+            .WithFreezeHeaderRow()
+            .AutoFitAllColumns()
+            .Build();
+        
+        Assert.Equal("Employee Report", workbook.Name);
+        var sheet = workbook.Sheets.First();
+        Assert.Equal("Employees", sheet.Name);
+        
+        Assert.Equal("Name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("Salary", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("HireDate", sheet.GetValue(2, 0)?.Value.AsT2);
+        Assert.Equal("Department", sheet.GetValue(3, 0)?.Value.AsT2);
+        
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.Equal(1u, sheet.FrozenPane.Row);
+        
+        var salaryCell = sheet.Cells.Cells[new(1, 1)];
+        Assert.Equal("0.00", salaryCell.Style.FormatCode);
+        Assert.Equal(Colors.Yellow, salaryCell.Style.FillColor);
+        
+        var dateCell = sheet.Cells.Cells[new(2, 1)];
+        Assert.Equal("yyyy-mm-dd", dateCell.Style.FormatCode);
+    }
 }
+
 

@@ -1,5 +1,6 @@
 using System.Text.Json;
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
+using FRJ.Tools.SimpleWorkSheet.Components.Formatting;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
@@ -8,7 +9,8 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 public class WorkbookBuilder
 {
     private string _workbookName = "Workbook";
-    private readonly WorksheetBuilder _worksheetBuilder;
+    private readonly WorksheetBuilder? _worksheetBuilder;
+    private readonly GenericTableBuilder? _genericTableBuilder;
     private readonly List<Func<WorkSheet, WorkSheet>> _chartBuilders = [];
     private bool _freezeHeaderRow;
 
@@ -20,6 +22,12 @@ public class WorkbookBuilder
             throw new ArgumentException("JSON must be an array or object", nameof(jsonRoot));
         
         _worksheetBuilder = WorksheetBuilder.FromJson(jsonRoot.GetRawText()).WithSheetName(DataSheetName);
+    }
+
+    private WorkbookBuilder(GenericTable table)
+    {
+        ArgumentNullException.ThrowIfNull(table);
+        _genericTableBuilder = GenericTableBuilder.FromGenericTable(table).WithSheetName(DataSheetName);
     }
 
     public static WorkbookBuilder FromJson(string jsonContent)
@@ -65,6 +73,8 @@ public class WorkbookBuilder
         return FromCsv(csvContent, hasHeader);
     }
 
+    public static WorkbookBuilder FromGenericTable(GenericTable table) => new(table);
+
     public WorkbookBuilder WithWorkbookName(string name)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -80,37 +90,78 @@ public class WorkbookBuilder
             throw new ArgumentException("Data sheet name cannot be empty", nameof(name));
         
         DataSheetName = name;
-        _worksheetBuilder.WithSheetName(name);
+        _worksheetBuilder?.WithSheetName(name);
+        _genericTableBuilder?.WithSheetName(name);
         return this;
     }
 
     public WorkbookBuilder WithPreserveOriginalValue(bool preserve)
     {
-        _worksheetBuilder.WithPreserveOriginalValue(preserve);
+        _worksheetBuilder?.WithPreserveOriginalValue(preserve);
+        _genericTableBuilder?.WithPreserveOriginalValue(preserve);
         return this;
     }
 
     public WorkbookBuilder WithTrimWhitespace(bool trim)
     {
-        _worksheetBuilder.WithTrimWhitespace(trim);
+        _worksheetBuilder?.WithTrimWhitespace(trim);
         return this;
     }
 
     public WorkbookBuilder WithHeaderStyle(Action<CellStyleBuilder> styleAction)
     {
-        _worksheetBuilder.WithHeaderStyle(styleAction);
+        _worksheetBuilder?.WithHeaderStyle(styleAction);
+        _genericTableBuilder?.WithHeaderStyle(styleAction);
         return this;
     }
 
     public WorkbookBuilder WithColumnParser(string columnName, Func<CellValue, CellValue> parser)
     {
-        _worksheetBuilder.WithColumnParser(columnName, parser);
+        _worksheetBuilder?.WithColumnParser(columnName, parser);
+        _genericTableBuilder?.WithColumnParser(columnName, parser);
         return this;
     }
 
     public WorkbookBuilder AutoFitAllColumns()
     {
-        _worksheetBuilder.AutoFitAllColumns();
+        _worksheetBuilder?.AutoFitAllColumns();
+        _genericTableBuilder?.AutoFitAllColumns();
+        return this;
+    }
+
+    public WorkbookBuilder WithColumnOrder(params string[] columnNames)
+    {
+        _genericTableBuilder?.WithColumnOrder(columnNames);
+        return this;
+    }
+
+    public WorkbookBuilder WithExcludeColumns(params string[] columnNames)
+    {
+        _genericTableBuilder?.WithExcludeColumns(columnNames);
+        return this;
+    }
+
+    public WorkbookBuilder WithIncludeColumns(params string[] columnNames)
+    {
+        _genericTableBuilder?.WithIncludeColumns(columnNames);
+        return this;
+    }
+
+    public WorkbookBuilder WithDateFormat(DateFormat format)
+    {
+        _genericTableBuilder?.WithDateFormat(format);
+        return this;
+    }
+
+    public WorkbookBuilder WithNumberFormat(string columnName, NumberFormat format)
+    {
+        _genericTableBuilder?.WithNumberFormat(columnName, format);
+        return this;
+    }
+
+    public WorkbookBuilder WithConditionalStyle(string columnName, Func<CellValue, bool> condition, Action<CellStyleBuilder> style)
+    {
+        _genericTableBuilder?.WithConditionalStyle(columnName, condition, style);
         return this;
     }
 
@@ -133,7 +184,7 @@ public class WorkbookBuilder
 
     public WorkBook Build()
     {
-        var dataSheet = _worksheetBuilder.Build();
+        var dataSheet = _worksheetBuilder?.Build() ?? _genericTableBuilder?.Build() ?? throw new InvalidOperationException("No builder available");
         
         if (_freezeHeaderRow)
             dataSheet.FreezePanes(1, 0);
@@ -146,7 +197,7 @@ public class WorkbookBuilder
 
     public int? GetColumnIndexByName(string columnName)
     {
-        var dataSheet = _worksheetBuilder.Build();
+        var dataSheet = _worksheetBuilder?.Build() ?? _genericTableBuilder?.Build() ?? throw new InvalidOperationException("No builder available");
         
         for (uint col = 0; col < 1000; col++)
         {
@@ -164,7 +215,7 @@ public class WorkbookBuilder
         if (colIndex == null)
             return null;
 
-        var dataSheet = _worksheetBuilder.Build();
+        var dataSheet = _worksheetBuilder?.Build() ?? _genericTableBuilder?.Build() ?? throw new InvalidOperationException("No builder available");
         var rowCount = CountDataRows(dataSheet);
 
         if (rowCount == 0)

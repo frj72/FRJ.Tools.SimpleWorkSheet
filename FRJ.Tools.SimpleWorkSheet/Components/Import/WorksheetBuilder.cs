@@ -42,6 +42,8 @@ public class WorksheetBuilder
         return FromJson(jsonContent);
     }
 
+    public static GenericTableBuilder FromGenericTable(GenericTable table) => GenericTableBuilder.FromGenericTable(table);
+
     public static WorksheetBuilder FromCsv(string csvContent, bool hasHeader = true)
     {
         var jsonContent = ConvertCsvToJson(csvContent, hasHeader);

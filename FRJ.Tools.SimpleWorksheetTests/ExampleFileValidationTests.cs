@@ -83,6 +83,10 @@ public class ExampleFileValidationTests
     [InlineData("71_CsvWithoutHeader.xlsx")]
     [InlineData("72_CsvAdvancedFeatures.xlsx")]
     [InlineData("73_CsvToWorkbookWithChart.xlsx")]
+    [InlineData("74_GenericTableBasic.xlsx")]
+    [InlineData("75_GenericTableAdvanced.xlsx")]
+    [InlineData("76_GenericTableToWorkbook.xlsx")]
+    [InlineData("77_GenericTableWorkbookAdvanced.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -103,7 +107,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 73;
+        const int expectedCount = 77;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);
