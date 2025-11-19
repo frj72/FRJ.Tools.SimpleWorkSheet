@@ -44,41 +44,59 @@ public class WorksheetBuilder
 
     public static GenericTableBuilder FromGenericTable(GenericTable table) => GenericTableBuilder.FromGenericTable(table);
 
-    public static WorksheetBuilder FromCsv(string csvContent, bool hasHeader = true)
+    public static GenericTableBuilder FromCsv(string csvContent, bool hasHeader = true)
     {
-        var jsonContent = ConvertCsvToJson(csvContent, hasHeader);
-        return FromJson(jsonContent);
+        var table = ConvertCsvToGenericTable(csvContent, hasHeader);
+        return GenericTableBuilder.FromGenericTable(table);
     }
 
-    public static WorksheetBuilder FromCsvFile(string filePath, bool hasHeader = true)
+    public static GenericTableBuilder FromCsvFile(string filePath, bool hasHeader = true)
     {
         var csvContent = File.ReadAllText(filePath);
         return FromCsv(csvContent, hasHeader);
     }
 
-    internal static string ConvertCsvToJson(string csvContent, bool hasHeader)
+    internal static GenericTable ConvertCsvToGenericTable(string csvContent, bool hasHeader)
     {
         var data = CsvParser.Parse(csvContent, hasHeader, out var headers);
         
         if (headers == null || headers.Count == 0)
-            return "[]";
+            return GenericTable.Create();
 
-        var jsonArray = new List<string>();
+        var table = new GenericTable([..headers]);
         
         foreach (var row in data)
         {
-            var properties = new List<string>();
-            for (var i = 0; i < Math.Min(headers.Count, row.Count); i++)
-                properties.Add($"\"{headers[i]}\":\"{EscapeJsonString(row[i])}\"");
+            var cellValues = new List<CellValue?>();
             
-            jsonArray.Add("{" + string.Join(",", properties) + "}");
+            for (var i = 0; i < headers.Count; i++)
+                if (i < row.Count && !string.IsNullOrWhiteSpace(row[i]))
+                {
+                    var value = row[i];
+                    cellValues.Add(TryParseCellValue(value));
+                }
+                else
+                    cellValues.Add(null);
+
+            table.AddRow(cellValues);
         }
 
-        return "[" + string.Join(",", jsonArray) + "]";
+        return table;
     }
 
-    private static string EscapeJsonString(string value) =>
-        value.Replace("\\", @"\\").Replace("\"", "\\\"").Replace("\n", "\\n").Replace("\r", "\\r");
+    private static CellValue TryParseCellValue(string value)
+    {
+        if (DateTime.TryParse(value, out var dateValue))
+            return new(dateValue);
+        
+        if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var decimalValue))
+            return new(decimalValue);
+        
+        if (long.TryParse(value, out var longValue))
+            return new(longValue);
+        
+        return new(value);
+    }
 
     public WorksheetBuilder WithSheetName(string name)
     {

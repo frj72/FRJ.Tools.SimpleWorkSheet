@@ -875,7 +875,7 @@ public class ImportWorksheetBuilderTests
         Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
         Assert.Equal("age", sheet.GetValue(1, 0)?.Value.AsT2);
         Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
-        Assert.Equal("30", sheet.GetValue(1, 1)?.Value.AsT2);
+        Assert.Equal(30m, sheet.GetValue(1, 1)?.Value.AsT0);
     }
 
     [Fact]
@@ -888,7 +888,7 @@ public class ImportWorksheetBuilderTests
         Assert.Equal("Column1", sheet.GetValue(0, 0)?.Value.AsT2);
         Assert.Equal("Column2", sheet.GetValue(1, 0)?.Value.AsT2);
         Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
-        Assert.Equal("30", sheet.GetValue(1, 1)?.Value.AsT2);
+        Assert.Equal(30m, sheet.GetValue(1, 1)?.Value.AsT0);
     }
 
     [Fact]
@@ -941,11 +941,11 @@ public class ImportWorksheetBuilderTests
         const string csv = "price\n100\n200";
         
         var sheet = WorksheetBuilder.FromCsv(csv)
-            .WithColumnParser("price", value => new(value.Value.AsT2 + "0"))
+            .WithColumnParser("price", value => new(value.Value.AsT0 * 10))
             .Build();
         
-        Assert.Equal("1000", sheet.GetValue(0, 1)?.Value.AsT2);
-        Assert.Equal("2000", sheet.GetValue(0, 2)?.Value.AsT2);
+        Assert.Equal(1000m, sheet.GetValue(0, 1)?.Value.AsT0);
+        Assert.Equal(2000m, sheet.GetValue(0, 2)?.Value.AsT0);
     }
 
     [Fact]
@@ -999,7 +999,7 @@ public class ImportWorksheetBuilderTests
             .WithHeaderStyle(style => style.WithFillColor("4472C4"))
             .WithColumnOrder("name", "value", "status")
             .WithExcludeColumns("id")
-            .WithColumnParser("value", val => new(val.Value.AsT2 + ".00"))
+            .WithColumnParser("value", val => new(val.Value.AsT0 * 10))
             .WithConditionalStyle("status",
                 val => val.IsString() && val.Value.AsT2 == "active",
                 style => style.WithFillColor("00FF00"))
