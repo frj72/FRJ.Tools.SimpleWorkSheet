@@ -63,6 +63,12 @@ public class ExampleFileValidationTests
     [InlineData("51_AreaChart.xlsx")]
     [InlineData("52_StackedAreaChart.xlsx")]
     [InlineData("53_ChartFormatting.xlsx")]
+    [InlineData("54_JsonArrayFluentImport.xlsx")]
+    [InlineData("55_JsonFlatObjectImport.xlsx")]
+    [InlineData("56_JsonMultiColumnArrayImport.xlsx")]
+    [InlineData("57_JsonArrayWithStyling.xlsx")]
+    [InlineData("58_JsonFlatObjectWithParsers.xlsx")]
+    [InlineData("59_JsonMultiColumnAllFeatures.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -83,7 +89,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 53;
+        const int expectedCount = 59;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);
