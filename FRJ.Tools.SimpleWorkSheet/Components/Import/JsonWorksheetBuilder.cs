@@ -126,9 +126,23 @@ public class JsonWorksheetBuilder
     {
         var propertyNames = new HashSet<string>();
 
-        foreach (var property in jsonArray.EnumerateArray().Where(item => item.ValueKind == JsonValueKind.Object).SelectMany(item => item.EnumerateObject())) propertyNames.Add(property.Name);
+        foreach (var item in jsonArray.EnumerateArray().Where(item => item.ValueKind == JsonValueKind.Object))
+            FlattenProperties(item, "", propertyNames);
 
         return [..propertyNames];
+    }
+
+    private static void FlattenProperties(JsonElement element, string prefix, HashSet<string> propertyNames)
+    {
+        foreach (var property in element.EnumerateObject())
+        {
+            var propertyName = string.IsNullOrEmpty(prefix) ? property.Name : $"{prefix}.{property.Name}";
+
+            if (property.Value.ValueKind == JsonValueKind.Object)
+                FlattenProperties(property.Value, propertyName, propertyNames);
+            else if (property.Value.ValueKind != JsonValueKind.Array)
+                propertyNames.Add(propertyName);
+        }
     }
 
     private void AddHeaders(WorkSheet sheet, List<string> properties)
@@ -149,15 +163,29 @@ public class JsonWorksheetBuilder
             for (var colIndex = 0; colIndex < properties.Count; colIndex++)
             {
                 var propertyName = properties[colIndex];
-                
-                if (!item.TryGetProperty(propertyName, out var propertyValue))
-                    continue;
+                var propertyValue = GetNestedProperty(item, propertyName);
 
-                AddCellValue(sheet, (uint)colIndex, rowIndex, propertyValue, propertyName);
+                if (propertyValue.HasValue)
+                    AddCellValue(sheet, (uint)colIndex, rowIndex, propertyValue.Value, propertyName);
             }
 
             rowIndex++;
         }
+    }
+
+    private static JsonElement? GetNestedProperty(JsonElement element, string propertyPath)
+    {
+        var parts = propertyPath.Split('.');
+        var current = element;
+
+        foreach (var part in parts)
+        {
+            if (!current.TryGetProperty(part, out var next))
+                return null;
+            current = next;
+        }
+
+        return current;
     }
 
     private void AddDataRowFromObject(WorkSheet sheet, List<string> properties)
@@ -167,11 +195,10 @@ public class JsonWorksheetBuilder
         for (var colIndex = 0; colIndex < properties.Count; colIndex++)
         {
             var propertyName = properties[colIndex];
-            
-            if (!_jsonRoot.TryGetProperty(propertyName, out var propertyValue))
-                continue;
+            var propertyValue = GetNestedProperty(_jsonRoot, propertyName);
 
-            AddCellValue(sheet, (uint)colIndex, rowIndex, propertyValue, propertyName);
+            if (propertyValue.HasValue)
+                AddCellValue(sheet, (uint)colIndex, rowIndex, propertyValue.Value, propertyName);
         }
     }
 

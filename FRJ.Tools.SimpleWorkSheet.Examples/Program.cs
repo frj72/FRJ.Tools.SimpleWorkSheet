@@ -73,7 +73,8 @@ public static class Program
             new JsonFluentImportPersonsExample(),
             new JsonArrayWithStylingExample(),
             new JsonFlatObjectWithParsersExample(),
-            new JsonMultiColumnAllFeaturesExample()
+            new JsonMultiColumnAllFeaturesExample(),
+            new JsonNestedObjectsExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

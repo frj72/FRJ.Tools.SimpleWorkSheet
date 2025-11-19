@@ -1,4 +1,6 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Import;
+using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
@@ -513,5 +515,144 @@ public class JsonWorksheetBuilderTests
         Assert.Null(sheet.GetValue(0, 3));
         Assert.Equal(25m, sheet.GetValue(1, 3)?.Value.AsT0);
         Assert.Equal("NYC", sheet.GetValue(2, 3)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void Build_NestedObject_FlattensWithDotNotation()
+    {
+        const string json = """[{"name": "John", "address": {"city": "NYC", "zip": "10001"}}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("address.city", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("address.zip", sheet.GetValue(2, 0)?.Value.AsT2);
+        Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
+        Assert.Equal("NYC", sheet.GetValue(1, 1)?.Value.AsT2);
+        Assert.Equal("10001", sheet.GetValue(2, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void Build_DeeplyNestedObject_FlattensCorrectly()
+    {
+        const string json = """[{"user": {"profile": {"name": "John"}}}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        Assert.Equal("user.profile.name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void Build_MixedNestedAndFlat_HandlesCorrectly()
+    {
+        const string json = """[{"id": 1, "data": {"value": 100}, "name": "Test"}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        var headers = new[]
+        {
+            sheet.GetValue(0, 0)?.Value.AsT2,
+            sheet.GetValue(1, 0)?.Value.AsT2,
+            sheet.GetValue(2, 0)?.Value.AsT2
+        };
+        
+        Assert.Contains("id", headers);
+        Assert.Contains("data.value", headers);
+        Assert.Contains("name", headers);
+    }
+
+    [Fact]
+    public void Build_NestedObjectArraysSkipped()
+    {
+        const string json = """[{"name": "John", "tags": ["a", "b"], "age": 30}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        var headers = new[]
+        {
+            sheet.GetValue(0, 0)?.Value.AsT2,
+            sheet.GetValue(1, 0)?.Value.AsT2
+        };
+        
+        Assert.Contains("name", headers);
+        Assert.Contains("age", headers);
+        Assert.DoesNotContain("tags", headers);
+    }
+
+    [Fact]
+    public void Build_EmptyNestedObject_SkipsGracefully()
+    {
+        const string json = """[{"name": "John", "address": {}}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        Assert.Equal("name", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("John", sheet.GetValue(0, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void Build_SingleRecord_CreatesCorrectStructure()
+    {
+        const string json = """[{"id": 1}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        Assert.Equal(2, sheet.Cells.Cells.Count);
+        Assert.Equal("id", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal(1m, sheet.GetValue(0, 1)?.Value.AsT0);
+    }
+
+    [Fact]
+    public void Build_MixedTypes_HandlesCorrectly()
+    {
+        const string json = """[{"value": "text"}, {"value": 123}, {"value": true}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        Assert.Equal("text", sheet.GetValue(0, 1)?.Value.AsT2);
+        Assert.Equal(123m, sheet.GetValue(0, 2)?.Value.AsT0);
+        Assert.Equal("TRUE", sheet.GetValue(0, 3)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void Build_NullNestedProperty_HandlesGracefully()
+    {
+        const string json = """[{"id": 1, "data": null}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        
+        Assert.Equal("id", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal(1m, sheet.GetValue(0, 1)?.Value.AsT0);
+        Assert.Null(sheet.GetValue(1, 1));
+    }
+
+    [Fact]
+    public void Build_RoundTrip_PreservesData()
+    {
+        const string json = """[{"name": "John", "age": 30, "address": {"city": "NYC"}}]""";
+        
+        var sheet = JsonWorksheetBuilder.FromJson(json).Build();
+        var workbook = new WorkBook("Test", [sheet]);
+        var tempFile = Path.Combine(Path.GetTempPath(), $"roundtrip_{Guid.NewGuid()}.xlsx");
+        
+        try
+        {
+            workbook.SaveToFile(tempFile);
+            var loadedWorkbook = WorkBookReader.LoadFromFile(tempFile);
+            
+            Assert.NotNull(loadedWorkbook);
+            Assert.Single(loadedWorkbook.Sheets);
+            
+            var loadedSheet = loadedWorkbook.Sheets.First();
+            Assert.Equal("John", loadedSheet.GetValue(0, 1)?.Value.AsT2);
+            Assert.Equal(30m, loadedSheet.GetValue(1, 1)?.Value.AsT0);
+            Assert.Equal("NYC", loadedSheet.GetValue(2, 1)?.Value.AsT2);
+        }
+        finally
+        {
+            if (File.Exists(tempFile))
+                File.Delete(tempFile);
+        }
     }
 }

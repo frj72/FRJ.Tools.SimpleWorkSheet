@@ -69,6 +69,7 @@ public class ExampleFileValidationTests
     [InlineData("57_JsonArrayWithStyling.xlsx")]
     [InlineData("58_JsonFlatObjectWithParsers.xlsx")]
     [InlineData("59_JsonMultiColumnAllFeatures.xlsx")]
+    [InlineData("60_JsonNestedObjects.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -89,7 +90,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 59;
+        const int expectedCount = 60;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);
