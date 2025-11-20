@@ -9,6 +9,7 @@ public class GenericTableBuilder
     private readonly GenericTable _table;
     private string _sheetName = "Sheet1";
     private bool _preserveOriginalValue = true;
+    private bool _trimWhitespace = true;
     private Action<CellStyleBuilder>? _headerStyleAction;
     private Dictionary<string, Func<CellValue, CellValue>>? _columnParsers;
     private bool _autoFitColumns;
@@ -39,6 +40,12 @@ public class GenericTableBuilder
     public GenericTableBuilder WithPreserveOriginalValue(bool preserve)
     {
         _preserveOriginalValue = preserve;
+        return this;
+    }
+
+    public GenericTableBuilder WithTrimWhitespace(bool trim)
+    {
+        _trimWhitespace = trim;
         return this;
     }
 
@@ -186,6 +193,9 @@ public class GenericTableBuilder
 
     private void AddCellValue(WorkSheet sheet, uint col, uint row, CellValue cellValue, string? propertyName = null)
     {
+        if (_trimWhitespace && cellValue.IsString())
+            cellValue = new(cellValue.Value.AsT2.Trim());
+
         if (_columnParsers != null && propertyName != null && _columnParsers.TryGetValue(propertyName, out var parser))
             cellValue = parser(cellValue);
 

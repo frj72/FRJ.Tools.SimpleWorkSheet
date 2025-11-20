@@ -9,20 +9,11 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Import;
 public class WorkbookBuilder
 {
     private string _workbookName = "Workbook";
-    private readonly WorksheetBuilder? _worksheetBuilder;
-    private readonly GenericTableBuilder? _genericTableBuilder;
+    private readonly GenericTableBuilder _genericTableBuilder;
     private readonly List<Func<WorkSheet, WorkSheet>> _chartBuilders = [];
     private bool _freezeHeaderRow;
 
     internal string DataSheetName { get; private set; } = "Data";
-
-    private WorkbookBuilder(JsonElement jsonRoot)
-    {
-        if (jsonRoot.ValueKind != JsonValueKind.Array && jsonRoot.ValueKind != JsonValueKind.Object)
-            throw new ArgumentException("JSON must be an array or object", nameof(jsonRoot));
-        
-        _worksheetBuilder = WorksheetBuilder.FromJson(jsonRoot.GetRawText()).WithSheetName(DataSheetName);
-    }
 
     private WorkbookBuilder(GenericTable table)
     {
@@ -33,7 +24,8 @@ public class WorkbookBuilder
     public static WorkbookBuilder FromJson(string jsonContent)
     {
         var jsonDoc = JsonDocument.Parse(jsonContent);
-        return new(jsonDoc.RootElement);
+        var table = JsonToGenericTableConverter.Convert(jsonDoc.RootElement, trimWhitespace: true);
+        return new(table);
     }
 
     public static WorkbookBuilder FromJsonFile(string filePath)
@@ -44,7 +36,7 @@ public class WorkbookBuilder
 
     public static WorkbookBuilder FromCsv(string csvContent, bool hasHeader = true)
     {
-        var table = WorksheetBuilder.ConvertCsvToGenericTable(csvContent, hasHeader);
+        var table = CsvToGenericTableConverter.Convert(csvContent, hasHeader);
         return FromGenericTable(table);
     }
 
@@ -71,78 +63,73 @@ public class WorkbookBuilder
             throw new ArgumentException("Data sheet name cannot be empty", nameof(name));
         
         DataSheetName = name;
-        _worksheetBuilder?.WithSheetName(name);
-        _genericTableBuilder?.WithSheetName(name);
+        _genericTableBuilder.WithSheetName(name);
         return this;
     }
 
     public WorkbookBuilder WithPreserveOriginalValue(bool preserve)
     {
-        _worksheetBuilder?.WithPreserveOriginalValue(preserve);
-        _genericTableBuilder?.WithPreserveOriginalValue(preserve);
+        _genericTableBuilder.WithPreserveOriginalValue(preserve);
         return this;
     }
 
     public WorkbookBuilder WithTrimWhitespace(bool trim)
     {
-        _worksheetBuilder?.WithTrimWhitespace(trim);
+        _genericTableBuilder.WithTrimWhitespace(trim);
         return this;
     }
 
     public WorkbookBuilder WithHeaderStyle(Action<CellStyleBuilder> styleAction)
     {
-        _worksheetBuilder?.WithHeaderStyle(styleAction);
-        _genericTableBuilder?.WithHeaderStyle(styleAction);
+        _genericTableBuilder.WithHeaderStyle(styleAction);
         return this;
     }
 
     public WorkbookBuilder WithColumnParser(string columnName, Func<CellValue, CellValue> parser)
     {
-        _worksheetBuilder?.WithColumnParser(columnName, parser);
-        _genericTableBuilder?.WithColumnParser(columnName, parser);
+        _genericTableBuilder.WithColumnParser(columnName, parser);
         return this;
     }
 
     public WorkbookBuilder AutoFitAllColumns()
     {
-        _worksheetBuilder?.AutoFitAllColumns();
-        _genericTableBuilder?.AutoFitAllColumns();
+        _genericTableBuilder.AutoFitAllColumns();
         return this;
     }
 
     public WorkbookBuilder WithColumnOrder(params string[] columnNames)
     {
-        _genericTableBuilder?.WithColumnOrder(columnNames);
+        _genericTableBuilder.WithColumnOrder(columnNames);
         return this;
     }
 
     public WorkbookBuilder WithExcludeColumns(params string[] columnNames)
     {
-        _genericTableBuilder?.WithExcludeColumns(columnNames);
+        _genericTableBuilder.WithExcludeColumns(columnNames);
         return this;
     }
 
     public WorkbookBuilder WithIncludeColumns(params string[] columnNames)
     {
-        _genericTableBuilder?.WithIncludeColumns(columnNames);
+        _genericTableBuilder.WithIncludeColumns(columnNames);
         return this;
     }
 
     public WorkbookBuilder WithDateFormat(DateFormat format)
     {
-        _genericTableBuilder?.WithDateFormat(format);
+        _genericTableBuilder.WithDateFormat(format);
         return this;
     }
 
     public WorkbookBuilder WithNumberFormat(string columnName, NumberFormat format)
     {
-        _genericTableBuilder?.WithNumberFormat(columnName, format);
+        _genericTableBuilder.WithNumberFormat(columnName, format);
         return this;
     }
 
     public WorkbookBuilder WithConditionalStyle(string columnName, Func<CellValue, bool> condition, Action<CellStyleBuilder> style)
     {
-        _genericTableBuilder?.WithConditionalStyle(columnName, condition, style);
+        _genericTableBuilder.WithConditionalStyle(columnName, condition, style);
         return this;
     }
 
@@ -165,7 +152,7 @@ public class WorkbookBuilder
 
     public WorkBook Build()
     {
-        var dataSheet = _worksheetBuilder?.Build() ?? _genericTableBuilder?.Build() ?? throw new InvalidOperationException("No builder available");
+        var dataSheet = _genericTableBuilder.Build();
         
         if (_freezeHeaderRow)
             dataSheet.FreezePanes(1, 0);
@@ -178,7 +165,7 @@ public class WorkbookBuilder
 
     public int? GetColumnIndexByName(string columnName)
     {
-        var dataSheet = _worksheetBuilder?.Build() ?? _genericTableBuilder?.Build() ?? throw new InvalidOperationException("No builder available");
+        var dataSheet = _genericTableBuilder.Build();
         
         for (uint col = 0; col < 1000; col++)
         {
@@ -196,7 +183,7 @@ public class WorkbookBuilder
         if (colIndex == null)
             return null;
 
-        var dataSheet = _worksheetBuilder?.Build() ?? _genericTableBuilder?.Build() ?? throw new InvalidOperationException("No builder available");
+        var dataSheet = _genericTableBuilder.Build();
         var rowCount = CountDataRows(dataSheet);
 
         if (rowCount == 0)
