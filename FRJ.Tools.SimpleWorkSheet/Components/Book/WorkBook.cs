@@ -5,6 +5,8 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.Book;
 
 public class WorkBook
 {
+    private readonly List<NamedRange> _namedRanges = [];
+
     public WorkBook(string name, IEnumerable<WorkSheet> sheets)
     {
         Name = name;
@@ -13,7 +15,8 @@ public class WorkBook
 
     public string Name { get; }
     public IEnumerable<WorkSheet> Sheets { get; }
-    public List<NamedRange> NamedRanges { get; } = [];
+
+    public IReadOnlyList<NamedRange> NamedRanges => _namedRanges;
 
     public void SaveToFile(string fileName)
     {
@@ -27,7 +30,7 @@ public class WorkBook
             throw new ArgumentException($"Named range '{name}' already exists", nameof(name));
 
         var namedRange = new NamedRange(name, sheetName, range);
-        NamedRanges.Add(namedRange);
+        _namedRanges.Add(namedRange);
     }
 
     public void AddNamedRange(string name, string sheetName, uint fromX, uint fromY, uint toX, uint toY)

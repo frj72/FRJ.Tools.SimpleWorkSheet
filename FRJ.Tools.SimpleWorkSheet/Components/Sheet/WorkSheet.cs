@@ -14,12 +14,18 @@ public class WorkSheet
     private readonly List<Chart> _charts = [];
     private readonly List<ExcelTable> _tables = [];
     private readonly List<WorksheetImage> _images = [];
+    private readonly Dictionary<uint, OneOf<double, CellWidth>> _explicitColumnWidths = new();
+    private readonly Dictionary<uint, OneOf<double, RowHeight>> _explicitRowHeights = new();
+    private readonly Dictionary<CellRange, CellValidation> _validations = new();
     public string Name { get; }
     public CellCollection Cells { get; }
-    
-    public Dictionary<uint, OneOf<double, CellWidth>> ExplicitColumnWidths { get; } = new();
-    public Dictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights { get; } = new();
-    public Dictionary<CellRange, CellValidation> Validations { get; } = new();
+
+    public IReadOnlyDictionary<uint, OneOf<double, CellWidth>> ExplicitColumnWidths => _explicitColumnWidths;
+
+    public IReadOnlyDictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights => _explicitRowHeights;
+
+    public IReadOnlyDictionary<CellRange, CellValidation> Validations => _validations;
+
     public FreezePane? FrozenPane { get; private set; }
     public string? TabColor { get; private set; }
     public bool IsVisible { get; private set; } = true;
@@ -62,7 +68,7 @@ public class WorkSheet
 
 
 
-    private void AddCellLegacy(CellPosition position, CellValue value, string? color = null, CellFont? font = null,
+    private void AddDefaultCell(CellPosition position, CellValue value, string? color = null, CellFont? font = null,
         CellBorders? borders = null)
     {
         if (!color.IsValidColor())
@@ -90,7 +96,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-            AddCellLegacy(new(x, y), value);
+            AddDefaultCell(new(x, y), value);
         else
             Cells.Cells[position] = cell.SetValue(value);
         
@@ -100,7 +106,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-             AddCellLegacy(new(x, y), string.Empty, font: font);
+             AddDefaultCell(new(x, y), string.Empty, font: font);
         else
             Cells.Cells[position] = cell.SetFont(font);
     }
@@ -110,7 +116,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-            AddCellLegacy(new(x, y), string.Empty, color: color);
+            AddDefaultCell(new(x, y), string.Empty, color: color);
         else
             Cells.Cells[position] = cell.SetColor(color);
     }
@@ -120,7 +126,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-             AddCellLegacy(new(x, y), string.Empty, borders: borders);
+             AddDefaultCell(new(x, y), string.Empty, borders: borders);
         else
             Cells.Cells[position] = cell.SetBorders(borders);
     }
@@ -133,7 +139,7 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         if (!Cells.Cells.TryGetValue(position, out var cell)) 
-            AddCellLegacy(new(x, y), string.Empty);
+            AddDefaultCell(new(x, y), string.Empty);
         else
         {
             cell = cell.SetDefaultFormatting();
@@ -142,10 +148,10 @@ public class WorkSheet
     }
     
     public  void SetColumnWidth(uint column, OneOf<double, CellWidth> width) 
-        => ExplicitColumnWidths[column] = width;
+        => _explicitColumnWidths[column] = width;
 
     public void SetRowHeight(uint row, OneOf<double, RowHeight> height) 
-        => ExplicitRowHeights[row] = height;
+        => _explicitRowHeights[row] = height;
 
     public void FreezePanes(uint row, uint column) => FrozenPane = new(row, column);
 
@@ -211,24 +217,18 @@ public class WorkSheet
     {
         var position = new CellPosition(x, y);
         var range = CellRange.FromPositions(position, position);
-        Validations[range] = validation;
+        _validations[range] = validation;
     }
 
-    public void AddValidation(CellPosition position, CellValidation validation)
-    {
-        var range = CellRange.FromPositions(position, position);
-        Validations[range] = validation;
-    }
+    public void AddValidation(CellPosition position, CellValidation validation) 
+        => _validations[CellRange.FromPositions(position, position)] = validation;
 
     public void AddValidation(CellRange range, CellValidation validation) 
-        => Validations[range] = validation;
+        => _validations[range] = validation;
 
-    public void AddValidation(uint fromX, uint fromY, uint toX, uint toY, CellValidation validation)
-    {
-        var range = CellRange.FromBounds(fromX, fromY, toX, toY);
-        Validations[range] = validation;
-    }
-    
+    public void AddValidation(uint fromX, uint fromY, uint toX, uint toY, CellValidation validation) 
+        => _validations[CellRange.FromBounds(fromX, fromY, toX, toY)] = validation;
+
     public void AddChart(Chart chart)
     {
         if (chart.Position == null)
