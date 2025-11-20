@@ -16,13 +16,13 @@ public class AreaChartExample : IExample
     {
         var sheet = new WorkSheet("Sales Data");
 
-        sheet.AddCell(new(0, 0), "Month");
-        sheet.AddCell(new(1, 0), "Sales");
+        sheet.AddCell(new(0, 0), "Month", null);
+        sheet.AddCell(new(1, 0), "Sales", null);
 
         for (uint i = 0; i < Months.Length; i++)
         {
-            sheet.AddCell(new(0, i + 1), Months[i]);
-            sheet.AddCell(new(1, i + 1), Sales[i]);
+            sheet.AddCell(new(0, i + 1), Months[i], null);
+            sheet.AddCell(new(1, i + 1), Sales[i], null);
         }
 
         var chart = AreaChart.Create()

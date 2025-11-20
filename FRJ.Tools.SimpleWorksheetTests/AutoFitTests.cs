@@ -9,9 +9,9 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), "Short");
-        sheet.AddCell(new(0, 1), "Much longer text");
-        sheet.AddCell(new(0, 2), "Mid");
+        sheet.AddCell(new(0, 0), "Short", null);
+        sheet.AddCell(new(0, 1), "Much longer text", null);
+        sheet.AddCell(new(0, 2), "Mid", null);
         
         sheet.AutoFitColumn(0);
         
@@ -26,7 +26,7 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(1, 0), "Some text");
+        sheet.AddCell(new(1, 0), "Some text", null);
         
         sheet.AutoFitColumn(0);
         
@@ -40,8 +40,8 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), 123456789);
-        sheet.AddCell(new(0, 1), 42);
+        sheet.AddCell(new(0, 0), 123456789, null);
+        sheet.AddCell(new(0, 1), 42, null);
         
         sheet.AutoFitColumn(0);
         
@@ -55,8 +55,8 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), 123.456m);
-        sheet.AddCell(new(0, 1), 3.14159m);
+        sheet.AddCell(new(0, 0), 123.456m, null);
+        sheet.AddCell(new(0, 1), 3.14159m, null);
         
         sheet.AutoFitColumn(0);
         
@@ -70,8 +70,8 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), DateTime.Now);
-        sheet.AddCell(new(0, 1), new DateTime(2024, 12, 25));
+        sheet.AddCell(new(0, 0), DateTime.Now, null);
+        sheet.AddCell(new(0, 1), new DateTime(2024, 12, 25), null);
         
         sheet.AutoFitColumn(0);
         
@@ -85,7 +85,7 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), "Regular text");
+        sheet.AddCell(new(0, 0), "Regular text", null);
         sheet.AddCell(new(0, 1), "Bold text", cell => cell
             .WithFont(font => font.Bold()));
         
@@ -118,13 +118,13 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), "Column A short");
-        sheet.AddCell(new(1, 0), "Column B much longer text");
-        sheet.AddCell(new(2, 0), "C");
+        sheet.AddCell(new(0, 0), "Column A short", null);
+        sheet.AddCell(new(1, 0), "Column B much longer text", null);
+        sheet.AddCell(new(2, 0), "C", null);
         
-        sheet.AddCell(new(0, 1), "A2");
-        sheet.AddCell(new(1, 1), "B2");
-        sheet.AddCell(new(2, 1), "C2 longer");
+        sheet.AddCell(new(0, 1), "A2", null);
+        sheet.AddCell(new(1, 1), "B2", null);
+        sheet.AddCell(new(2, 1), "C2 longer", null);
         
         sheet.AutoFitAllColumns();
         
@@ -157,9 +157,9 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), "Row 0");
-        sheet.AddCell(new(0, 10), "Row 10 longer text");
-        sheet.AddCell(new(0, 100), "Row 100");
+        sheet.AddCell(new(0, 0), "Row 0", null);
+        sheet.AddCell(new(0, 10), "Row 10 longer text", null);
+        sheet.AddCell(new(0, 100), "Row 100", null);
         
         sheet.AutoFitColumn(0);
         
@@ -173,8 +173,8 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), "Text");
-        sheet.SetColumnWith(0, 50.0);
+        sheet.AddCell(new(0, 0), "Text", null);
+        sheet.SetColumnWidth(0, 50.0);
         
         var oldWidth = sheet.ExplicitColumnWidths[0].AsT0;
         Assert.Equal(50.0, oldWidth);
@@ -190,10 +190,10 @@ public class AutoFitTests
     {
         var sheet = new WorkSheet("TestSheet");
         
-        sheet.AddCell(new(0, 0), "String");
-        sheet.AddCell(new(1, 0), 12345);
-        sheet.AddCell(new(2, 0), 123.45m);
-        sheet.AddCell(new(3, 0), DateTime.Now);
+        sheet.AddCell(new(0, 0), "String", null);
+        sheet.AddCell(new(1, 0), 12345, null);
+        sheet.AddCell(new(2, 0), 123.45m, null);
+        sheet.AddCell(new(3, 0), DateTime.Now, null);
         
         sheet.AutoFitAllColumns();
         

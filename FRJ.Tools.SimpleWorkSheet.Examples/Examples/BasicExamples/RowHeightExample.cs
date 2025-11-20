@@ -12,26 +12,26 @@ public class RowHeightExample : IExample
     {
         var sheet = new WorkSheet("RowHeights");
         
-        sheet.AddCell(new(0, 0), "Default Row Height");
-        sheet.AddCell(new(1, 0), "Row 0 uses default height");
+        sheet.AddCell(new(0, 0), "Default Row Height", null);
+        sheet.AddCell(new(1, 0), "Row 0 uses default height", null);
         
-        sheet.AddCell(new(0, 1), "Small Row");
-        sheet.AddCell(new(1, 1), "Row 1 has height 15");
+        sheet.AddCell(new(0, 1), "Small Row", null);
+        sheet.AddCell(new(1, 1), "Row 1 has height 15", null);
         sheet.SetRowHeight(1, 15.0);
         
-        sheet.AddCell(new(0, 2), "Medium Row");
-        sheet.AddCell(new(1, 2), "Row 2 has height 30");
+        sheet.AddCell(new(0, 2), "Medium Row", null);
+        sheet.AddCell(new(1, 2), "Row 2 has height 30", null);
         sheet.SetRowHeight(2, 30.0);
         
-        sheet.AddCell(new(0, 3), "Large Row");
-        sheet.AddCell(new(1, 3), "Row 3 has height 50");
+        sheet.AddCell(new(0, 3), "Large Row", null);
+        sheet.AddCell(new(1, 3), "Row 3 has height 50", null);
         sheet.SetRowHeight(3, 50.0);
         
-        sheet.AddCell(new(0, 4), "Extra Large Row");
-        sheet.AddCell(new(1, 4), "Row 4 has height 75");
+        sheet.AddCell(new(0, 4), "Extra Large Row", null);
+        sheet.AddCell(new(1, 4), "Row 4 has height 75", null);
         sheet.SetRowHeight(4, 75.0);
         
-        sheet.AddCell(new(0, 5), "Styled Content");
+        sheet.AddCell(new(0, 5), "Styled Content", null);
         sheet.AddCell(new(1, 5), "This row has custom height and styling", cell => cell
             .WithFont(font => font.WithSize(18).Bold())
             .WithColor("E7E6E6"));

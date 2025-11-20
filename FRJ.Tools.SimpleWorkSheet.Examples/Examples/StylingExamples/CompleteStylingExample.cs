@@ -19,7 +19,7 @@ public class CompleteStylingExample : IExample
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
         
-        sheet.AddCell(0, 0, 123.456m, cell => cell
+        sheet.AddCell(0, 0, 123.456m, configure: cell => cell
             .WithStyle(style => style
                 .WithFillColor("E0E0E0")
                 .WithFont(font => font
@@ -31,7 +31,7 @@ public class CompleteStylingExample : IExample
                 .WithBorders(borders)
                 .WithFormatCode("0.00")));
         
-        sheet.AddCell(0, 1, "Header Style", cell => cell
+        sheet.AddCell(0, 1, "Header Style", configure: cell => cell
             .WithColor("4472C4")
             .WithFont(font => font
                 .WithSize(16)

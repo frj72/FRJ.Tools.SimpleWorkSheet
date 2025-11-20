@@ -30,7 +30,7 @@ public class AutoFitColumnsExample : IExample
         sheet.MergeCells(0, 0, 4, 0);
 
         var headers = SourceArrayHeaders.Select(h => new CellValue(h));
-        sheet.AddRow(0, 1, headers, cell => cell
+        sheet.AddRow(0, 1, headers, configure: cell => cell
             .WithFont(font => font.Bold())
             .WithStyle(style => style.WithFillColor("D9E1F2")));
 
@@ -45,7 +45,7 @@ public class AutoFitColumnsExample : IExample
                     _ => new CellValue(SourceArrayData[row][col].ToString() ?? string.Empty)
                 };
 
-                sheet.AddCell(new(col, row + 2), value);
+                sheet.AddCell(new(col, row + 2), value, null);
             }
 
         sheet.AutoFitAllColumns();

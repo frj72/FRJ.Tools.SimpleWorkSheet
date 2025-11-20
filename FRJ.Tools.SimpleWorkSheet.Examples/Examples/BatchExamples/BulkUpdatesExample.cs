@@ -12,7 +12,8 @@ public class BulkUpdatesExample : IExample
     {
         var sheet = new WorkSheet("BulkUpdates");
         
-        for (uint i = 0; i < 5; i++) sheet.AddCell(0, i, $"Original {i}");
+        for (uint i = 0; i < 5; i++) 
+            sheet.AddCell(0, i, $"Original {i}", null);
 
         for (uint i = 0; i < 5; i++)
         {

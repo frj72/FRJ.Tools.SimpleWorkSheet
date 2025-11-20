@@ -32,7 +32,7 @@ public class JsonImportTests
         for (uint c = 0; c < headers.Count; c++)
         {
             var c1 = c;
-            sheet.AddCell(c, 0, headers[(int)c], cell => cell.FromImportedValue(headers[(int)c1], baseOptions));
+            sheet.AddCell(c, 0, headers[(int)c], configure: cell => cell.FromImportedValue(headers[(int)c1], baseOptions));
         }
 
         var nameToIndex = headers.Select((h, i) => new { h, i }).ToDictionary(x => x.h, x => x.i);
@@ -56,7 +56,7 @@ public class JsonImportTests
                     ? parser(processed)
                     : new(processed);
 
-                sheet.AddCell(c, r, value, cell => cell.FromImportedValue(raw, options));
+                sheet.AddCell(c, r, value, configure: cell => cell.FromImportedValue(raw, options));
             }
 
             r++;
@@ -109,7 +109,7 @@ public class JsonImportTests
         for (uint c = 0; c < headers.Count; c++)
         {
             var c1 = c;
-            sheet.AddCell(c, 0, headers[(int)c], cell => cell.FromImportedValue(headers[(int)c1], baseOptions));
+            sheet.AddCell(c, 0, headers[(int)c], configure: cell => cell.FromImportedValue(headers[(int)c1], baseOptions));
         }
 
         var nameToIndex = headers.Select((h, i) => new { h, i }).ToDictionary(x => x.h, x => x.i);
@@ -135,7 +135,7 @@ public class JsonImportTests
                     ? parser(processed)
                     : new(processed);
 
-                sheet.AddCell(c, r, value, cell => cell.FromImportedValue(raw, options));
+                sheet.AddCell(c, r, value, configure: cell => cell.FromImportedValue(raw, options));
             }
 
             r++;

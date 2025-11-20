@@ -13,7 +13,7 @@ public class TextAlignmentExample : IExample
     {
         var sheet = new WorkSheet("Alignment");
 
-        sheet.AddCell(new(0, 0), "Horizontal Alignment");
+        sheet.AddCell(new(0, 0), "Horizontal Alignment", null);
         sheet.AddCell(new(0, 1), "Left (default)", cell => cell
             .WithStyle(style => style.WithHorizontalAlignment(HorizontalAlignment.Left)));
         sheet.AddCell(new(0, 2), "Center", cell => cell
@@ -21,7 +21,7 @@ public class TextAlignmentExample : IExample
         sheet.AddCell(new(0, 3), "Right", cell => cell
             .WithStyle(style => style.WithHorizontalAlignment(HorizontalAlignment.Right)));
 
-        sheet.AddCell(new(2, 0), "Vertical Alignment");
+        sheet.AddCell(new(2, 0), "Vertical Alignment", null);
         sheet.SetRowHeight(1, 40.0);
         sheet.SetRowHeight(2, 40.0);
         sheet.SetRowHeight(3, 40.0);
@@ -32,14 +32,14 @@ public class TextAlignmentExample : IExample
         sheet.AddCell(new(2, 3), "Bottom", cell => cell
             .WithStyle(style => style.WithVerticalAlignment(VerticalAlignment.Bottom)));
 
-        sheet.AddCell(new(4, 0), "Text Rotation");
+        sheet.AddCell(new(4, 0), "Text Rotation", null);
         sheet.AddCell(new(4, 1), "45 degrees", cell => cell
             .WithStyle(style => style.WithTextRotation(45)));
         sheet.AddCell(new(4, 2), "-30 degrees", cell => cell
             .WithStyle(style => style.WithTextRotation(-30)));
 
-        sheet.AddCell(new(6, 0), "Wrap Text");
-        sheet.SetColumnWith(6, 15.0);
+        sheet.AddCell(new(6, 0), "Wrap Text", null);
+        sheet.SetColumnWidth(6, 15.0);
         sheet.AddCell(new(6, 1), "This is a long text that will wrap to multiple lines", cell => cell
             .WithStyle(style => style.WithWrapText(true)));
 

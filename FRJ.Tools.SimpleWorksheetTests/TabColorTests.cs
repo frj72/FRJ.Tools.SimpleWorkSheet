@@ -51,7 +51,7 @@ public class TabColorTests
     public void TabColor_SaveAndLoad_PreservesColor()
     {
         var sheet = new WorkSheet("TestSheet");
-        sheet.AddCell(new(0, 0), "Test");
+        sheet.AddCell(new(0, 0), "Test", null);
         sheet.SetTabColor("4472C4");
         
         var binary = SheetConverter.ToBinaryExcelFile(sheet);
@@ -66,15 +66,15 @@ public class TabColorTests
     public void TabColor_MultipleSheets_EachHasOwnColor()
     {
         var sheet1 = new WorkSheet("Sheet1");
-        sheet1.AddCell(new(0, 0), "Sheet 1");
+        sheet1.AddCell(new(0, 0), "Sheet 1", null);
         sheet1.SetTabColor("FF0000");
         
         var sheet2 = new WorkSheet("Sheet2");
-        sheet2.AddCell(new(0, 0), "Sheet 2");
+        sheet2.AddCell(new(0, 0), "Sheet 2", null);
         sheet2.SetTabColor("00FF00");
         
         var sheet3 = new WorkSheet("Sheet3");
-        sheet3.AddCell(new(0, 0), "Sheet 3");
+        sheet3.AddCell(new(0, 0), "Sheet 3", null);
         
         var workbook = new WorkBook("Test", [sheet1, sheet2, sheet3]);
         var binary = SheetConverter.ToBinaryExcelFile(workbook);
@@ -108,7 +108,7 @@ public class TabColorTests
     public void TabColor_WithoutSetting_RoundTripReturnsNull()
     {
         var sheet = new WorkSheet("TestSheet");
-        sheet.AddCell(new(0, 0), "Test");
+        sheet.AddCell(new(0, 0), "Test", null);
         
         var binary = SheetConverter.ToBinaryExcelFile(sheet);
         using var stream = new MemoryStream(binary);

@@ -31,20 +31,20 @@ public class InsertImagesExample : IExample
         sheet.AddCell(new(6, 2), "Financial Summary", cell => cell
             .WithFont(font => font.Bold().WithSize(14)));
         
-        sheet.AddCell(new(6, 4), "Quarter");
-        sheet.AddCell(new(7, 4), "Revenue");
-        sheet.AddCell(new(8, 4), "Expenses");
-        sheet.AddCell(new(9, 4), "Profit");
+        sheet.AddCell(new(6, 4), "Quarter", null);
+        sheet.AddCell(new(7, 4), "Revenue", null);
+        sheet.AddCell(new(8, 4), "Expenses", null);
+        sheet.AddCell(new(9, 4), "Profit", null);
         
-        sheet.AddCell(new(6, 5), "Q1");
-        sheet.AddCell(new(7, 5), 1250000);
-        sheet.AddCell(new(8, 5), 890000);
-        sheet.AddCell(new(9, 5), 360000);
+        sheet.AddCell(new(6, 5), "Q1", null);
+        sheet.AddCell(new(7, 5), 1250000, null);
+        sheet.AddCell(new(8, 5), 890000, null);
+        sheet.AddCell(new(9, 5), 360000, null);
         
-        sheet.AddCell(new(6, 6), "Q2");
-        sheet.AddCell(new(7, 6), 1380000);
-        sheet.AddCell(new(8, 6), 920000);
-        sheet.AddCell(new(9, 6), 460000);
+        sheet.AddCell(new(6, 6), "Q2", null);
+        sheet.AddCell(new(7, 6), 1380000, null);
+        sheet.AddCell(new(8, 6), 920000, null);
+        sheet.AddCell(new(9, 6), 460000, null);
         
         sheet.AutoFitAllColumns();
 

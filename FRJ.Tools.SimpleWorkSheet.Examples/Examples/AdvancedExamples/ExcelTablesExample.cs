@@ -48,7 +48,7 @@ public class ExcelTablesExample : IExample
                 int i => new(i),
                 _ => new CellValue(Data[row][col].ToString() ?? string.Empty)
             };
-            sheet.AddCell(new(col, row + 2), value);
+            sheet.AddCell(new(col, row + 2), value, null);
         }
 
         sheet.AddTable("InventoryTable", 0, 1, 4, (uint)(Data.Length + 1));

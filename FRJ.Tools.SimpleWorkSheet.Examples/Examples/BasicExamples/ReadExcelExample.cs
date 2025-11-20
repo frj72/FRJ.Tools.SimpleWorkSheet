@@ -23,18 +23,18 @@ public class ReadExcelExample : IExample
             .WithFont(font => font.Bold())
             .WithColor("4472C4"));
         
-        originalSheet.AddCell(new(0, 1), "Alice");
-        originalSheet.AddCell(new(1, 1), 30);
+        originalSheet.AddCell(new(0, 1), "Alice", null);
+        originalSheet.AddCell(new(1, 1), 30, null);
         originalSheet.AddCell(new(2, 1), "alice@example.com", cell => cell
-            .WithHyperlink("mailto:alice@example.com"));
+            .WithHyperlink("mailto:alice@example.com", null));
         
-        originalSheet.AddCell(new(0, 2), "Bob");
-        originalSheet.AddCell(new(1, 2), 25);
+        originalSheet.AddCell(new(0, 2), "Bob", null);
+        originalSheet.AddCell(new(1, 2), 25, null);
         originalSheet.AddCell(new(2, 2), "bob@example.com", cell => cell
-            .WithHyperlink("mailto:bob@example.com"));
+            .WithHyperlink("mailto:bob@example.com", null));
         
-        originalSheet.SetColumnWith(0, 15.0);
-        originalSheet.SetColumnWith(2, 25.0);
+        originalSheet.SetColumnWidth(0, 15.0);
+        originalSheet.SetColumnWidth(2, 25.0);
         originalSheet.FreezePanes(1, 0);
         
         var tempPath = Path.Combine(Path.GetTempPath(), "read_example_temp.xlsx");

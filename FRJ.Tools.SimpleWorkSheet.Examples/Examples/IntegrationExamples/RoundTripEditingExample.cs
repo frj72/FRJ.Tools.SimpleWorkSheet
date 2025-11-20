@@ -18,15 +18,15 @@ public class RoundTripEditingExample : IExample
         originalSheet.AddCell(new(2, 0), "Salary", cell => cell.WithFont(font => font.Bold()));
         originalSheet.AddCell(new(3, 0), "Status", cell => cell.WithFont(font => font.Bold()));
         
-        originalSheet.AddCell(new(0, 1), 101);
-        originalSheet.AddCell(new(1, 1), "Alice");
-        originalSheet.AddCell(new(2, 1), 75000);
-        originalSheet.AddCell(new(3, 1), "Active");
+        originalSheet.AddCell(new(0, 1), 101, null);
+        originalSheet.AddCell(new(1, 1), "Alice", null);
+        originalSheet.AddCell(new(2, 1), 75000, null);
+        originalSheet.AddCell(new(3, 1), "Active", null);
         
-        originalSheet.AddCell(new(0, 2), 102);
-        originalSheet.AddCell(new(1, 2), "Bob");
-        originalSheet.AddCell(new(2, 2), 68000);
-        originalSheet.AddCell(new(3, 2), "Active");
+        originalSheet.AddCell(new(0, 2), 102, null);
+        originalSheet.AddCell(new(1, 2), "Bob", null);
+        originalSheet.AddCell(new(2, 2), 68000, null);
+        originalSheet.AddCell(new(3, 2), "Active", null);
         
         var tempPath = Path.Combine(Path.GetTempPath(), "roundtrip_temp.xlsx");
         ExampleRunner.SaveWorkSheet(originalSheet, tempPath);
@@ -40,9 +40,9 @@ public class RoundTripEditingExample : IExample
         Console.WriteLine($"Step 2: Loaded file - found {loadedSheet.Cells.Cells.Count} cells");
         Console.WriteLine();
         
-        loadedSheet.AddCell(new(0, 3), 103);
-        loadedSheet.AddCell(new(1, 3), "Charlie");
-        loadedSheet.AddCell(new(2, 3), 82000);
+        loadedSheet.AddCell(new(0, 3), 103, null);
+        loadedSheet.AddCell(new(1, 3), "Charlie", null);
+        loadedSheet.AddCell(new(2, 3), 82000, null);
         loadedSheet.AddCell(new(3, 3), "Active", cell => cell
             .WithColor("90EE90"));
         

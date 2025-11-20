@@ -15,19 +15,19 @@ public class MultiChartDashboardExample : IShowcase
         var sheet = new WorkSheet("Dashboard");
         
         var months = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun" };
-        sheet.AddCell(new(0, 0), "Month");
+        sheet.AddCell(new(0, 0), "Month", null);
         for (uint i = 0; i < 6; i++)
-            sheet.AddCell(new(i + 1, 0), months[i]);
+            sheet.AddCell(new(i + 1, 0), months[i], null);
         
-        sheet.AddCell(new(0, 1), "Sales");
+        sheet.AddCell(new(0, 1), "Sales", null);
         var sales = new[] { 100, 120, 115, 130, 125, 140 };
         for (uint i = 0; i < 6; i++)
-            sheet.AddCell(new(i + 1, 1), sales[i]);
+            sheet.AddCell(new(i + 1, 1), sales[i], null);
         
-        sheet.AddCell(new(0, 2), "Costs");
+        sheet.AddCell(new(0, 2), "Costs", null);
         var costs = new[] { 60, 70, 68, 75, 72, 80 };
         for (uint i = 0; i < 6; i++)
-            sheet.AddCell(new(i + 1, 2), costs[i]);
+            sheet.AddCell(new(i + 1, 2), costs[i], null);
         
         var barChart = BarChart.Create()
             .WithTitle("Monthly Sales")

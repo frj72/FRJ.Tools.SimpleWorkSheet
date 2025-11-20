@@ -44,13 +44,13 @@ public class MultiLevelHeaderExample : IShowcase
         var products = new[] { "Widget A", "Widget B", "Widget C" };
         for (uint row = 0; row < 3; row++)
         {
-            sheet.AddCell(new(0, row + 3), products[row]);
+            sheet.AddCell(new(0, row + 3), products[row], null);
             for (uint col = 1; col <= 9; col++)
-                sheet.AddCell(new(col, row + 3), (row + 1) * col * 100);
+                sheet.AddCell(new(col, row + 3), (row + 1) * col * 100, null);
         }
         
         for (uint col = 0; col <= 9; col++)
-            sheet.SetColumnWith(col, 10.0);
+            sheet.SetColumnWidth(col, 10.0);
         
         sheet.FreezePanes(1, 3);
         

@@ -132,13 +132,13 @@ public class FreezePaneTests
         var sheet = new WorkSheet("FreezePanes");
         
         var headers = SourceArrayHeaders.Select(h => new CellValue(h));
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithFont(font => font.Bold())
             .WithColor("4472C4"));
         
         for (uint row = 1; row < 20; row++)
         for (uint col = 0; col < 5; col++)
-            sheet.AddCell(new(col, row), $"R{row}C{col}");
+            sheet.AddCell(new(col, row), $"R{row}C{col}", null);
 
         sheet.FreezePanes(1, 0);
         
@@ -166,7 +166,7 @@ public class FreezePaneTests
             
             for (uint r = 0; r < 10; r++)
             for (uint c = 0; c < 5; c++)
-                sheet.AddCell(new(c, r), $"R{r}C{c}");
+                sheet.AddCell(new(c, r), $"R{r}C{c}", null);
 
             sheet.FreezePanes(row, col);
             

@@ -146,14 +146,14 @@ public class AreaChartTests
     public void AreaChart_SaveAndGenerate_CreatesValidFile()
     {
         var sheet = new WorkSheet("Data");
-        sheet.AddCell(new(0, 0), "Month");
-        sheet.AddCell(new(1, 0), "Sales");
-        sheet.AddCell(new(0, 1), "Jan");
-        sheet.AddCell(new(1, 1), 1000);
-        sheet.AddCell(new(0, 2), "Feb");
-        sheet.AddCell(new(1, 2), 1500);
-        sheet.AddCell(new(0, 3), "Mar");
-        sheet.AddCell(new(1, 3), 1200);
+        sheet.AddCell(new(0, 0), "Month", null);
+        sheet.AddCell(new(1, 0), "Sales", null);
+        sheet.AddCell(new(0, 1), "Jan", null);
+        sheet.AddCell(new(1, 1), 1000, null);
+        sheet.AddCell(new(0, 2), "Feb", null);
+        sheet.AddCell(new(1, 2), 1500, null);
+        sheet.AddCell(new(0, 3), "Mar", null);
+        sheet.AddCell(new(1, 3), 1200, null);
         
         var chart = AreaChart.Create()
             .WithTitle("Monthly Sales")
@@ -172,15 +172,15 @@ public class AreaChartTests
     public void AreaChart_Stacked_SaveAndGenerate_CreatesValidFile()
     {
         var sheet = new WorkSheet("Data");
-        sheet.AddCell(new(0, 0), "Month");
-        sheet.AddCell(new(1, 0), "Product A");
-        sheet.AddCell(new(2, 0), "Product B");
-        sheet.AddCell(new(0, 1), "Jan");
-        sheet.AddCell(new(1, 1), 1000);
-        sheet.AddCell(new(2, 1), 800);
-        sheet.AddCell(new(0, 2), "Feb");
-        sheet.AddCell(new(1, 2), 1500);
-        sheet.AddCell(new(2, 2), 900);
+        sheet.AddCell(new(0, 0), "Month", null);
+        sheet.AddCell(new(1, 0), "Product A", null);
+        sheet.AddCell(new(2, 0), "Product B", null);
+        sheet.AddCell(new(0, 1), "Jan", null);
+        sheet.AddCell(new(1, 1), 1000, null);
+        sheet.AddCell(new(2, 1), 800, null);
+        sheet.AddCell(new(0, 2), "Feb", null);
+        sheet.AddCell(new(1, 2), 1500, null);
+        sheet.AddCell(new(2, 2), 900, null);
         
         var chart = AreaChart.Create()
             .WithTitle("Stacked Sales")

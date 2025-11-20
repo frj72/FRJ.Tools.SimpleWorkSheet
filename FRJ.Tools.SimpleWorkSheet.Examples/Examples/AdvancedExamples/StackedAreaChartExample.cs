@@ -18,17 +18,17 @@ public class StackedAreaChartExample : IExample
     {
         var sheet = new WorkSheet("Sales Data");
 
-        sheet.AddCell(new(0, 0), "Month");
-        sheet.AddCell(new(1, 0), "Product A");
-        sheet.AddCell(new(2, 0), "Product B");
-        sheet.AddCell(new(3, 0), "Product C");
+        sheet.AddCell(new(0, 0), "Month", null);
+        sheet.AddCell(new(1, 0), "Product A", null);
+        sheet.AddCell(new(2, 0), "Product B", null);
+        sheet.AddCell(new(3, 0), "Product C", null);
 
         for (uint i = 0; i < Months.Length; i++)
         {
-            sheet.AddCell(new(0, i + 1), Months[i]);
-            sheet.AddCell(new(1, i + 1), ProductA[i]);
-            sheet.AddCell(new(2, i + 1), ProductB[i]);
-            sheet.AddCell(new(3, i + 1), ProductC[i]);
+            sheet.AddCell(new(0, i + 1), Months[i], null);
+            sheet.AddCell(new(1, i + 1), ProductA[i], null);
+            sheet.AddCell(new(2, i + 1), ProductB[i], null);
+            sheet.AddCell(new(3, i + 1), ProductC[i], null);
         }
 
         var chart = AreaChart.Create()

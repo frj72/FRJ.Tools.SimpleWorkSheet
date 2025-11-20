@@ -17,15 +17,15 @@ public class ChartFormattingExample : IExample
     {
         var sheet = new WorkSheet("Quarterly Data");
 
-        sheet.AddCell(new(0, 0), "Quarter");
-        sheet.AddCell(new(1, 0), "Revenue");
-        sheet.AddCell(new(2, 0), "Expenses");
+        sheet.AddCell(new(0, 0), "Quarter", null);
+        sheet.AddCell(new(1, 0), "Revenue", null);
+        sheet.AddCell(new(2, 0), "Expenses", null);
 
         for (uint i = 0; i < Quarters.Length; i++)
         {
-            sheet.AddCell(new(0, i + 1), Quarters[i]);
-            sheet.AddCell(new(1, i + 1), Revenue[i]);
-            sheet.AddCell(new(2, i + 1), Expenses[i]);
+            sheet.AddCell(new(0, i + 1), Quarters[i], null);
+            sheet.AddCell(new(1, i + 1), Revenue[i], null);
+            sheet.AddCell(new(2, i + 1), Expenses[i], null);
         }
 
         var chart1 = BarChart.Create()
@@ -55,14 +55,14 @@ public class ChartFormattingExample : IExample
 
         sheet.AddChart(chart2);
 
-        sheet.AddCell(new(16, 0), "Product");
-        sheet.AddCell(new(17, 0), "Sales");
-        sheet.AddCell(new(16, 1), "Laptops");
-        sheet.AddCell(new(17, 1), 45000);
-        sheet.AddCell(new(16, 2), "Phones");
-        sheet.AddCell(new(17, 2), 32000);
-        sheet.AddCell(new(16, 3), "Tablets");
-        sheet.AddCell(new(17, 3), 18000);
+        sheet.AddCell(new(16, 0), "Product", null);
+        sheet.AddCell(new(17, 0), "Sales", null);
+        sheet.AddCell(new(16, 1), "Laptops", null);
+        sheet.AddCell(new(17, 1), 45000, null);
+        sheet.AddCell(new(16, 2), "Phones", null);
+        sheet.AddCell(new(17, 2), 32000, null);
+        sheet.AddCell(new(16, 3), "Tablets", null);
+        sheet.AddCell(new(17, 3), 18000, null);
 
         var chart3 = PieChart.Create()
             .WithTitle("Product Distribution")

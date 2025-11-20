@@ -26,7 +26,7 @@ public class OpenXmlValidationTests
     public void SimplestSheet_ValidatesCorrectly()
     {
         var sheet = new WorkSheet("Test");
-        sheet.AddCell(new(0, 0), "Hello");
+        sheet.AddCell(new(0, 0), "Hello", null);
         
         var tempPath = Path.GetTempFileName() + ".xlsx";
         
@@ -47,8 +47,8 @@ public class OpenXmlValidationTests
     public void RoundTrip_SimplestCase_ValidatesCorrectly()
     {
         var sheet = new WorkSheet("Test");
-        sheet.AddCell(new(0, 0), "Hello");
-        sheet.AddCell(new(1, 0), 123);
+        sheet.AddCell(new(0, 0), "Hello", null);
+        sheet.AddCell(new(1, 0), 123, null);
         
         var tempPath1 = Path.GetTempFileName() + ".xlsx";
         var tempPath2 = Path.GetTempFileName() + ".xlsx";
@@ -80,7 +80,7 @@ public class OpenXmlValidationTests
     {
         var sheet = new WorkSheet("Test");
         sheet.AddCell(new(0, 0), "Link", cell => cell
-            .WithHyperlink("https://example.com"));
+            .WithHyperlink("https://example.com", null));
         
         var tempPath1 = Path.GetTempFileName() + ".xlsx";
         var tempPath2 = Path.GetTempFileName() + ".xlsx";
@@ -118,9 +118,9 @@ public class OpenXmlValidationTests
             .WithStyle(style => style.WithHorizontalAlignment(HorizontalAlignment.Center)));
         
         sheet.AddCell(new(0, 1), "Link", cell => cell
-            .WithHyperlink("https://example.com"));
+            .WithHyperlink("https://example.com", null));
         
-        sheet.SetColumnWith(0, 20.0);
+        sheet.SetColumnWidth(0, 20.0);
         sheet.SetRowHeight(0, 25.0);
         sheet.FreezePanes(1, 0);
         
@@ -154,12 +154,12 @@ public class OpenXmlValidationTests
     {
         var sheet = new WorkSheet("Sales");
 
-        sheet.AddCell(new(0, 0), new CellValue("Region"));
-        sheet.AddCell(new(1, 0), new CellValue("Sales"));
-        sheet.AddCell(new(0, 1), new CellValue("North"));
-        sheet.AddCell(new(1, 1), new CellValue(100));
-        sheet.AddCell(new(0, 2), new CellValue("South"));
-        sheet.AddCell(new(1, 2), new CellValue(150));
+        sheet.AddCell(new(0, 0), new("Region"), null);
+        sheet.AddCell(new(1, 0), new("Sales"), null);
+        sheet.AddCell(new(0, 1), new("North"), null);
+        sheet.AddCell(new(1, 1), new(100), null);
+        sheet.AddCell(new(0, 2), new("South"), null);
+        sheet.AddCell(new(1, 2), new(150), null);
 
         var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
         var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
@@ -192,12 +192,12 @@ public class OpenXmlValidationTests
     {
         var sheet = new WorkSheet("Trends");
 
-        sheet.AddCell(new(0, 0), new CellValue("Month"));
-        sheet.AddCell(new(1, 0), new CellValue("Sales"));
-        sheet.AddCell(new(0, 1), new CellValue("Jan"));
-        sheet.AddCell(new(1, 1), new CellValue(100));
-        sheet.AddCell(new(0, 2), new CellValue("Feb"));
-        sheet.AddCell(new(1, 2), new CellValue(120));
+        sheet.AddCell(new(0, 0), new("Month"), null);
+        sheet.AddCell(new(1, 0), new("Sales"), null);
+        sheet.AddCell(new(0, 1), new("Jan"), null);
+        sheet.AddCell(new(1, 1), new(100), null);
+        sheet.AddCell(new(0, 2), new("Feb"), null);
+        sheet.AddCell(new(1, 2), new(120), null);
 
         var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
         var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
@@ -229,12 +229,12 @@ public class OpenXmlValidationTests
     {
         var sheet = new WorkSheet("Distribution");
 
-        sheet.AddCell(new(0, 0), new CellValue("Category"));
-        sheet.AddCell(new(1, 0), new CellValue("Value"));
-        sheet.AddCell(new(0, 1), new CellValue("A"));
-        sheet.AddCell(new(1, 1), new CellValue(30));
-        sheet.AddCell(new(0, 2), new CellValue("B"));
-        sheet.AddCell(new(1, 2), new CellValue(70));
+        sheet.AddCell(new(0, 0), new("Category"), null);
+        sheet.AddCell(new(1, 0), new("Value"), null);
+        sheet.AddCell(new(0, 1), new("A"), null);
+        sheet.AddCell(new(1, 1), new(30), null);
+        sheet.AddCell(new(0, 2), new("B"), null);
+        sheet.AddCell(new(1, 2), new(70), null);
 
         var categoriesRange = CellRange.FromBounds(0, 1, 0, 2);
         var valuesRange = CellRange.FromBounds(1, 1, 1, 2);
@@ -266,12 +266,12 @@ public class OpenXmlValidationTests
     {
         var sheet = new WorkSheet("Correlation");
 
-        sheet.AddCell(new(0, 0), new CellValue("X"));
-        sheet.AddCell(new(1, 0), new CellValue("Y"));
-        sheet.AddCell(new(0, 1), new CellValue(1));
-        sheet.AddCell(new(1, 1), new CellValue(10));
-        sheet.AddCell(new(0, 2), new CellValue(2));
-        sheet.AddCell(new(1, 2), new CellValue(20));
+        sheet.AddCell(new(0, 0), new("X"), null);
+        sheet.AddCell(new(1, 0), new("Y"), null);
+        sheet.AddCell(new(0, 1), new(1), null);
+        sheet.AddCell(new(1, 1), new(10), null);
+        sheet.AddCell(new(0, 2), new(2), null);
+        sheet.AddCell(new(1, 2), new(20), null);
 
         var xRange = CellRange.FromBounds(0, 1, 0, 2);
         var yRange = CellRange.FromBounds(1, 1, 1, 2);
@@ -302,12 +302,12 @@ public class OpenXmlValidationTests
     public void ChartOnlySheet_NoCells_ValidatesCorrectly()
     {
         var dataSheet = new WorkSheet("Data");
-        dataSheet.AddCell(new(0, 0), new CellValue("Category"));
-        dataSheet.AddCell(new(1, 0), new CellValue("Value"));
-        dataSheet.AddCell(new(0, 1), new CellValue("A"));
-        dataSheet.AddCell(new(1, 1), new CellValue(100));
-        dataSheet.AddCell(new(0, 2), new CellValue("B"));
-        dataSheet.AddCell(new(1, 2), new CellValue(200));
+        dataSheet.AddCell(new(0, 0), new("Category"), null);
+        dataSheet.AddCell(new(1, 0), new("Value"), null);
+        dataSheet.AddCell(new(0, 1), new("A"), null);
+        dataSheet.AddCell(new(1, 1), new(100), null);
+        dataSheet.AddCell(new(0, 2), new("B"), null);
+        dataSheet.AddCell(new(1, 2), new(200), null);
 
         var chartSheet = new WorkSheet("Dashboard");
 
@@ -341,10 +341,10 @@ public class OpenXmlValidationTests
     public void ExcelTable_ValidatesCorrectly()
     {
         var sheet = new WorkSheet("Test");
-        sheet.AddCell(new(0, 0), "Name");
-        sheet.AddCell(new(1, 0), "Age");
-        sheet.AddCell(new(0, 1), "Alice");
-        sheet.AddCell(new(1, 1), 30);
+        sheet.AddCell(new(0, 0), "Name", null);
+        sheet.AddCell(new(1, 0), "Age", null);
+        sheet.AddCell(new(0, 1), "Alice", null);
+        sheet.AddCell(new(1, 1), 30, null);
         sheet.AddTable("TestTable", 0, 0, 1, 1);
         
         var tempPath = Path.GetTempFileName() + ".xlsx";
@@ -366,7 +366,7 @@ public class OpenXmlValidationTests
     public void InsertImage_ValidatesCorrectly()
     {
         var sheet = new WorkSheet("Test");
-        sheet.AddCell(new(0, 0), "Test with Image");
+        sheet.AddCell(new(0, 0), "Test with Image", null);
         
         var imageData = new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
         var image = new WorksheetImage(imageData, ImageFormat.Png, new(2, 2), 100, 100);
@@ -391,12 +391,12 @@ public class OpenXmlValidationTests
     public void AreaChart_ValidatesCorrectly()
     {
         var sheet = new WorkSheet("Data");
-        sheet.AddCell(new(0, 0), "Month");
-        sheet.AddCell(new(1, 0), "Sales");
-        sheet.AddCell(new(0, 1), "Jan");
-        sheet.AddCell(new(1, 1), 1000);
-        sheet.AddCell(new(0, 2), "Feb");
-        sheet.AddCell(new(1, 2), 1500);
+        sheet.AddCell(new(0, 0), "Month", null);
+        sheet.AddCell(new(1, 0), "Sales", null);
+        sheet.AddCell(new(0, 1), "Jan", null);
+        sheet.AddCell(new(1, 1), 1000, null);
+        sheet.AddCell(new(0, 2), "Feb", null);
+        sheet.AddCell(new(1, 2), 1500, null);
         
         var chart = AreaChart.Create()
             .WithTitle("Sales")
@@ -425,15 +425,15 @@ public class OpenXmlValidationTests
     public void StackedAreaChart_ValidatesCorrectly()
     {
         var sheet = new WorkSheet("Data");
-        sheet.AddCell(new(0, 0), "Month");
-        sheet.AddCell(new(1, 0), "Product A");
-        sheet.AddCell(new(2, 0), "Product B");
-        sheet.AddCell(new(0, 1), "Jan");
-        sheet.AddCell(new(1, 1), 1000);
-        sheet.AddCell(new(2, 1), 800);
-        sheet.AddCell(new(0, 2), "Feb");
-        sheet.AddCell(new(1, 2), 1500);
-        sheet.AddCell(new(2, 2), 900);
+        sheet.AddCell(new(0, 0), "Month", null);
+        sheet.AddCell(new(1, 0), "Product A", null);
+        sheet.AddCell(new(2, 0), "Product B", null);
+        sheet.AddCell(new(0, 1), "Jan", null);
+        sheet.AddCell(new(1, 1), 1000, null);
+        sheet.AddCell(new(2, 1), 800, null);
+        sheet.AddCell(new(0, 2), "Feb", null);
+        sheet.AddCell(new(1, 2), 1500, null);
+        sheet.AddCell(new(2, 2), 900, null);
         
         var chart = AreaChart.Create()
             .WithTitle("Stacked Sales")

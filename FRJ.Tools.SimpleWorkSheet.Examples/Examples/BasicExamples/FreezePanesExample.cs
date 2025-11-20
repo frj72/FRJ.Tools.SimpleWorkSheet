@@ -16,12 +16,12 @@ public class FreezePanesExample : IExample
         var sheet = new WorkSheet("FreezePanes");
         
         var headers = SourceArrayHeaders.Select(h => new CellValue(h));
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithFont(font => font.Bold())
             .WithColor("4472C4"));
         
         for (uint row = 1; row < 20; row++)
-        for (uint col = 0; col < 5; col++) sheet.AddCell(new(col, row), $"R{row}C{col}");
+        for (uint col = 0; col < 5; col++) sheet.AddCell(new(col, row), $"R{row}C{col}", null);
 
         sheet.FreezePanes(1, 0);
         

@@ -18,13 +18,13 @@ public class WorkBookReaderTests
             .WithFont(font => font.Bold())
             .WithColor("4472C4"));
         
-        sheet.AddCell(new(0, 1), "Text Value");
-        sheet.AddCell(new(1, 1), 123.45);
+        sheet.AddCell(new(0, 1), "Text Value", null);
+        sheet.AddCell(new(1, 1), 123.45, null);
         
         sheet.AddCell(new(0, 2), "Link", cell => cell
             .WithHyperlink("https://example.com", "Test Link"));
         
-        sheet.SetColumnWith(0, 20.0);
+        sheet.SetColumnWidth(0, 20.0);
         sheet.SetRowHeight(0, 25.0);
         sheet.FreezePanes(1, 0);
         
@@ -207,7 +207,7 @@ public class WorkBookReaderTests
         originalSheet.AddCell(new(0, 0), "Test", cell => cell
             .WithFont(font => font.Bold().WithSize(14))
             .WithColor("FF0000"));
-        originalSheet.AddCell(new(1, 0), 42);
+        originalSheet.AddCell(new(1, 0), 42, null);
         
         WorkBook originalWorkbook = new("Test", [originalSheet]);
         var tempPath = Path.GetTempFileName() + ".xlsx";
@@ -398,7 +398,7 @@ public class WorkBookReaderTests
     {
         var sheet = new WorkSheet("Links");
         sheet.AddCell(new(0, 0), "Docs", cell => cell.WithHyperlink("https://docs.example.com", "Docs"));
-        sheet.AddCell(new(0, 1), "Email", cell => cell.WithHyperlink("mailto:user@example.com?subject=Hello"));
+        sheet.AddCell(new(0, 1), "Email", cell => cell.WithHyperlink("mailto:user@example.com?subject=Hello", null));
 
         var path = SaveWorkbook(new("Links", [sheet]));
  

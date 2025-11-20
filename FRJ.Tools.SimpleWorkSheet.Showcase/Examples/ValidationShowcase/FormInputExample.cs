@@ -19,10 +19,10 @@ public class FormInputExample : IShowcase
         sheet.MergeCells(0, 0, 1, 0);
         
         sheet.AddCell(new(0, 2), "Name:", cell => cell.WithFont(f => f.Bold()));
-        sheet.AddCell(new(1, 2), "[Enter name]");
+        sheet.AddCell(new(1, 2), "[Enter name]", null);
         
         sheet.AddCell(new(0, 3), "Email:", cell => cell.WithFont(f => f.Bold()));
-        sheet.AddCell(new(1, 3), "[Enter email]");
+        sheet.AddCell(new(1, 3), "[Enter email]", null);
         
         sheet.AddCell(new(0, 4), "Country:", cell => cell.WithFont(f => f.Bold()));
         var countryValidation = CellValidation.List(["USA", "Canada", "UK", "Australia", "Other"]);
@@ -42,8 +42,8 @@ public class FormInputExample : IShowcase
         var dateValidation = CellValidation.Date(ValidationOperator.GreaterThanOrEqual, DateTime.Today);
         sheet.AddValidation(1, 7, dateValidation);
         
-        sheet.SetColumnWith(0, 15.0);
-        sheet.SetColumnWith(1, 25.0);
+        sheet.SetColumnWidth(0, 15.0);
+        sheet.SetColumnWidth(1, 25.0);
         
         var workbook = new WorkBook("FormInput", [sheet]);
         ShowcaseRunner.SaveWorkBook(workbook, "Showcase_23_FormInput.xlsx");

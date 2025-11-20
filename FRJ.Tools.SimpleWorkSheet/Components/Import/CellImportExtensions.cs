@@ -8,13 +8,11 @@ public static class CellImportExtensions
     {
         public CellBuilder FromImportedValue(string rawValue,
             string source)
-        {
-            return builder
+            => builder
                 .WithMetadata(meta => meta
                     .WithSource(source)
                     .WithOriginalValue(rawValue)
                     .WithImportedAt(DateTime.UtcNow));
-        }
 
         public CellBuilder FromImportedValue(string rawValue,
             ImportOptions options)

@@ -169,12 +169,12 @@ public class ChartImprovementsTests
     public void BarChart_WithImprovements_GeneratesValidFile()
     {
         var sheet = new WorkSheet("Data");
-        sheet.AddCell(new(0, 0), "Category");
-        sheet.AddCell(new(1, 0), "Value");
-        sheet.AddCell(new(0, 1), "A");
-        sheet.AddCell(new(1, 1), 100);
-        sheet.AddCell(new(0, 2), "B");
-        sheet.AddCell(new(1, 2), 150);
+        sheet.AddCell(new(0, 0), "Category", null);
+        sheet.AddCell(new(1, 0), "Value", null);
+        sheet.AddCell(new(0, 1), "A", null);
+        sheet.AddCell(new(1, 1), 100, null);
+        sheet.AddCell(new(0, 2), "B", null);
+        sheet.AddCell(new(1, 2), 150, null);
         
         var chart = BarChart.Create()
             .WithTitle("Test Chart")
@@ -198,12 +198,12 @@ public class ChartImprovementsTests
     public void LineChart_WithNoLegend_GeneratesValidFile()
     {
         var sheet = new WorkSheet("Data");
-        sheet.AddCell(new(0, 0), "X");
-        sheet.AddCell(new(1, 0), "Y");
-        sheet.AddCell(new(0, 1), 1);
-        sheet.AddCell(new(1, 1), 10);
-        sheet.AddCell(new(0, 2), 2);
-        sheet.AddCell(new(1, 2), 20);
+        sheet.AddCell(new(0, 0), "X", null);
+        sheet.AddCell(new(1, 0), "Y", null);
+        sheet.AddCell(new(0, 1), 1, null);
+        sheet.AddCell(new(1, 1), 10, null);
+        sheet.AddCell(new(0, 2), 2, null);
+        sheet.AddCell(new(1, 2), 20, null);
         
         var chart = LineChart.Create()
             .WithTitle("No Legend Chart")

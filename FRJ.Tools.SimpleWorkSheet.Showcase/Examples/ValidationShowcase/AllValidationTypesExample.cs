@@ -19,44 +19,44 @@ public class AllValidationTypesExample : IShowcase
         
         uint row = 1;
         
-        sheet.AddCell(new(0, row), "List");
-        sheet.AddCell(new(1, row), "Choose: Red, Green, or Blue");
+        sheet.AddCell(new(0, row), "List", null);
+        sheet.AddCell(new(1, row), "Choose: Red, Green, or Blue", null);
         var listValidation = CellValidation.List(["Red", "Green", "Blue"]);
         sheet.AddValidation(2, row, listValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "Whole Number");
-        sheet.AddCell(new(1, row), "Enter number between 1-100");
+        sheet.AddCell(new(0, row), "Whole Number", null);
+        sheet.AddCell(new(1, row), "Enter number between 1-100", null);
         var wholeValidation = CellValidation.WholeNumber(ValidationOperator.Between, 1, 100);
         sheet.AddValidation(2, row, wholeValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "Decimal");
-        sheet.AddCell(new(1, row), "Enter decimal > 0");
+        sheet.AddCell(new(0, row), "Decimal", null);
+        sheet.AddCell(new(1, row), "Enter decimal > 0", null);
         var decimalValidation = CellValidation.DecimalNumber(ValidationOperator.GreaterThan, 0.0);
         sheet.AddValidation(2, row, decimalValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "Date");
-        sheet.AddCell(new(1, row), "Enter date in 2025");
+        sheet.AddCell(new(0, row), "Date", null);
+        sheet.AddCell(new(1, row), "Enter date in 2025", null);
         var dateValidation = CellValidation.Date(ValidationOperator.Between, 
             new(2025, 1, 1), new DateTime(2025, 12, 31));
         sheet.AddValidation(2, row, dateValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "Text Length");
-        sheet.AddCell(new(1, row), "Enter text (max 10 chars)");
+        sheet.AddCell(new(0, row), "Text Length", null);
+        sheet.AddCell(new(1, row), "Enter text (max 10 chars)", null);
         var textValidation = CellValidation.TextLength(ValidationOperator.LessThanOrEqual, 10);
         sheet.AddValidation(2, row, textValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "Custom Formula");
-        sheet.AddCell(new(1, row), "Enter even number");
+        sheet.AddCell(new(0, row), "Custom Formula", null);
+        sheet.AddCell(new(1, row), "Enter even number", null);
         var customValidation = CellValidation.Custom("=MOD(C7,2)=0");
         sheet.AddValidation(2, row, customValidation);
         
         for (uint col = 0; col < 3; col++)
-            sheet.SetColumnWith(col, 25.0);
+            sheet.SetColumnWidth(col, 25.0);
         
         var workbook = new WorkBook("AllValidations", [sheet]);
         ShowcaseRunner.SaveWorkBook(workbook, "Showcase_22_AllValidationTypes.xlsx");

@@ -51,7 +51,7 @@ public class CalendarExample : IShowcase
         }
         
         for (uint col = 0; col < 7; col++)
-            sheet.SetColumnWith(col, 12.0);
+            sheet.SetColumnWidth(col, 12.0);
         
         for (uint r = 2; r < 8; r++)
             sheet.SetRowHeight(r, 60.0);

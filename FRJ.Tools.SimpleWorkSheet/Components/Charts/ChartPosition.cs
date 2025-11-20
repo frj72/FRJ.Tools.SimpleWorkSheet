@@ -20,8 +20,6 @@ public record ChartPosition
         ToRow = toRow;
     }
 
-    public static ChartPosition FromBounds(uint fromColumn, uint fromRow, uint toColumn, uint toRow)
-    {
-        return new(fromColumn, fromRow, toColumn, toRow);
-    }
+    public static ChartPosition FromBounds(uint fromColumn, uint fromRow, uint toColumn, uint toRow) 
+        => new(fromColumn, fromRow, toColumn, toRow);
 }

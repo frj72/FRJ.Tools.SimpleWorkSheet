@@ -22,7 +22,7 @@ public class ImportOptionsExample : IExample
         const string rawValue = "  Sample Data  ";
         var processedValue = rawValue.ProcessRawValue(basicOptions);
         
-        sheet.AddCell(0, 0, processedValue, cell => cell
+        sheet.AddCell(0, 0, processedValue, configure: cell => cell
             .FromImportedValue(rawValue, basicOptions));
         
         var advancedOptions = ImportOptionsBuilder.Create()
@@ -34,7 +34,7 @@ public class ImportOptionsExample : IExample
             .WithCustomMetadata("import_batch", "batch_001")
             .Build();
         
-        sheet.AddCell(0, 1, "Advanced Import", cell => cell
+        sheet.AddCell(0, 1, "Advanced Import", configure: cell => cell
             .FromImportedValue("raw_json_value", advancedOptions));
         
         ExampleRunner.SaveWorkSheet(sheet, "14_ImportOptions.xlsx");

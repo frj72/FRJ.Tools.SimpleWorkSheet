@@ -50,7 +50,7 @@ public class SheetVisibilityTests
     public void Visibility_SaveAndLoad_PreservesVisibleState()
     {
         var sheet = new WorkSheet("TestSheet");
-        sheet.AddCell(new(0, 0), "Test");
+        sheet.AddCell(new(0, 0), "Test", null);
         sheet.SetVisible(true);
         
         var binary = SheetConverter.ToBinaryExcelFile(sheet);
@@ -65,7 +65,7 @@ public class SheetVisibilityTests
     public void Visibility_SaveAndLoad_PreservesHiddenState()
     {
         var sheet = new WorkSheet("TestSheet");
-        sheet.AddCell(new(0, 0), "Test");
+        sheet.AddCell(new(0, 0), "Test", null);
         sheet.SetVisible(false);
         
         var binary = SheetConverter.ToBinaryExcelFile(sheet);
@@ -80,15 +80,15 @@ public class SheetVisibilityTests
     public void Visibility_MultipleSheets_EachHasOwnState()
     {
         var sheet1 = new WorkSheet("Visible");
-        sheet1.AddCell(new(0, 0), "Sheet 1");
+        sheet1.AddCell(new(0, 0), "Sheet 1", null);
         sheet1.SetVisible(true);
         
         var sheet2 = new WorkSheet("Hidden");
-        sheet2.AddCell(new(0, 0), "Sheet 2");
+        sheet2.AddCell(new(0, 0), "Sheet 2", null);
         sheet2.SetVisible(false);
         
         var sheet3 = new WorkSheet("AlsoVisible");
-        sheet3.AddCell(new(0, 0), "Sheet 3");
+        sheet3.AddCell(new(0, 0), "Sheet 3", null);
         
         var workbook = new WorkBook("Test", [sheet1, sheet2, sheet3]);
         var binary = SheetConverter.ToBinaryExcelFile(workbook);
@@ -106,7 +106,7 @@ public class SheetVisibilityTests
     public void Visibility_WithoutSetting_RoundTripReturnsVisible()
     {
         var sheet = new WorkSheet("TestSheet");
-        sheet.AddCell(new(0, 0), "Test");
+        sheet.AddCell(new(0, 0), "Test", null);
         
         var binary = SheetConverter.ToBinaryExcelFile(sheet);
         using var stream = new MemoryStream(binary);

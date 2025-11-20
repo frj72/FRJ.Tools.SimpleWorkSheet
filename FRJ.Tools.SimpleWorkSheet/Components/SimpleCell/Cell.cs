@@ -5,7 +5,7 @@ namespace FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 public record Cell
 {
-    public Cell(CellValue Value, CellStyle Style, CellMetadata? Metadata = null)
+    public Cell(CellValue Value, CellStyle Style, CellMetadata? Metadata)
     {
         this.Value = Value;
         this.Style = Style;
@@ -26,11 +26,12 @@ public record Cell
         Metadata = null;
     }
 
-    public static Cell Create(CellValue value, string? color = null, CellFont? font = null, CellBorders? borders = null, string? formatCode = null) =>
+    public static Cell Create(CellValue value, string? color, CellFont? font, CellBorders? borders,
+        string? formatCode) =>
         new(value, color ?? WorkSheetDefaults.FillColor, font ?? WorkSheetDefaults.Font,
             borders ?? WorkSheetDefaults.CellBorders, formatCode);
 
-    public static Cell CreateEmpty() => Create(string.Empty);
+    public static Cell CreateEmpty() => Create(string.Empty, null, null, null, null);
 
     public CellValue Value { get; init; }
     public CellStyle Style { get; init; }

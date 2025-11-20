@@ -1,6 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 
 namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
@@ -21,20 +20,20 @@ public class PieChartExample : IExample
             .WithFont(font => font.Bold())
             .WithStyle(style => style.WithFillColor("4472C4")));
 
-        sheet.AddCell(new(0, 1), new CellValue("Company A"));
-        sheet.AddCell(new(1, 1), new CellValue(35));
+        sheet.AddCell(new(0, 1), new("Company A"), null);
+        sheet.AddCell(new(1, 1), new(35), null);
 
-        sheet.AddCell(new(0, 2), new CellValue("Company B"));
-        sheet.AddCell(new(1, 2), new CellValue(25));
+        sheet.AddCell(new(0, 2), new("Company B"), null);
+        sheet.AddCell(new(1, 2), new(25), null);
 
-        sheet.AddCell(new(0, 3), new CellValue("Company C"));
-        sheet.AddCell(new(1, 3), new CellValue(20));
+        sheet.AddCell(new(0, 3), new("Company C"), null);
+        sheet.AddCell(new(1, 3), new(20), null);
 
-        sheet.AddCell(new(0, 4), new CellValue("Company D"));
-        sheet.AddCell(new(1, 4), new CellValue(12));
+        sheet.AddCell(new(0, 4), new("Company D"), null);
+        sheet.AddCell(new(1, 4), new(12), null);
 
-        sheet.AddCell(new(0, 5), new CellValue("Others"));
-        sheet.AddCell(new(1, 5), new CellValue(8));
+        sheet.AddCell(new(0, 5), new("Others"), null);
+        sheet.AddCell(new(1, 5), new(8), null);
 
         var categoriesRange = CellRange.FromBounds(0, 1, 0, 5);
         var valuesRange = CellRange.FromBounds(1, 1, 1, 5);

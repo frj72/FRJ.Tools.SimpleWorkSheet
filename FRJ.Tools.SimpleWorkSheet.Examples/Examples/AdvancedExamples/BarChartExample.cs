@@ -1,6 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 
 namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
@@ -30,29 +29,29 @@ public class BarChartExample : IExample
             .WithFont(font => font.Bold())
             .WithStyle(style => style.WithFillColor("4472C4")));
 
-        sheet.AddCell(new(0, 1), new CellValue("North"));
-        sheet.AddCell(new(1, 1), new CellValue(125000));
-        sheet.AddCell(new(2, 1), new CellValue(138000));
-        sheet.AddCell(new(3, 1), new CellValue(142000));
-        sheet.AddCell(new(4, 1), new CellValue(155000));
+        sheet.AddCell(new(0, 1), new("North"), null);
+        sheet.AddCell(new(1, 1), new(125000), null);
+        sheet.AddCell(new(2, 1), new(138000), null);
+        sheet.AddCell(new(3, 1), new(142000), null);
+        sheet.AddCell(new(4, 1), new(155000), null);
 
-        sheet.AddCell(new(0, 2), new CellValue("South"));
-        sheet.AddCell(new(1, 2), new CellValue(98000));
-        sheet.AddCell(new(2, 2), new CellValue(105000));
-        sheet.AddCell(new(3, 2), new CellValue(112000));
-        sheet.AddCell(new(4, 2), new CellValue(118000));
+        sheet.AddCell(new(0, 2), new("South"), null);
+        sheet.AddCell(new(1, 2), new(98000), null);
+        sheet.AddCell(new(2, 2), new(105000), null);
+        sheet.AddCell(new(3, 2), new(112000), null);
+        sheet.AddCell(new(4, 2), new(118000), null);
 
-        sheet.AddCell(new(0, 3), new CellValue("East"));
-        sheet.AddCell(new(1, 3), new CellValue(87000));
-        sheet.AddCell(new(2, 3), new CellValue(92000));
-        sheet.AddCell(new(3, 3), new CellValue(96000));
-        sheet.AddCell(new(4, 3), new CellValue(101000));
+        sheet.AddCell(new(0, 3), new("East"), null);
+        sheet.AddCell(new(1, 3), new(87000), null);
+        sheet.AddCell(new(2, 3), new(92000), null);
+        sheet.AddCell(new(3, 3), new(96000), null);
+        sheet.AddCell(new(4, 3), new(101000), null);
 
-        sheet.AddCell(new(0, 4), new CellValue("West"));
-        sheet.AddCell(new(1, 4), new CellValue(145000));
-        sheet.AddCell(new(2, 4), new CellValue(152000));
-        sheet.AddCell(new(3, 4), new CellValue(158000));
-        sheet.AddCell(new(4, 4), new CellValue(165000));
+        sheet.AddCell(new(0, 4), new("West"), null);
+        sheet.AddCell(new(1, 4), new(145000), null);
+        sheet.AddCell(new(2, 4), new(152000), null);
+        sheet.AddCell(new(3, 4), new(158000), null);
+        sheet.AddCell(new(4, 4), new(165000), null);
 
         var categoriesRange = CellRange.FromBounds(0, 1, 0, 4);
         var q1Range = CellRange.FromBounds(1, 1, 1, 4);

@@ -27,13 +27,13 @@ public class FinancialReportExample : IShowcase
         sheet.AddCell(new(5, 2), "Total", cell => cell.WithFont(f => f.Bold()).WithColor("4472C4"));
         
         var revenues = new[] { 100000m, 120000m, 115000m, 130000m };
-        sheet.AddCell(new(0, 3), "Revenue");
+        sheet.AddCell(new(0, 3), "Revenue", null);
         for (var i = 0; i < 4; i++)
             sheet.AddCell(new((uint)(i + 1), 3), revenues[i], cell => cell.WithFormatCode("$#,##0.00"));
         sheet.AddCell(new(5, 3), new CellFormula("=SUM(B4:E4)"), cell => cell.WithFormatCode("$#,##0.00").WithFont(f => f.Bold()));
         
         var expenses = new[] { 60000m, 70000m, 68000m, 75000m };
-        sheet.AddCell(new(0, 4), "Expenses");
+        sheet.AddCell(new(0, 4), "Expenses", null);
         for (var i = 0; i < 4; i++)
             sheet.AddCell(new((uint)(i + 1), 4), expenses[i], cell => cell.WithFormatCode("$#,##0.00"));
         sheet.AddCell(new(5, 4), new CellFormula("=SUM(B5:E5)"), cell => cell.WithFormatCode("$#,##0.00").WithFont(f => f.Bold()));
@@ -50,7 +50,7 @@ public class FinancialReportExample : IShowcase
             .WithColor("A9D08E"));
         
         for (uint col = 0; col <= 5; col++)
-            sheet.SetColumnWith(col, 12.0);
+            sheet.SetColumnWidth(col, 12.0);
         
         sheet.FreezePanes(1, 3);
         

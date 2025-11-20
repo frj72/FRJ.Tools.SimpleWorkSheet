@@ -40,15 +40,15 @@ public class ColorPaletteExample : IShowcase
         uint row = 1;
         foreach (var (name, hex) in colors)
         {
-            sheet.AddCell(new(0, row), name);
-            sheet.AddCell(new(1, row), hex);
+            sheet.AddCell(new(0, row), name, null);
+            sheet.AddCell(new(1, row), hex, null);
             sheet.AddCell(new(2, row), "        ", cell => cell.WithColor(hex));
             row++;
         }
         
-        sheet.SetColumnWith(0, 15.0);
-        sheet.SetColumnWith(1, 10.0);
-        sheet.SetColumnWith(2, 15.0);
+        sheet.SetColumnWidth(0, 15.0);
+        sheet.SetColumnWidth(1, 10.0);
+        sheet.SetColumnWidth(2, 15.0);
         
         var workbook = new WorkBook("Colors", [sheet]);
         ShowcaseRunner.SaveWorkBook(workbook, "Showcase_07_ColorPalette.xlsx");

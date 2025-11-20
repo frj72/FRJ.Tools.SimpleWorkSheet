@@ -6,34 +6,27 @@ public static class WorkSheetBuilderExtensions
 {
     extension(WorkSheet sheet)
     {
-        public Cell AddCell(uint x, uint y, Action<CellBuilder> configure)
-        {
-            return sheet.AddCell(new(x, y), configure);
-        }
+        public Cell AddEmptyCell(uint x, uint y, Action<CellBuilder> configure) 
+            => sheet.AddEmptyCell(new(x, y), configure);
 
-        public Cell AddCell(uint x, uint y, CellValue value, Action<CellBuilder>? configure = null)
-        {
-            return sheet.AddCell(new(x, y), value, configure);
-        }
+        public Cell AddCell(uint x, uint y, CellValue value, Action<CellBuilder>? configure) 
+            => sheet.AddCell(new(x, y), value, configure);
 
-        public Cell AddStyledCell(CellPosition position, CellValue value, CellStyle style)
-        {
-            return sheet.AddCell(position, value, cell => cell.WithStyle(style));
-        }
+        public Cell AddStyledCell(CellPosition position, CellValue value, CellStyle style) 
+            => sheet.AddCell(position, value, cell => cell.WithStyle(style));
 
-        public Cell AddStyledCell(uint x, uint y, CellValue value, CellStyle style)
-        {
-            return sheet.AddCell(new(x, y), value, cell => cell.WithStyle(style));
-        }
+        public Cell AddStyledCell(uint x, uint y, CellValue value, CellStyle style) 
+            => sheet.AddCell(new(x, y), value, cell => cell.WithStyle(style));
 
-        public IEnumerable<Cell> AddRow(uint row, uint startColumn, IEnumerable<CellValue> values, Action<CellBuilder>? configure = null)
+        public IEnumerable<Cell> AddRow(uint row, uint startColumn, IEnumerable<CellValue> values,
+            Action<CellBuilder>? configure)
         {
             var cells = new List<Cell>();
             var column = startColumn;
         
             foreach (var value in values)
             {
-                var cell = sheet.AddCell(column, row, value, configure);
+                var cell = sheet.AddCell(column, row, value, configure: configure);
                 cells.Add(cell);
                 column++;
             }
@@ -41,14 +34,15 @@ public static class WorkSheetBuilderExtensions
             return cells;
         }
 
-        public IEnumerable<Cell> AddColumn(uint column, uint startRow, IEnumerable<CellValue> values, Action<CellBuilder>? configure = null)
+        public IEnumerable<Cell> AddColumn(uint column, uint startRow, IEnumerable<CellValue> values,
+            Action<CellBuilder>? configure)
         {
             var cells = new List<Cell>();
             var row = startRow;
         
             foreach (var value in values)
             {
-                var cell = sheet.AddCell(column, row, value, configure);
+                var cell = sheet.AddCell(column, row, value, configure: configure);
                 cells.Add(cell);
                 row++;
             }

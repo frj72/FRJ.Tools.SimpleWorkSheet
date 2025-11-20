@@ -1,7 +1,6 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 
 namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
@@ -28,35 +27,35 @@ public class ChartSheetExample : IExample
             .WithFont(font => font.Bold())
             .WithStyle(style => style.WithFillColor("4472C4")));
 
-        dataSheet.AddCell(new(0, 1), new CellValue("Jan"));
-        dataSheet.AddCell(new(1, 1), new CellValue(50000));
-        dataSheet.AddCell(new(2, 1), new CellValue(30000));
-        dataSheet.AddCell(new(3, 1), new CellValue(20000));
+        dataSheet.AddCell(new(0, 1), new("Jan"), null);
+        dataSheet.AddCell(new(1, 1), new(50000), null);
+        dataSheet.AddCell(new(2, 1), new(30000), null);
+        dataSheet.AddCell(new(3, 1), new(20000), null);
 
-        dataSheet.AddCell(new(0, 2), new CellValue("Feb"));
-        dataSheet.AddCell(new(1, 2), new CellValue(55000));
-        dataSheet.AddCell(new(2, 2), new CellValue(32000));
-        dataSheet.AddCell(new(3, 2), new CellValue(23000));
+        dataSheet.AddCell(new(0, 2), new("Feb"), null);
+        dataSheet.AddCell(new(1, 2), new(55000), null);
+        dataSheet.AddCell(new(2, 2), new(32000), null);
+        dataSheet.AddCell(new(3, 2), new(23000), null);
 
-        dataSheet.AddCell(new(0, 3), new CellValue("Mar"));
-        dataSheet.AddCell(new(1, 3), new CellValue(60000));
-        dataSheet.AddCell(new(2, 3), new CellValue(35000));
-        dataSheet.AddCell(new(3, 3), new CellValue(25000));
+        dataSheet.AddCell(new(0, 3), new("Mar"), null);
+        dataSheet.AddCell(new(1, 3), new(60000), null);
+        dataSheet.AddCell(new(2, 3), new(35000), null);
+        dataSheet.AddCell(new(3, 3), new(25000), null);
 
-        dataSheet.AddCell(new(0, 4), new CellValue("Apr"));
-        dataSheet.AddCell(new(1, 4), new CellValue(58000));
-        dataSheet.AddCell(new(2, 4), new CellValue(33000));
-        dataSheet.AddCell(new(3, 4), new CellValue(25000));
+        dataSheet.AddCell(new(0, 4), new("Apr"), null);
+        dataSheet.AddCell(new(1, 4), new(58000), null);
+        dataSheet.AddCell(new(2, 4), new(33000), null);
+        dataSheet.AddCell(new(3, 4), new(25000), null);
 
-        dataSheet.AddCell(new(0, 5), new CellValue("May"));
-        dataSheet.AddCell(new(1, 5), new CellValue(62000));
-        dataSheet.AddCell(new(2, 5), new CellValue(36000));
-        dataSheet.AddCell(new(3, 5), new CellValue(26000));
+        dataSheet.AddCell(new(0, 5), new("May"), null);
+        dataSheet.AddCell(new(1, 5), new(62000), null);
+        dataSheet.AddCell(new(2, 5), new(36000), null);
+        dataSheet.AddCell(new(3, 5), new(26000), null);
 
-        dataSheet.AddCell(new(0, 6), new CellValue("Jun"));
-        dataSheet.AddCell(new(1, 6), new CellValue(65000));
-        dataSheet.AddCell(new(2, 6), new CellValue(38000));
-        dataSheet.AddCell(new(3, 6), new CellValue(27000));
+        dataSheet.AddCell(new(0, 6), new("Jun"), null);
+        dataSheet.AddCell(new(1, 6), new(65000), null);
+        dataSheet.AddCell(new(2, 6), new(38000), null);
+        dataSheet.AddCell(new(3, 6), new(27000), null);
 
         var dashboardSheet = new WorkSheet("Dashboard");
 

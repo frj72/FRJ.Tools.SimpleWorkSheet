@@ -174,7 +174,7 @@ public class GenericTableBuilder
             if (_headerStyleAction != null)
                 sheet.AddCell(new((uint)i, 0), new(headers[i]), builder => builder.WithStyle(_headerStyleAction));
             else
-                sheet.AddCell(new((uint)i, 0), new CellValue(headers[i]));
+                sheet.AddCell(new((uint)i, 0), new(headers[i]), null);
     }
 
     private void AddDataRows(WorkSheet sheet, List<string> headers)
@@ -191,7 +191,7 @@ public class GenericTableBuilder
         }
     }
 
-    private void AddCellValue(WorkSheet sheet, uint col, uint row, CellValue cellValue, string? propertyName = null)
+    private void AddCellValue(WorkSheet sheet, uint col, uint row, CellValue cellValue, string? propertyName)
     {
         if (_trimWhitespace && cellValue.IsString())
             cellValue = new(cellValue.Value.AsT2.Trim());

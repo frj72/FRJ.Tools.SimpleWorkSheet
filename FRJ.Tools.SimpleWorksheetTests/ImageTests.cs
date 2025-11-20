@@ -153,7 +153,7 @@ public class ImageTests
     public void AddImage_SaveToFile_CreatesValidFile()
     {
         var sheet = new WorkSheet("TestSheet");
-        sheet.AddCell(new(0, 0), "Test with Image");
+        sheet.AddCell(new(0, 0), "Test with Image", null);
         
         var imageData = CreateTestImageData();
         var image = new WorksheetImage(imageData, ImageFormat.Png, new(2, 2), 100, 100);

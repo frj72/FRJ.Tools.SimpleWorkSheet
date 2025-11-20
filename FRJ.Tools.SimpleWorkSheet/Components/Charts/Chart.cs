@@ -16,10 +16,7 @@ public abstract class Chart
     public bool ShowDataLabels { get; protected set; }
     public bool ShowMajorGridlines { get; protected set; } = true;
 
-    protected Chart(ChartType type)
-    {
-        Type = type;
-    }
+    protected Chart(ChartType type) => Type = type;
 
     public void AddSeries(string name, CellRange dataRange)
     {

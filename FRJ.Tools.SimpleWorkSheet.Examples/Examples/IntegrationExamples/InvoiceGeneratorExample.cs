@@ -15,21 +15,21 @@ public class InvoiceGeneratorExample : IExample
     {
         var sheet = new WorkSheet("Invoice");
         
-        sheet.AddCell(0, 0, "INVOICE", cell => cell
+        sheet.AddCell(0, 0, "INVOICE", configure: cell => cell
             .WithFont(font => font.WithSize(24).Bold())
             .WithColor("4472C4"));
         
-        sheet.AddCell(0, 2, "Invoice #:");
-        sheet.AddCell(1, 2, "INV-2025-001");
-        sheet.AddCell(0, 3, "Date:");
-        sheet.AddCell(1, 3, DateTime.Now);
-        sheet.AddCell(0, 4, "Due Date:");
-        sheet.AddCell(1, 4, DateTime.Now.AddDays(30));
+        sheet.AddCell(0, 2, "Invoice #:", null);
+        sheet.AddCell(1, 2, "INV-2025-001", null);
+        sheet.AddCell(0, 3, "Date:", null);
+        sheet.AddCell(1, 3, DateTime.Now, null);
+        sheet.AddCell(0, 4, "Due Date:", null);
+        sheet.AddCell(1, 4, DateTime.Now.AddDays(30), null);
         
-        sheet.AddCell(0, 6, "Bill To:");
-        sheet.AddCell(0, 7, "John Smith");
-        sheet.AddCell(0, 8, "123 Main St");
-        sheet.AddCell(0, 9, "New York, NY 10001");
+        sheet.AddCell(0, 6, "Bill To:", null);
+        sheet.AddCell(0, 7, "John Smith", null);
+        sheet.AddCell(0, 8, "123 Main St", null);
+        sheet.AddCell(0, 9, "New York, NY 10001", null);
         
         var borders = CellBorders.Create(
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
@@ -39,7 +39,7 @@ public class InvoiceGeneratorExample : IExample
         
         var headers = SourceArray.Select(h => new CellValue(h));
         
-        sheet.AddRow(11, 0, headers, cell => cell
+        sheet.AddRow(11, 0, headers, configure: cell => cell
             .WithColor("E7E6E6")
             .WithFont(font => font.Bold())
             .WithBorders(borders));
@@ -55,19 +55,19 @@ public class InvoiceGeneratorExample : IExample
         {
             var row = i + 12;
             var rowData = items[i].Select(v => new CellValue(v));
-            sheet.AddRow(row, 0, rowData, cell => cell.WithBorders(borders));
+            sheet.AddRow(row, 0, rowData, configure: cell => cell.WithBorders(borders));
         }
         
-        sheet.AddCell(3, 16, "Subtotal:", cell => cell.WithFont(font => font.Bold()));
-        sheet.AddCell(4, 16, "$2,500.00", cell => cell.WithBorders(borders));
+        sheet.AddCell(3, 16, "Subtotal:", configure: cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(4, 16, "$2,500.00", configure: cell => cell.WithBorders(borders));
         
-        sheet.AddCell(3, 17, "Tax (8%):", cell => cell.WithFont(font => font.Bold()));
-        sheet.AddCell(4, 17, "$200.00", cell => cell.WithBorders(borders));
+        sheet.AddCell(3, 17, "Tax (8%):", configure: cell => cell.WithFont(font => font.Bold()));
+        sheet.AddCell(4, 17, "$200.00", configure: cell => cell.WithBorders(borders));
         
-        sheet.AddCell(3, 18, "TOTAL:", cell => cell
+        sheet.AddCell(3, 18, "TOTAL:", configure: cell => cell
             .WithFont(font => font.WithSize(14).Bold())
             .WithColor("4472C4"));
-        sheet.AddCell(4, 18, "$2,700.00", cell => cell
+        sheet.AddCell(4, 18, "$2,700.00", configure: cell => cell
             .WithFont(font => font.WithSize(14).Bold())
             .WithColor("4472C4")
             .WithBorders(borders));

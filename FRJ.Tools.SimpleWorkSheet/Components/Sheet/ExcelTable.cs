@@ -7,7 +7,7 @@ public record ExcelTable
     public bool ShowFilterButton { get; init; }
     public string? DisplayName { get; init; }
 
-    public ExcelTable(string name, CellRange range, bool showFilterButton = true, string? displayName = null)
+    public ExcelTable(string name, CellRange range, bool showFilterButton, string? displayName)
     {
         if (string.IsNullOrWhiteSpace(name))
             throw new ArgumentException("Table name cannot be empty", nameof(name));

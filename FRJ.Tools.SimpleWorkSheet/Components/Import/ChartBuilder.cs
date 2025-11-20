@@ -18,10 +18,7 @@ public class ChartBuilder
     private (int width, int height)? _chartSize;
     private bool _showDataLabels;
 
-    internal ChartBuilder(WorkbookBuilder parent)
-    {
-        _parent = parent;
-    }
+    internal ChartBuilder(WorkbookBuilder parent) => _parent = parent;
 
     public ChartBuilder OnSheet(string sheetName)
     {

@@ -19,17 +19,17 @@ public class RowAdditionExample : IExample
         
         var headers = SourceArrayHeaders.Select(h => new CellValue(h));
         
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithColor("4472C4")
             .WithFont(font => font.Bold().WithColor("FFFFFF")));
         
         var row1 = SourceArrayRow1.Select(v => new CellValue(v));
         
-        sheet.AddRow(1, 0, row1, cell => cell.WithColor("F0F0F0"));
+        sheet.AddRow(1, 0, row1, configure: cell => cell.WithColor("F0F0F0"));
         
         var row2 = SourceArrayRow2.Select(v => new CellValue(v));
         
-        sheet.AddRow(2, 0, row2);
+        sheet.AddRow(2, 0, row2, null);
         
         ExampleRunner.SaveWorkSheet(sheet, "10_RowAddition.xlsx");
     }

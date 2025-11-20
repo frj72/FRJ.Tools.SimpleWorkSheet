@@ -19,33 +19,33 @@ public class DateRangeValidationExample : IShowcase
         
         uint row = 1;
         
-        sheet.AddCell(new(0, row), "Future Dates Only");
-        sheet.AddCell(new(1, row), "Date must be after today");
+        sheet.AddCell(new(0, row), "Future Dates Only", null);
+        sheet.AddCell(new(1, row), "Date must be after today", null);
         var futureValidation = CellValidation.Date(ValidationOperator.GreaterThan, DateTime.Today);
         sheet.AddValidation(2, row, futureValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "2025 Only");
-        sheet.AddCell(new(1, row), "Date must be in year 2025");
+        sheet.AddCell(new(0, row), "2025 Only", null);
+        sheet.AddCell(new(1, row), "Date must be in year 2025", null);
         var year2025Validation = CellValidation.Date(ValidationOperator.Between,
             new(2025, 1, 1), new DateTime(2025, 12, 31));
         sheet.AddValidation(2, row, year2025Validation);
         row++;
         
-        sheet.AddCell(new(0, row), "Past Dates");
-        sheet.AddCell(new(1, row), "Date must be before today");
+        sheet.AddCell(new(0, row), "Past Dates", null);
+        sheet.AddCell(new(1, row), "Date must be before today", null);
         var pastValidation = CellValidation.Date(ValidationOperator.LessThan, DateTime.Today);
         sheet.AddValidation(2, row, pastValidation);
         row++;
         
-        sheet.AddCell(new(0, row), "Next 30 Days");
-        sheet.AddCell(new(1, row), "Date within next 30 days");
+        sheet.AddCell(new(0, row), "Next 30 Days", null);
+        sheet.AddCell(new(1, row), "Date within next 30 days", null);
         var next30Validation = CellValidation.Date(ValidationOperator.Between,
             DateTime.Today, DateTime.Today.AddDays(30));
         sheet.AddValidation(2, row, next30Validation);
         
         for (uint col = 0; col < 3; col++)
-            sheet.SetColumnWith(col, 25.0);
+            sheet.SetColumnWidth(col, 25.0);
         
         var workbook = new WorkBook("DateValidation", [sheet]);
         ShowcaseRunner.SaveWorkBook(workbook, "Showcase_24_DateRangeValidation.xlsx");

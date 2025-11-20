@@ -12,22 +12,22 @@ public class FontVariationsExample : IExample
     {
         var sheet = new WorkSheet("FontVariations");
         
-        sheet.AddCell(0, 0, "Bold Text", cell => cell
+        sheet.AddCell(0, 0, "Bold Text", configure: cell => cell
             .WithFont(font => font.Bold()));
         
-        sheet.AddCell(0, 1, "Italic Text", cell => cell
+        sheet.AddCell(0, 1, "Italic Text", configure: cell => cell
             .WithFont(font => font.Italic()));
         
-        sheet.AddCell(0, 2, "Large Text", cell => cell
+        sheet.AddCell(0, 2, "Large Text", configure: cell => cell
             .WithFont(font => font.WithSize(20)));
         
-        sheet.AddCell(0, 3, "Red Text", cell => cell
+        sheet.AddCell(0, 3, "Red Text", configure: cell => cell
             .WithFont(font => font.WithColor("FF0000")));
         
-        sheet.AddCell(0, 4, "Calibri Font", cell => cell
+        sheet.AddCell(0, 4, "Calibri Font", configure: cell => cell
             .WithFont(font => font.WithName("Calibri")));
         
-        sheet.AddCell(0, 5, "Bold Italic Underline", cell => cell
+        sheet.AddCell(0, 5, "Bold Italic Underline", configure: cell => cell
             .WithFont(font => font
                 .Bold()
                 .Italic()

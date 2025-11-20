@@ -12,19 +12,19 @@ public class MetadataTrackingExample : IExample
     {
         var sheet = new WorkSheet("MetadataTracking");
         
-        sheet.AddCell(0, 0, "Manual Entry", cell => cell
+        sheet.AddCell(0, 0, "Manual Entry", configure: cell => cell
             .WithMetadata(meta => meta
                 .WithSource("manual")
                 .WithImportedAt(DateTime.UtcNow)));
         
-        sheet.AddCell(0, 1, "API Import", cell => cell
+        sheet.AddCell(0, 1, "API Import", configure: cell => cell
             .WithMetadata(meta => meta
                 .WithSource("api")
                 .WithImportedAt(DateTime.UtcNow)
                 .AddCustomData("api_endpoint", "/users/123")
                 .AddCustomData("version", "v2")));
         
-        sheet.AddCell(0, 2, "Calculated", cell => cell
+        sheet.AddCell(0, 2, "Calculated", configure: cell => cell
             .WithMetadata(meta => meta
                 .WithSource("calculation")
                 .AddCustomData("formula", "A1 + A2")));

@@ -15,7 +15,7 @@ public class JsonSparseArrayImportExample : IExample
     {
         var sheet = new WorkSheet("JsonSparseImport");
 
-        var jsonPath = Path.Combine("Examples", "ImportExamples", "data", "users_sparse.json");
+        var jsonPath = Path.Combine("Resources", "Data", "Json", "users_sparse.json");
         var json = File.ReadAllText(jsonPath);
 
         using var doc = JsonDocument.Parse(json);
@@ -34,7 +34,7 @@ public class JsonSparseArrayImportExample : IExample
         for (uint c = 0; c < headers.Count; c++)
         {
             var header = headers[(int)c];
-            sheet.AddCell(c, 0, header, cell => cell
+            sheet.AddCell(c, 0, header, configure: cell => cell
                 .WithColor("4472C4")
                 .WithFont(f => f.Bold().WithColor("FFFFFF"))
                 .FromImportedValue(header, baseOptions));
@@ -67,7 +67,7 @@ public class JsonSparseArrayImportExample : IExample
                     : new(processed);
 
                 var isEmpty = string.IsNullOrEmpty(raw);
-                sheet.AddCell(c, r, value, cell =>
+                sheet.AddCell(c, r, value, configure: cell =>
                 {
                     cell.FromImportedValue(raw, options);
                     if (isEmpty)
@@ -77,7 +77,7 @@ public class JsonSparseArrayImportExample : IExample
 
             r++;
         }
-
+        sheet.AutoFitAllColumns();
         ExampleRunner.SaveWorkSheet(sheet, "30_JsonSparseArrayImport.xlsx");
     }
 }

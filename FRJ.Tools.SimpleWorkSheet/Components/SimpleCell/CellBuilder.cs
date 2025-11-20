@@ -108,7 +108,7 @@ public class CellBuilder
         return this;
     }
 
-    public CellBuilder WithHyperlink(string url, string? tooltip = null)
+    public CellBuilder WithHyperlink(string url, string? tooltip)
     {
         _hyperlink = new(url, tooltip);
         return this;

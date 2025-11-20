@@ -309,7 +309,7 @@ public class WorkBookReader
             if (column.Min?.Value == null || column.Width?.Value == null || column.CustomWidth?.Value != true) continue;
             var colIndex = column.Min.Value - 1;
             OneOf<double, CellWidth> width = column.Width.Value;
-            workSheet.SetColumnWith(colIndex, width);
+            workSheet.SetColumnWidth(colIndex, width);
         }
     }
 

@@ -14,8 +14,8 @@ public class ValueOnlyExample : IExample
         
         for (uint i = 0; i < 5; i++)
         {
-            sheet.AddCell(0, i, $"Row {i + 1}");
-            sheet.AddCell(1, i, (i + 1) * 10);
+            sheet.AddCell(0, i, $"Row {i + 1}", null);
+            sheet.AddCell(1, i, (i + 1) * 10, null);
         }
         
         ExampleRunner.SaveWorkSheet(sheet, "05_ValueOnly.xlsx");

@@ -12,15 +12,15 @@ public class DataTypesExample : IExample
     {
         var sheet = new WorkSheet("DataTypes");
         
-        sheet.AddCell(0, 0, "String Value");
-        sheet.AddCell(0, 1, "Integer:");
-        sheet.AddCell(1, 1, 42);
-        sheet.AddCell(0, 2, "Decimal:");
-        sheet.AddCell(1, 2, 3.14159m);
-        sheet.AddCell(0, 3, "Date:");
-        sheet.AddCell(1, 3, DateTime.Now);
-        sheet.AddCell(0, 4, "DateTimeOffset:");
-        sheet.AddCell(1, 4, DateTimeOffset.Now);
+        sheet.AddCell(0, 0, "String Value", null);
+        sheet.AddCell(0, 1, "Integer:", null);
+        sheet.AddCell(1, 1, 42, null);
+        sheet.AddCell(0, 2, "Decimal:", null);
+        sheet.AddCell(1, 2, 3.14159m, null);
+        sheet.AddCell(0, 3, "Date:", null);
+        sheet.AddCell(1, 3, DateTime.Now, null);
+        sheet.AddCell(0, 4, "DateTimeOffset:", null);
+        sheet.AddCell(1, 4, DateTimeOffset.Now, null);
         
         ExampleRunner.SaveWorkSheet(sheet, "02_DataTypes.xlsx");
     }
