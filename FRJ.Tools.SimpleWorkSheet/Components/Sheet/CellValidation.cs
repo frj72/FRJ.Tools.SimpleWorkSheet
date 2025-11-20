@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public record CellValidation
@@ -27,9 +29,9 @@ public record CellValidation
         };
     }
 
-    public static CellValidation WholeNumber(ValidationOperator op, int value1, int? value2 = null, bool allowBlank = true)
-    {
-        return new()
+    public static CellValidation WholeNumber(ValidationOperator op, int value1, int? value2 = null,
+        bool allowBlank = true)
+        => new()
         {
             Type = ValidationType.WholeNumber,
             Operator = op,
@@ -37,35 +39,32 @@ public record CellValidation
             Formula2 = value2?.ToString(),
             AllowBlank = allowBlank
         };
-    }
 
-    public static CellValidation DecimalNumber(ValidationOperator op, double value1, double? value2 = null, bool allowBlank = true)
-    {
-        return new()
+    public static CellValidation DecimalNumber(ValidationOperator op, double value1, double? value2 = null,
+        bool allowBlank = true)
+        => new()
         {
             Type = ValidationType.Decimal,
             Operator = op,
-            Formula1 = value1.ToString(System.Globalization.CultureInfo.InvariantCulture),
-            Formula2 = value2?.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Formula1 = value1.ToString(CultureInfo.InvariantCulture),
+            Formula2 = value2?.ToString(CultureInfo.InvariantCulture),
             AllowBlank = allowBlank
         };
-    }
 
-    public static CellValidation Date(ValidationOperator op, DateTime value1, DateTime? value2 = null, bool allowBlank = true)
-    {
-        return new()
+    public static CellValidation Date(ValidationOperator op, DateTime value1, DateTime? value2 = null,
+        bool allowBlank = true)
+        => new()
         {
             Type = ValidationType.Date,
             Operator = op,
-            Formula1 = value1.ToOADate().ToString(System.Globalization.CultureInfo.InvariantCulture),
-            Formula2 = value2?.ToOADate().ToString(System.Globalization.CultureInfo.InvariantCulture),
+            Formula1 = value1.ToOADate().ToString(CultureInfo.InvariantCulture),
+            Formula2 = value2?.ToOADate().ToString(CultureInfo.InvariantCulture),
             AllowBlank = allowBlank
         };
-    }
 
-    public static CellValidation TextLength(ValidationOperator op, int length1, int? length2 = null, bool allowBlank = true)
-    {
-        return new()
+    public static CellValidation TextLength(ValidationOperator op, int length1, int? length2 = null,
+        bool allowBlank = true)
+        => new()
         {
             Type = ValidationType.TextLength,
             Operator = op,
@@ -73,37 +72,30 @@ public record CellValidation
             Formula2 = length2?.ToString(),
             AllowBlank = allowBlank
         };
-    }
 
     public static CellValidation Custom(string formula, bool allowBlank = true)
-    {
-        return new()
+        => new()
         {
             Type = ValidationType.Custom,
             Operator = ValidationOperator.Between,
             Formula1 = formula,
             AllowBlank = allowBlank
         };
-    }
 
     public CellValidation WithInputMessage(string title, string message)
-    {
-        return this with
+        => this with
         {
             ShowInputMessage = true,
             InputTitle = title,
             InputMessage = message
         };
-    }
 
     public CellValidation WithErrorAlert(string title, string message, string style = "stop")
-    {
-        return this with
+        => this with
         {
             ShowErrorAlert = true,
             ErrorTitle = title,
             ErrorMessage = message,
             ErrorStyle = style
         };
-    }
 }

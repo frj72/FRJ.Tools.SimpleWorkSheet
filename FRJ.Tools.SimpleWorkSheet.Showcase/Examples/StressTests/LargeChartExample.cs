@@ -14,14 +14,14 @@ public class LargeChartExample : IShowcase
     {
         var sheet = new WorkSheet("ChartData");
         
-        sheet.AddCell(new(0, 0), "X");
-        sheet.AddCell(new(1, 0), "Y");
+        sheet.AddCell(new(0, 0), "X", null);
+        sheet.AddCell(new(1, 0), "Y", null);
         
         Console.WriteLine("  Creating 1000 data points...");
         for (uint row = 1; row <= 1000; row++)
         {
-            sheet.AddCell(new(0, row), row);
-            sheet.AddCell(new(1, row), Math.Sin(row / 10.0) * 100);
+            sheet.AddCell(new(0, row), row, null);
+            sheet.AddCell(new(1, row), Math.Sin(row / 10.0) * 100, null);
             
             if (row % 100 == 0)
                 Console.WriteLine($"    Created {row} points...");

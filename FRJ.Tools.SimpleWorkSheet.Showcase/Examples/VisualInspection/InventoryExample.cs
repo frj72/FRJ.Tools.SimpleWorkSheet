@@ -28,9 +28,9 @@ public class InventoryExample : IShowcase
         uint row = 1;
         foreach (var (sku, product, qty, price, url) in items)
         {
-            sheet.AddCell(new(0, row), sku);
-            sheet.AddCell(new(1, row), product);
-            sheet.AddCell(new(2, row), qty);
+            sheet.AddCell(new(0, row), sku, null);
+            sheet.AddCell(new(1, row), product, null);
+            sheet.AddCell(new(2, row), qty, null);
             sheet.AddCell(new(3, row), price, cell => cell.WithFormatCode("$#,##0.00"));
             sheet.AddCell(new(4, row), qty * price, cell => cell.WithFormatCode("$#,##0.00"));
             sheet.AddCell(new(5, row), url, cell => cell.WithHyperlink(url, "Visit Supplier"));
@@ -38,7 +38,7 @@ public class InventoryExample : IShowcase
         }
         
         for (uint col = 0; col < 6; col++)
-            sheet.SetColumnWith(col, 15.0);
+            sheet.SetColumnWidth(col, 15.0);
         
         var workbook = new WorkBook("Inventory", [sheet]);
         ShowcaseRunner.SaveWorkBook(workbook, "Showcase_16_Inventory.xlsx");

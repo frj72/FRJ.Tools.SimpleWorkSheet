@@ -1,3 +1,4 @@
+using System.Globalization;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
@@ -44,8 +45,8 @@ public class CellValidationTests
         var validation = CellValidation.Date(ValidationOperator.Between, date1, date2);
 
         Assert.Equal(ValidationType.Date, validation.Type);
-        Assert.Equal(date1.ToOADate().ToString(System.Globalization.CultureInfo.InvariantCulture), validation.Formula1);
-        Assert.Equal(date2.ToOADate().ToString(System.Globalization.CultureInfo.InvariantCulture), validation.Formula2);
+        Assert.Equal(date1.ToOADate().ToString(CultureInfo.InvariantCulture), validation.Formula1);
+        Assert.Equal(date2.ToOADate().ToString(CultureInfo.InvariantCulture), validation.Formula2);
     }
 
     [Fact]

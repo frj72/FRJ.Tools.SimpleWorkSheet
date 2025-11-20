@@ -12,8 +12,8 @@ public class ConditionalFormattingExample : IExample
     {
         var sheet = new WorkSheet("ConditionalFormatting");
         
-        sheet.AddCell(0, 0, "Score");
-        sheet.AddCell(1, 0, "Status");
+        sheet.AddCell(0, 0, "Score", null);
+        sheet.AddCell(1, 0, "Status", null);
         
         var scores = new[] { 15, 45, 65, 85, 95 };
         
@@ -36,11 +36,11 @@ public class ConditionalFormattingExample : IExample
                 _ => "Excellent"
             };
             
-            sheet.AddCell(0, row, score, cell => cell
+            sheet.AddCell(0, row, score, configure: cell => cell
                 .WithColor(color)
                 .WithFont(font => font.Bold()));
             
-            sheet.AddCell(1, row, status, cell => cell
+            sheet.AddCell(1, row, status, configure: cell => cell
                 .WithColor(color));
         }
         

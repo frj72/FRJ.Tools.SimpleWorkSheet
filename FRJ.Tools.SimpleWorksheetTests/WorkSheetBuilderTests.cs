@@ -11,7 +11,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var position = new CellPosition(1, 1);
 
-        var cell = sheet.AddCell(position, builder => builder
+        var cell = sheet.AddEmptyCell(position, builder => builder
             .WithValue("TestValue")
             .WithColor("FF0000"));
 
@@ -40,7 +40,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var position = new CellPosition(1, 1);
 
-        _ = sheet.AddCell(position, "TestValue");
+        _ = sheet.AddCell(position, "TestValue", null);
 
         Assert.Equal("TestValue", sheet.GetValue(1, 1)?.AsString());
     }
@@ -50,7 +50,7 @@ public class WorkSheetBuilderTests
     {
         var sheet = new WorkSheet("Test");
 
-        var cell = sheet.AddCell(1, 1, builder => builder
+        var cell = sheet.AddEmptyCell(1, 1, builder => builder
             .WithValue("TestValue")
             .WithColor("0000FF"));
 
@@ -63,7 +63,7 @@ public class WorkSheetBuilderTests
     {
         var sheet = new WorkSheet("Test");
 
-        var cell = sheet.AddCell(2, 2, "TestValue", builder => builder
+        var cell = sheet.AddCell(2, 2, "TestValue", configure: builder => builder
             .WithFont(font => font.WithSize(14).Italic()));
 
         Assert.Equal("TestValue", sheet.GetValue(2, 2)?.AsString());
@@ -105,7 +105,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var values = SourceArrayAbc.Select(s => new CellValue(s));
 
-        var cells = sheet.AddRow(1, 0, values).ToList();
+        var cells = sheet.AddRow(1, 0, values, null).ToList();
 
         Assert.Equal(3, cells.Count);
         Assert.Equal("A", sheet.GetValue(0, 1)?.AsString());
@@ -121,7 +121,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var values = SourceArrayAbc.Select(s => new CellValue(s));
 
-        var cells = sheet.AddRow(1, 0, values, builder => builder
+        var cells = sheet.AddRow(1, 0, values, configure: builder => builder
             .WithColor("EFEFEF")
             .WithFont(font => font.Bold())).ToList();
 
@@ -141,7 +141,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var values = SourceArrayAbc.Select(s => new CellValue(s));
 
-        var cells = sheet.AddColumn(1, 0, values).ToList();
+        var cells = sheet.AddColumn(1, 0, values, null).ToList();
 
         Assert.Equal(3, cells.Count);
         Assert.Equal("A", sheet.GetValue(1, 0)?.AsString());
@@ -155,7 +155,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
         var values = SourceArrayAbc.Select(i => new CellValue(i));
 
-        var cells = sheet.AddColumn(1, 0, values, builder => builder
+        var cells = sheet.AddColumn(1, 0, values, configure: builder => builder
             .WithFont(font => font.WithSize(16))).ToList();
 
         Assert.All(cells, cell => Assert.Equal(16, cell.Font?.Size));
@@ -165,7 +165,7 @@ public class WorkSheetBuilderTests
     public void WorkSheet_UpdateCell_ModifiesExistingCell()
     {
         var sheet = new WorkSheet("Test");
-        sheet.AddCell(1, 1, "Original");
+        sheet.AddCell(1, 1, "Original", null);
 
         var updated = sheet.UpdateCell(1, 1, builder => builder
             .WithValue("Updated")
@@ -193,7 +193,7 @@ public class WorkSheetBuilderTests
     {
         var sheet = new WorkSheet("Test");
 
-        var cell = sheet.AddCell(1, 1, 123.45m, builder => builder
+        var cell = sheet.AddCell(1, 1, 123.45m, configure: builder => builder
             .WithStyle(style => style
                 .WithFillColor("E0E0E0")
                 .WithFont(font => font
@@ -217,7 +217,7 @@ public class WorkSheetBuilderTests
     {
         var sheet = new WorkSheet("Test");
 
-        var cell = sheet.AddCell(1, 1, "Imported", builder => builder
+        var cell = sheet.AddCell(1, 1, "Imported", configure: builder => builder
             .WithMetadata(meta => meta
                 .WithSource("csv")
                 .WithOriginalValue("raw_value")
@@ -235,7 +235,7 @@ public class WorkSheetBuilderTests
         var sheet = new WorkSheet("Test");
 
         Assert.Throws<ArgumentException>(() => 
-            sheet.AddCell(1, 1, "Test", builder => builder.WithColor("invalidColor")));
+            sheet.AddCell(1, 1, "Test", configure: builder => builder.WithColor("invalidColor")));
     }
 
     [Fact]

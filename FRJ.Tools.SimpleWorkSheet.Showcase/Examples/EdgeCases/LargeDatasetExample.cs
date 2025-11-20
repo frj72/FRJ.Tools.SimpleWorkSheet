@@ -31,7 +31,7 @@ public class LargeDatasetExample : IShowcase
                     3 => new(DateTime.Now.AddDays(row)),
                     _ => new CellValue($"Data{row}-{col}")
                 };
-                sheet.AddCell(new(col, row), value);
+                sheet.AddCell(new(col, row), value, null);
             }
             
             if (row % 1000 == 0)

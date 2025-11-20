@@ -16,7 +16,7 @@ public class ConditionalFormulaExample : IExample
         var sheet = new WorkSheet("ConditionalFormula");
         
         var headers = SourceArray.Select(h => new CellValue(h));
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithColor("2E75B6")
             .WithFont(font => font.Bold().WithColor("FFFFFF")));
         
@@ -25,8 +25,8 @@ public class ConditionalFormulaExample : IExample
         for (uint i = 0; i < scores.Length; i++)
         {
             var row = i + 1;
-            sheet.AddCell(0, row, scores[i]);
-            sheet.AddCell(1, row, new CellFormula($"=IF(A{row + 1}>=90,\"A\",IF(A{row + 1}>=80,\"B\",IF(A{row + 1}>=70,\"C\",IF(A{row + 1}>=60,\"D\",\"F\"))))"), cell => cell
+            sheet.AddCell(0, row, scores[i], null);
+            sheet.AddCell(1, row, new CellFormula($"=IF(A{row + 1}>=90,\"A\",IF(A{row + 1}>=80,\"B\",IF(A{row + 1}>=70,\"C\",IF(A{row + 1}>=60,\"D\",\"F\"))))"), configure: cell => cell
                 .WithFont(font => font.Bold()));
         }
         

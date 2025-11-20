@@ -62,4 +62,34 @@ public class BarChart : Chart
         base.AddSeries(name, dataRange);
         return this;
     }
+
+    public BarChart WithLegendPosition(ChartLegendPosition position)
+    {
+        LegendPosition = position;
+        return this;
+    }
+
+    public BarChart WithCategoryAxisTitle(string title)
+    {
+        CategoryAxisTitle = title;
+        return this;
+    }
+
+    public BarChart WithValueAxisTitle(string title)
+    {
+        ValueAxisTitle = title;
+        return this;
+    }
+
+    public BarChart WithDataLabels(bool show)
+    {
+        ShowDataLabels = show;
+        return this;
+    }
+
+    public BarChart WithMajorGridlines(bool show)
+    {
+        ShowMajorGridlines = show;
+        return this;
+    }
 }

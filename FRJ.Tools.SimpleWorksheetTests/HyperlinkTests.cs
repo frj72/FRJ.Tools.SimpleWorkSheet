@@ -12,7 +12,7 @@ public class HyperlinkTests
     {
         var cell = CellBuilder.Create()
             .WithValue("Click here")
-            .WithHyperlink("https://example.com")
+            .WithHyperlink("https://example.com", null)
             .Build();
 
         Assert.NotNull(cell.Hyperlink);
@@ -55,13 +55,13 @@ public class HyperlinkTests
         var sheet = new WorkSheet("Hyperlinks");
 
         sheet.AddCell(new(0, 0), "Google", cell => cell
-            .WithHyperlink("https://google.com"));
+            .WithHyperlink("https://google.com", null));
 
         sheet.AddCell(new(0, 1), "GitHub", cell => cell
-            .WithHyperlink("https://github.com"));
+            .WithHyperlink("https://github.com", null));
 
         sheet.AddCell(new(0, 2), "Email", cell => cell
-            .WithHyperlink("mailto:test@example.com"));
+            .WithHyperlink("mailto:test@example.com", null));
 
         var workbook = new WorkBook("Test", [sheet]);
         var bytes = SheetConverter.ToBinaryExcelFile(workbook);
@@ -75,7 +75,7 @@ public class HyperlinkTests
         var sheet = new WorkSheet("Hyperlinks");
 
         sheet.AddCell(new(0, 0), "Styled Link", cell => cell
-            .WithHyperlink("https://example.com")
+            .WithHyperlink("https://example.com", null)
             .WithFont(font => font.WithColor("0000FF").Bold())
             .WithStyle(style => style.WithHorizontalAlignment(HorizontalAlignment.Center)));
 
@@ -93,7 +93,7 @@ public class HyperlinkTests
 
         var cell = CellBuilder.Create()
             .WithValue("Long URL")
-            .WithHyperlink(url)
+            .WithHyperlink(url, null)
             .Build();
 
         Assert.Equal(url, cell.Hyperlink?.Url);
@@ -106,7 +106,7 @@ public class HyperlinkTests
 
         var cell = CellBuilder.Create()
             .WithValue("Special")
-            .WithHyperlink(url)
+            .WithHyperlink(url, null)
             .Build();
 
         Assert.Equal(url, cell.Hyperlink?.Url);
@@ -119,7 +119,7 @@ public class HyperlinkTests
 
         var cell = CellBuilder.Create()
             .WithValue("Email")
-            .WithHyperlink(url)
+            .WithHyperlink(url, null)
             .Build();
 
         Assert.Equal(url, cell.Hyperlink?.Url);
@@ -146,7 +146,7 @@ public class HyperlinkTests
 
         var cell = CellBuilder.Create()
             .WithValue("Invalid")
-            .WithHyperlink(url)
+            .WithHyperlink(url, null)
             .Build();
 
         Assert.Equal(url, cell.Hyperlink?.Url);

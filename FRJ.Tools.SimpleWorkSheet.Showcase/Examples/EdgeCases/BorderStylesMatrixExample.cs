@@ -22,7 +22,7 @@ public class BorderStylesMatrixExample : IShowcase
         
         foreach (var style in styles)
         {
-            sheet.AddCell(new(0, row), style.ToString());
+            sheet.AddCell(new(0, row), style.ToString(), null);
             sheet.AddCell(new(1, row), "Sample Text", cell => cell.WithBorders(
                 CellBorders.Create(
                     CellBorder.Create("000000", style),
@@ -33,8 +33,8 @@ public class BorderStylesMatrixExample : IShowcase
             row++;
         }
         
-        sheet.SetColumnWith(0, 20.0);
-        sheet.SetColumnWith(1, 20.0);
+        sheet.SetColumnWidth(0, 20.0);
+        sheet.SetColumnWidth(1, 20.0);
         
         var workbook = new WorkBook("BorderStyles", [sheet]);
         ShowcaseRunner.SaveWorkBook(workbook, "Showcase_06_BorderStylesMatrix.xlsx");

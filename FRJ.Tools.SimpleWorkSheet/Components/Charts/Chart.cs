@@ -1,3 +1,5 @@
+using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+
 namespace FRJ.Tools.SimpleWorkSheet.Components.Charts;
 
 public abstract class Chart
@@ -8,13 +10,15 @@ public abstract class Chart
     public string? Title { get; protected set; }
     public string? DataSourceSheet { get; protected set; }
     public List<ChartSeries> Series { get; } = [];
+    public ChartLegendPosition LegendPosition { get; protected set; } = ChartLegendPosition.Right;
+    public string? CategoryAxisTitle { get; protected set; }
+    public string? ValueAxisTitle { get; protected set; }
+    public bool ShowDataLabels { get; protected set; }
+    public bool ShowMajorGridlines { get; protected set; } = true;
 
-    protected Chart(ChartType type)
-    {
-        Type = type;
-    }
+    protected Chart(ChartType type) => Type = type;
 
-    public void AddSeries(string name, Sheet.CellRange dataRange)
+    public void AddSeries(string name, CellRange dataRange)
     {
         ChartDataRange.ValidateDataRange(dataRange);
         var series = new ChartSeries(name, dataRange);

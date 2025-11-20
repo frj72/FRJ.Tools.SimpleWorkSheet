@@ -12,17 +12,17 @@ public class SimpleTableExample : IExample
     {
         var sheet = new WorkSheet("SimpleTable");
         
-        sheet.AddCell(0, 0, "Name");
-        sheet.AddCell(1, 0, "Age");
-        sheet.AddCell(2, 0, "City");
+        sheet.AddCell(0, 0, "Name", null);
+        sheet.AddCell(1, 0, "Age", null);
+        sheet.AddCell(2, 0, "City", null);
         
-        sheet.AddCell(0, 1, "John");
-        sheet.AddCell(1, 1, 30);
-        sheet.AddCell(2, 1, "NYC");
+        sheet.AddCell(0, 1, "John", null);
+        sheet.AddCell(1, 1, 30, null);
+        sheet.AddCell(2, 1, "NYC", null);
         
-        sheet.AddCell(0, 2, "Jane");
-        sheet.AddCell(1, 2, 25);
-        sheet.AddCell(2, 2, "LA");
+        sheet.AddCell(0, 2, "Jane", null);
+        sheet.AddCell(1, 2, 25, null);
+        sheet.AddCell(2, 2, "LA", null);
         
         ExampleRunner.SaveWorkSheet(sheet, "03_SimpleTable.xlsx");
     }

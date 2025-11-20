@@ -18,6 +18,18 @@ public static class ExampleRunner
         Console.WriteLine($"Saved: {filePath}");
     }
 
+    public static void SaveWorkBook(WorkBook workBook, string filename)
+    {
+        var outputDir = Path.Combine(Directory.GetCurrentDirectory(), "Output");
+        Directory.CreateDirectory(outputDir);
+        
+        var filePath = Path.Combine(outputDir, filename);
+        
+        workBook.SaveToFile(filePath);
+        
+        Console.WriteLine($"Saved: {filePath}");
+    }
+
     public static void RunExample(IExample example)
     {
         Console.WriteLine($"\n=== {example.Name} ===");

@@ -5,5 +5,6 @@ public enum ChartType
     Bar,
     Line,
     Pie,
-    Scatter
+    Scatter,
+    Area
 }

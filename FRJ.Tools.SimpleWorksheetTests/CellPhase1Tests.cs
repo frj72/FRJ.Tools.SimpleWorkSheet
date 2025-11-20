@@ -25,7 +25,7 @@ public class CellPhase1Tests
         var value = new CellValue("TestValue");
         var style = CellStyle.Create("FFFFFF");
 
-        var cell = new Cell(value, style);
+        var cell = new Cell(value, style, null);
 
         Assert.Equal(value, cell.Value);
         Assert.Equal(style, cell.Style);
@@ -66,7 +66,7 @@ public class CellPhase1Tests
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
         const string formatCode = "0.00";
         var style = CellStyle.Create(color, font, borders, formatCode);
-        var cell = new Cell(new("Test"), style);
+        var cell = new Cell(new("Test"), style, null);
 
         Assert.Equal(color, cell.Color);
         Assert.Equal(font, cell.Font);
@@ -78,7 +78,7 @@ public class CellPhase1Tests
     public void Cell_WithStyleUpdate_UpdatesStyleProperty()
     {
         var originalStyle = CellStyle.Create("FFFFFF");
-        var cell = new Cell(new("Test"), originalStyle);
+        var cell = new Cell(new("Test"), originalStyle, null);
         var newStyle = CellStyle.Create("FF0000");
 
         var updatedCell = cell with { Style = newStyle };
@@ -102,7 +102,7 @@ public class CellPhase1Tests
     [Fact]
     public void Cell_Create_WorksWithNewStyleApproach()
     {
-        var cell = Cell.Create("TestValue", "FFFFFF", CellFont.Create(12, "Arial", "000000"));
+        var cell = Cell.Create("TestValue", "FFFFFF", CellFont.Create(12, "Arial", "000000"), null, null);
 
         Assert.Equal("TestValue", cell.Value.AsString());
         Assert.Equal("FFFFFF", cell.Style.FillColor);
@@ -113,7 +113,7 @@ public class CellPhase1Tests
     [Fact]
     public void CellExtensions_SetColor_UpdatesStyleFillColor()
     {
-        var cell = Cell.Create("Test");
+        var cell = Cell.Create("Test", null, null, null, null);
         
         var updatedCell = cell.SetColor("FF0000");
 
@@ -124,7 +124,7 @@ public class CellPhase1Tests
     [Fact]
     public void CellExtensions_SetFont_UpdatesStyleFont()
     {
-        var cell = Cell.Create("Test");
+        var cell = Cell.Create("Test", null, null, null, null);
         var newFont = CellFont.Create(14, "Arial", "000000", true);
         
         var updatedCell = cell.SetFont(newFont);
@@ -136,7 +136,7 @@ public class CellPhase1Tests
     [Fact]
     public void CellExtensions_SetBorders_UpdatesStyleBorders()
     {
-        var cell = Cell.Create("Test");
+        var cell = Cell.Create("Test", null, null, null, null);
         var borders = CellBorders.Create(
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
@@ -152,7 +152,7 @@ public class CellPhase1Tests
     [Fact]
     public void CellExtensions_SetDefaultFormatting_UsesDefaultCellStyle()
     {
-        var cell = Cell.Create("Test", "FF0000", CellFont.Create(14, "Arial", "000000", true));
+        var cell = Cell.Create("Test", "FF0000", CellFont.Create(14, "Arial", "000000", true), null, null);
         
         var updatedCell = cell.SetDefaultFormatting();
 

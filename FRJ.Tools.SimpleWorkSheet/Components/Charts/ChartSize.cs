@@ -18,10 +18,7 @@ public record ChartSize
         HeightEmus = heightEmus;
     }
 
-    public static ChartSize FromEmus(long width, long height)
-    {
-        return new(width, height);
-    }
+    public static ChartSize FromEmus(long width, long height) => new(width, height);
 
     public static ChartSize FromInches(double widthInches, double heightInches)
     {

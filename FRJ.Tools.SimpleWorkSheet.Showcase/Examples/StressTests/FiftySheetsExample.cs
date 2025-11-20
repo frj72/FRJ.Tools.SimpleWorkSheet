@@ -20,7 +20,7 @@ public class FiftySheetsExample : IShowcase
             
             for (uint row = 0; row < 100; row++)
                 for (uint col = 0; col < 10; col++)
-                    sheet.AddCell(new(col, row), $"S{i}-R{row}-C{col}");
+                    sheet.AddCell(new(col, row), $"S{i}-R{row}-C{col}", null);
             
             sheets.Add(sheet);
             

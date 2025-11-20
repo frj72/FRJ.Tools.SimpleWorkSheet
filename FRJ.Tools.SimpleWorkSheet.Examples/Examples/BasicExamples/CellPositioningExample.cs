@@ -13,12 +13,12 @@ public class CellPositioningExample : IExample
     {
         var sheet = new WorkSheet("Positioning");
         
-        sheet.AddCell(0, 0, "Using x, y coordinates");
+        sheet.AddCell(0, 0, "Using x, y coordinates", null);
         
         var position = new CellPosition(0, 1);
-        sheet.AddCell(position, "Using CellPosition object");
+        sheet.AddCell(position, "Using CellPosition object", null);
         
-        sheet.AddCell(new(0, 2), "Another CellPosition");
+        sheet.AddCell(new(0, 2), "Another CellPosition", null);
         
         ExampleRunner.SaveWorkSheet(sheet, "04_CellPositioning.xlsx");
     }

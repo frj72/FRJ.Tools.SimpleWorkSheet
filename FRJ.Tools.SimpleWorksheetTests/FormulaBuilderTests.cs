@@ -23,7 +23,7 @@ public class FormulaBuilderTests
     [Fact]
     public void XLookup_WithoutIfNotFound_GeneratesCorrectFormula()
     {
-        var formula = FormulaBuilder.XLookup("A2", "B1:B10", "C1:C10");
+        var formula = FormulaBuilder.XLookup("A2", "B1:B10", "C1:C10", null);
         
         Assert.Equal("=XLOOKUP(A2,B1:B10,C1:C10)", formula.Value);
     }
@@ -39,7 +39,7 @@ public class FormulaBuilderTests
     [Fact]
     public void Index_WithRowOnly_GeneratesCorrectFormula()
     {
-        var formula = FormulaBuilder.Index("A1:C10", 5);
+        var formula = FormulaBuilder.Index("A1:C10", 5, null);
         
         Assert.Equal("=INDEX(A1:C10,5)", formula.Value);
     }
@@ -255,7 +255,7 @@ public class FormulaBuilderTests
     [Fact]
     public void Weekday_WithoutReturnType_GeneratesCorrectFormula()
     {
-        var formula = FormulaBuilder.Weekday("A1");
+        var formula = FormulaBuilder.Weekday("A1", null);
         
         Assert.Equal("=WEEKDAY(A1)", formula.Value);
     }
@@ -327,7 +327,7 @@ public class FormulaBuilderTests
     [Fact]
     public void Ceiling_WithoutSignificance_GeneratesCorrectFormula()
     {
-        var formula = FormulaBuilder.Ceiling("A1");
+        var formula = FormulaBuilder.Ceiling("A1", null);
         
         Assert.Equal("=CEILING(A1)", formula.Value);
     }
@@ -343,7 +343,7 @@ public class FormulaBuilderTests
     [Fact]
     public void Floor_WithoutSignificance_GeneratesCorrectFormula()
     {
-        var formula = FormulaBuilder.Floor("A1");
+        var formula = FormulaBuilder.Floor("A1", null);
         
         Assert.Equal("=FLOOR(A1)", formula.Value);
     }

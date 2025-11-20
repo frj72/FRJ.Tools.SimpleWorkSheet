@@ -21,12 +21,12 @@ public class AllChartTypesExample : IShowcase
         var categories = new[] { "ProductA", "Product B", "Product C", "Product D", "Product E" };
         var values = new[] { 120, 95, 140, 85, 110 };
         
-        dataSheet.AddCell(new(0, 0), "Product");
-        dataSheet.AddCell(new(1, 0), "Sales");
+        dataSheet.AddCell(new(0, 0), "Product", null);
+        dataSheet.AddCell(new(1, 0), "Sales", null);
         for (uint i = 0; i < 5; i++)
         {
-            dataSheet.AddCell(new(0, i + 1), categories[i]);
-            dataSheet.AddCell(new(1, i + 1), values[i]);
+            dataSheet.AddCell(new(0, i + 1), categories[i], null);
+            dataSheet.AddCell(new(1, i + 1), values[i], null);
         }
         
         var dataRange = CellRange.FromBounds(0, 1, 0, 5);

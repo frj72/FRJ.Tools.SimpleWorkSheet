@@ -19,7 +19,7 @@ public class BorderStylesExample : IExample
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
         
-        sheet.AddCell(0, 0, "All Borders", cell => cell.WithBorders(thinBorders));
+        sheet.AddCell(0, 0, "All Borders", configure: cell => cell.WithBorders(thinBorders));
         
         var topBottomBorders = CellBorders.Create(
             null,
@@ -27,7 +27,7 @@ public class BorderStylesExample : IExample
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
         
-        sheet.AddCell(0, 1, "Top/Bottom Only", cell => cell.WithBorders(topBottomBorders));
+        sheet.AddCell(0, 1, "Top/Bottom Only", configure: cell => cell.WithBorders(topBottomBorders));
         
         var leftBorder = CellBorders.Create(
             CellBorder.Create(Colors.Red, CellBorderStyle.Thin),
@@ -35,8 +35,7 @@ public class BorderStylesExample : IExample
             null,
             null);
         
-        sheet.AddCell(0, 2, "Left Border Red", cell => cell.WithBorders(leftBorder));
-        
+        sheet.AddCell(0, 2, "Left Border Red", configure: cell => cell.WithBorders(leftBorder));
         ExampleRunner.SaveWorkSheet(sheet, "08_BorderStyles.xlsx");
     }
 }

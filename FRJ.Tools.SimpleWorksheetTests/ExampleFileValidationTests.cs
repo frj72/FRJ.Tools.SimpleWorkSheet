@@ -55,6 +55,39 @@ public class ExampleFileValidationTests
     [InlineData("43_PieChart.xlsx")]
     [InlineData("44_ScatterChart.xlsx")]
     [InlineData("45_ChartSheet.xlsx")]
+    [InlineData("46_AutoFitColumns.xlsx")]
+    [InlineData("47_SheetTabColors.xlsx")]
+    [InlineData("48_SheetVisibility.xlsx")]
+    [InlineData("49_ExcelTables.xlsx")]
+    [InlineData("50_InsertImages.xlsx")]
+    [InlineData("51_AreaChart.xlsx")]
+    [InlineData("52_StackedAreaChart.xlsx")]
+    [InlineData("53_ChartFormatting.xlsx")]
+    [InlineData("54_JsonArrayFluentImport.xlsx")]
+    [InlineData("55_JsonFlatObjectImport.xlsx")]
+    [InlineData("56_JsonMultiColumnArrayImport.xlsx")]
+    [InlineData("57_JsonArrayWithStyling.xlsx")]
+    [InlineData("58_JsonFlatObjectWithParsers.xlsx")]
+    [InlineData("59_JsonMultiColumnAllFeatures.xlsx")]
+    [InlineData("60_JsonNestedObjects.xlsx")]
+    [InlineData("61_JsonToWorkbook.xlsx")]
+    [InlineData("62_JsonToWorkbookLineChart.xlsx")]
+    [InlineData("63_JsonToWorkbookBarChart.xlsx")]
+    [InlineData("64_JsonToWorkbookMultipleCharts.xlsx")]
+    [InlineData("65_JsonColumnOrdering.xlsx")]
+    [InlineData("66_JsonColumnFiltering.xlsx")]
+    [InlineData("67_JsonDateNumberFormatting.xlsx")]
+    [InlineData("68_JsonConditionalStyling.xlsx")]
+    [InlineData("69_JsonAdvancedWorkbook.xlsx")]
+    [InlineData("70_CsvWithHeader.xlsx")]
+    [InlineData("71_CsvWithoutHeader.xlsx")]
+    [InlineData("72_CsvAdvancedFeatures.xlsx")]
+    [InlineData("73_CsvToWorkbookWithChart.xlsx")]
+    [InlineData("74_GenericTableBasic.xlsx")]
+    [InlineData("75_GenericTableAdvanced.xlsx")]
+    [InlineData("76_GenericTableToWorkbook.xlsx")]
+    [InlineData("77_GenericTableWorkbookAdvanced.xlsx")]
+    [InlineData("78_BuiltInColors.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -75,7 +108,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 45;
+        const int expectedCount = 78;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);

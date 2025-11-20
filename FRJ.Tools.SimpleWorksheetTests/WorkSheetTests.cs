@@ -15,7 +15,7 @@ public class WorkSheetTests
         var position = new CellPosition(1, 1);
         var value = new CellValue("TestValue");
 
-        sheet.AddCell(position, value);
+        sheet.AddCell(position, value, null);
 
         Assert.Equal(value, sheet.GetValue(1, 1));
     }
@@ -37,7 +37,7 @@ public class WorkSheetTests
         var position = new CellPosition(1, 1);
         var value = new CellValue("TestValue");
 
-        sheet.AddCell(position, value);
+        sheet.AddCell(position, value, null);
         var newValue = new CellValue("NewValue");
         sheet.SetValue(1, 1, newValue);
 
@@ -62,7 +62,7 @@ public class WorkSheetTests
         var position = new CellPosition(1, 1);
         var font = CellFont.Create(12, "Arial", "000000");
 
-        sheet.AddCell(position, new CellValue("TestValue"));
+        sheet.AddCell(position, new("TestValue"), null);
         sheet.SetFont(1, 1, font);
 
         Assert.Equal(font, sheet.Cells.Cells[position].Font);
@@ -75,7 +75,7 @@ public class WorkSheetTests
         var position = new CellPosition(1, 1);
         const string color = "FFFFFF";
 
-        sheet.AddCell(position, new CellValue("TestValue"));
+        sheet.AddCell(position, new("TestValue"), null);
         sheet.SetColor(1, 1, color);
 
         Assert.Equal(color, sheet.Cells.Cells[position].Color);
@@ -92,7 +92,7 @@ public class WorkSheetTests
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
 
-        sheet.AddCell(position, new CellValue("TestValue"));
+        sheet.AddCell(position, new("TestValue"), null);
         sheet.SetBorders(1, 1, borders);
 
         Assert.Equal(borders, sheet.Cells.Cells[position].Borders);
@@ -105,7 +105,7 @@ public class WorkSheetTests
         var position = new CellPosition(1, 1);
         var font = CellFont.Create(12, "Arial", "invalidColor");
  
-        sheet.AddCell(position, new CellValue("TestValue"));
+        sheet.AddCell(position, new("TestValue"), null);
  
         Assert.Throws<ArgumentException>(() => sheet.SetFont(1, 1, font));
     }
@@ -199,14 +199,14 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("Sales");
 
-        sheet.AddCell(new(0, 0), new CellValue("Region"));
-        sheet.AddCell(new(1, 0), new CellValue("Sales"));
-        sheet.AddCell(new(0, 1), new CellValue("North"));
-        sheet.AddCell(new(1, 1), new CellValue(100));
-        sheet.AddCell(new(0, 2), new CellValue("South"));
-        sheet.AddCell(new(1, 2), new CellValue(150));
-        sheet.AddCell(new(0, 3), new CellValue("East"));
-        sheet.AddCell(new(1, 3), new CellValue(120));
+        sheet.AddCell(new(0, 0), new("Region"), null);
+        sheet.AddCell(new(1, 0), new("Sales"), null);
+        sheet.AddCell(new(0, 1), new("North"), null);
+        sheet.AddCell(new(1, 1), new(100), null);
+        sheet.AddCell(new(0, 2), new("South"), null);
+        sheet.AddCell(new(1, 2), new(150), null);
+        sheet.AddCell(new(0, 3), new("East"), null);
+        sheet.AddCell(new(1, 3), new(120), null);
 
         var categoriesRange = CellRange.FromBounds(0, 1, 0, 3);
         var valuesRange = CellRange.FromBounds(1, 1, 1, 3);
@@ -246,10 +246,10 @@ public class WorkSheetTests
     public void AddChart_MultipleSheets_ChartsReferenceCrossSheetsCorrectly()
     {
         var dataSheet = new WorkSheet("Data");
-        dataSheet.AddCell(new(0, 0), new CellValue("A"));
-        dataSheet.AddCell(new(1, 0), new CellValue(100));
-        dataSheet.AddCell(new(0, 1), new CellValue("B"));
-        dataSheet.AddCell(new(1, 1), new CellValue(200));
+        dataSheet.AddCell(new(0, 0), new("A"), null);
+        dataSheet.AddCell(new(1, 0), new(100), null);
+        dataSheet.AddCell(new(0, 1), new("B"), null);
+        dataSheet.AddCell(new(1, 1), new(200), null);
 
         var chartSheet = new WorkSheet("Charts");
         var chart = BarChart.Create()
@@ -272,8 +272,8 @@ public class WorkSheetTests
         var sheet = new WorkSheet("TestSheet");
         var position = new CellPosition(0, 0);
 
-        sheet.AddCell(position, "First");
-        sheet.AddCell(position, "Second");
+        sheet.AddCell(position, "First", null);
+        sheet.AddCell(position, "Second", null);
 
         var value = sheet.GetValue(0, 0);
         Assert.Equal("Second", value?.Value.AsT2);
@@ -285,7 +285,7 @@ public class WorkSheetTests
         var sheet = new WorkSheet("TestSheet");
         var position = new CellPosition(0, 0);
 
-        sheet.AddCell(position, "Original");
+        sheet.AddCell(position, "Original", null);
         sheet.SetValue(0, 0, "Updated");
 
         var value = sheet.GetValue(0, 0);
@@ -299,7 +299,7 @@ public class WorkSheetTests
         var position = new CellPosition(0, 0);
         var newFont = CellFont.Create(16, "Arial", "FF0000");
 
-        sheet.AddCell(position, "TestValue");
+        sheet.AddCell(position, "TestValue", null);
         sheet.SetFont(0, 0, newFont);
 
         var value = sheet.GetValue(0, 0);
@@ -316,7 +316,7 @@ public class WorkSheetTests
         var position = new CellPosition(0, 0);
         const string newColor = "FF0000";
 
-        sheet.AddCell(position, "TestValue");
+        sheet.AddCell(position, "TestValue", null);
         sheet.SetColor(0, 0, newColor);
 
         var value = sheet.GetValue(0, 0);
@@ -337,7 +337,7 @@ public class WorkSheetTests
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin),
             CellBorder.Create(Colors.Black, CellBorderStyle.Thin));
 
-        sheet.AddCell(position, "TestValue");
+        sheet.AddCell(position, "TestValue", null);
         sheet.SetBorders(0, 0, borders);
 
         var value = sheet.GetValue(0, 0);
@@ -352,7 +352,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
 
-        sheet.SetColumnWith(0, 0.0);
+        sheet.SetColumnWidth(0, 0.0);
 
         Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
         Assert.Equal(0.0, sheet.ExplicitColumnWidths[0].AsT0);
@@ -363,7 +363,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
 
-        sheet.SetColumnWith(0, -5.0);
+        sheet.SetColumnWidth(0, -5.0);
 
         Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
         Assert.Equal(-5.0, sheet.ExplicitColumnWidths[0].AsT0);
@@ -374,7 +374,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
 
-        sheet.SetColumnWith(0, 1.0);
+        sheet.SetColumnWidth(0, 1.0);
 
         Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
         Assert.Equal(1.0, sheet.ExplicitColumnWidths[0].AsT0);
@@ -385,7 +385,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
 
-        sheet.SetColumnWith(0, 255.0);
+        sheet.SetColumnWidth(0, 255.0);
 
         Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
         Assert.Equal(255.0, sheet.ExplicitColumnWidths[0].AsT0);
@@ -396,7 +396,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
 
-        sheet.SetColumnWith(0, 1000.0);
+        sheet.SetColumnWidth(0, 1000.0);
 
         Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
         Assert.Equal(1000.0, sheet.ExplicitColumnWidths[0].AsT0);
@@ -407,7 +407,7 @@ public class WorkSheetTests
     {
         var sheet = new WorkSheet("TestSheet");
 
-        sheet.SetColumnWith(0, CellWidth.AutoExpand);
+        sheet.SetColumnWidth(0, CellWidth.AutoExpand);
 
         Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
         Assert.True(sheet.ExplicitColumnWidths[0].IsT1);

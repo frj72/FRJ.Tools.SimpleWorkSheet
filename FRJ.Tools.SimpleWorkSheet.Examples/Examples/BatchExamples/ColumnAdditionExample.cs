@@ -18,12 +18,12 @@ public class ColumnAdditionExample : IExample
         
         var months = SourceArrayMonths.Select(m => new CellValue(m));
         
-        sheet.AddColumn(0, 0, months, cell => cell
+        sheet.AddColumn(0, 0, months, configure: cell => cell
             .WithFont(font => font.Bold()));
         
         var sales = SourceArraySales.Select(s => new CellValue(s));
         
-        sheet.AddColumn(1, 0, sales);
+        sheet.AddColumn(1, 0, sales, null);
         
         ExampleRunner.SaveWorkSheet(sheet, "11_ColumnAddition.xlsx");
     }

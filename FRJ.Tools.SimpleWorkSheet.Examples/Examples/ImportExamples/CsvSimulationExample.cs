@@ -38,7 +38,7 @@ public class CsvSimulationExample : IExample
                 if (row == 0)
                 {
                     var col1 = col;
-                    sheet.AddCell(col, row, processedValue, cell => cell
+                    sheet.AddCell(col, row, processedValue, configure: cell => cell
                         .WithColor("4472C4")
                         .WithFont(font => font.Bold().WithColor("FFFFFF"))
                         .FromImportedValue(values[col1], options));
@@ -46,7 +46,7 @@ public class CsvSimulationExample : IExample
                 else
                 {
                     var col1 = col;
-                    sheet.AddCell(col, row, processedValue, cell => cell
+                    sheet.AddCell(col, row, processedValue, configure: cell => cell
                         .FromImportedValue(values[col1], options));
                 }
             }

@@ -2,13 +2,12 @@ using System.Globalization;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using SkiaSharp;
 
-// ReSharper disable UnusedMember.Global
-
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public static class CellExtensions
 {
     private const double DefaultWidth = 65.0 / 6.0;
+
     extension(Cell cell)
     {
         public Cell SetValue(CellValue value) => cell with { Value = value };
@@ -33,16 +32,8 @@ public static class CellExtensions
                 throw new ArgumentException("Invalid border color format", nameof(borders));
             return cell with { Style = cell.Style.WithBorders(borders) };
         }
-
-        public Cell SetBorders(CellBorder borders)
-        {
-            return cell with { Style = cell.Style.WithBorders(CellBorders.Create(borders, borders, borders, borders)) };
-        }
-
         public Cell SetDefaultFormatting()
-        {
-            return cell with { Style = WorkSheetDefaults.DefaultCellStyle };
-        }
+            => cell with { Style = WorkSheetDefaults.DefaultCellStyle };
     }
 
     public static double EstimateMaxWidth(this IEnumerable<Cell> cells)
@@ -63,12 +54,12 @@ public static class CellExtensions
                 SKFontStyleWidth.Normal,
                 fontStyleSlant
             );
-            
+
             var textSize = (float)(cellFont.Size ?? WorkSheetDefaults.FontSize);
-            
+
             using var font = new SKFont(typeface, textSize);
 
-    
+
             var textToEstimate = cell.Value.CellValueType() switch
             {
                 CellValueBasicType.String => cell.Value.AsString(),
@@ -80,7 +71,7 @@ public static class CellExtensions
                     cell.Value.AsDateTime().ToString("yyyy-MM-dd HH:mm:ss"),
                 _ => cell.Value.AsString()
             };
-            
+
             var rawWidthPx = font.MeasureText(textToEstimate);
             var width = Math.Ceiling(rawWidthPx / 6.0);
 
@@ -92,7 +83,4 @@ public static class CellExtensions
             ? DefaultWidth
             : maxWidth;
     }
-
-   
-    
 }

@@ -16,7 +16,7 @@ public class PercentageFormulaExample : IExample
         var sheet = new WorkSheet("PercentageFormula");
         
         var headers = SourceArray.Select(h => new CellValue(h));
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithColor("4472C4")
             .WithFont(font => font.Bold().WithColor("FFFFFF")));
         
@@ -32,10 +32,10 @@ public class PercentageFormulaExample : IExample
             var row = i + 1;
             var product = products[i];
             
-            sheet.AddCell(0, row, product.Name);
-            sheet.AddCell(1, row, product.Sales, cell => cell.WithFormatCode("$#,##0"));
-            sheet.AddCell(2, row, product.Target, cell => cell.WithFormatCode("$#,##0"));
-            sheet.AddCell(3, row, new CellFormula($"=B{row + 1}/C{row + 1}"), cell => cell
+            sheet.AddCell(0, row, product.Name, null);
+            sheet.AddCell(1, row, product.Sales, configure: cell => cell.WithFormatCode("$#,##0"));
+            sheet.AddCell(2, row, product.Target, configure: cell => cell.WithFormatCode("$#,##0"));
+            sheet.AddCell(3, row, new CellFormula($"=B{row + 1}/C{row + 1}"), configure: cell => cell
                 .WithFormatCode("0.0%")
                 .WithFont(font => font.Bold()));
         }

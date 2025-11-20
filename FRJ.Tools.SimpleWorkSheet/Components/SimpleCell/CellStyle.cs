@@ -11,9 +11,10 @@ public record CellStyle
     public int? TextRotation { get; init; }
     public bool? WrapText { get; init; }
 
-    public static CellStyle Create(string? fillColor = null, CellFont? font = null, CellBorders? borders = null, string? formatCode = null, HorizontalAlignment? horizontalAlignment = null, VerticalAlignment? verticalAlignment = null, int? textRotation = null, bool? wrapText = null)
-    {
-        return new()
+    public static CellStyle Create(string? fillColor = null, CellFont? font = null, CellBorders? borders = null,
+        string? formatCode = null, HorizontalAlignment? horizontalAlignment = null,
+        VerticalAlignment? verticalAlignment = null, int? textRotation = null, bool? wrapText = null)
+        => new()
         {
             FillColor = fillColor,
             Font = font,
@@ -24,5 +25,4 @@ public record CellStyle
             TextRotation = textRotation,
             WrapText = wrapText
         };
-    }
 }

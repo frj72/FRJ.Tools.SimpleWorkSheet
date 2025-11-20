@@ -75,4 +75,16 @@ public class PieChart : Chart
         base.AddSeries(name, dataRange);
         return this;
     }
+
+    public PieChart WithLegendPosition(ChartLegendPosition position)
+    {
+        LegendPosition = position;
+        return this;
+    }
+
+    public PieChart WithDataLabels(bool show)
+    {
+        ShowDataLabels = show;
+        return this;
+    }
 }

@@ -11,7 +11,7 @@ public class HelloWorldExample : IExample
     public void Run()
     {
         var sheet = new WorkSheet("HelloWorld");
-        sheet.AddCell(0, 0, "Hello World");
+        sheet.AddCell(0, 0, "Hello World", null);
         ExampleRunner.SaveWorkSheet(sheet, "01_HelloWorld.xlsx");
     }
 }

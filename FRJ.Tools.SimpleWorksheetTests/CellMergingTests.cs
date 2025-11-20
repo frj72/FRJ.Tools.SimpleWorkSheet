@@ -31,7 +31,7 @@ public class CellMergingTests
     public void WorkBookReader_LoadsMergedCells()
     {
         var sheet = new WorkSheet("Merged");
-        sheet.AddCell(new(0, 0), "Header");
+        sheet.AddCell(new(0, 0), "Header", null);
         sheet.MergeCells(0, 0, 3, 1);
 
         var workbook = new WorkBook("Test", [sheet]);
@@ -73,7 +73,7 @@ public class CellMergingTests
     public void MergeCells_PreservesExistingTopLeftValue()
     {
         var sheet = new WorkSheet("Test");
-        sheet.AddCell(new(0, 0), "Header");
+        sheet.AddCell(new(0, 0), "Header", null);
 
         sheet.MergeCells(0, 0, 2, 1);
 

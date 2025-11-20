@@ -34,19 +34,19 @@ public class GradebookExample : IShowcase
         uint row = 1;
         foreach (var (name, quiz1, quiz2, midterm, final) in students)
         {
-            sheet.AddCell(new(0, row), name);
-            sheet.AddCell(new(1, row), quiz1);
-            sheet.AddCell(new(2, row), quiz2);
-            sheet.AddCell(new(3, row), midterm);
-            sheet.AddCell(new(4, row), final);
+            sheet.AddCell(new(0, row), name, null);
+            sheet.AddCell(new(1, row), quiz1, null);
+            sheet.AddCell(new(2, row), quiz2, null);
+            sheet.AddCell(new(3, row), midterm, null);
+            sheet.AddCell(new(4, row), final, null);
             sheet.AddCell(new(5, row), new CellFormula($"=AVERAGE(B{row + 1}:E{row + 1})"), cell => cell.WithFormatCode("0.00"));
-            sheet.AddCell(new(6, row), new CellFormula($"=IF(F{row + 1}>=90,\"A\",IF(F{row + 1}>=80,\"B\",IF(F{row + 1}>=70,\"C\",\"F\")))"));
+            sheet.AddCell(new(6, row), new CellFormula($"=IF(F{row + 1}>=90,\"A\",IF(F{row + 1}>=80,\"B\",IF(F{row + 1}>=70,\"C\",\"F\")))"), null);
             row++;
         }
         
-        sheet.SetColumnWith(0, 18.0);
+        sheet.SetColumnWidth(0, 18.0);
         for (uint col = 1; col <= 6; col++)
-            sheet.SetColumnWith(col, 10.0);
+            sheet.SetColumnWidth(col, 10.0);
         
         sheet.FreezePanes(1, 0);
         

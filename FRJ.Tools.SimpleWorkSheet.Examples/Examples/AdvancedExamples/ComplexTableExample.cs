@@ -17,7 +17,7 @@ public class ComplexTableExample : IExample
         
         var headers = SourceArray.Select(h => new CellValue(h));
         
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithColor("2E75B6")
             .WithFont(font => font
                 .WithSize(12)
@@ -40,7 +40,7 @@ public class ComplexTableExample : IExample
             var values = rowData.Select(v => new CellValue(v));
             var bgColor = i % 2 == 0 ? "F2F2F2" : "FFFFFF";
             
-            sheet.AddRow(row, 0, values, cell => cell.WithColor(bgColor));
+            sheet.AddRow(row, 0, values, configure: cell => cell.WithColor(bgColor));
             
             var stockValue = int.Parse(rowData[4]);
             var statusColor = stockValue switch

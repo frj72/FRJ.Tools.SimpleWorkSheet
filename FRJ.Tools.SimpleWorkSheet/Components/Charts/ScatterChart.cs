@@ -62,4 +62,34 @@ public class ScatterChart : Chart
         base.AddSeries(name, dataRange);
         return this;
     }
+
+    public ScatterChart WithLegendPosition(ChartLegendPosition position)
+    {
+        LegendPosition = position;
+        return this;
+    }
+
+    public ScatterChart WithCategoryAxisTitle(string title)
+    {
+        CategoryAxisTitle = title;
+        return this;
+    }
+
+    public ScatterChart WithValueAxisTitle(string title)
+    {
+        ValueAxisTitle = title;
+        return this;
+    }
+
+    public ScatterChart WithDataLabels(bool show)
+    {
+        ShowDataLabels = show;
+        return this;
+    }
+
+    public ScatterChart WithMajorGridlines(bool show)
+    {
+        ShowMajorGridlines = show;
+        return this;
+    }
 }

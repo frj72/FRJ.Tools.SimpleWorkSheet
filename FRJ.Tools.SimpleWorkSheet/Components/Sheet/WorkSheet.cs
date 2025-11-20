@@ -12,6 +12,8 @@ public class WorkSheet
 
     private readonly List<CellRange> _mergedCells = [];
     private readonly List<Chart> _charts = [];
+    private readonly List<ExcelTable> _tables = [];
+    private readonly List<WorksheetImage> _images = [];
     public string Name { get; }
     public CellCollection Cells { get; }
     
@@ -19,8 +21,12 @@ public class WorkSheet
     public Dictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights { get; } = new();
     public Dictionary<CellRange, CellValidation> Validations { get; } = new();
     public FreezePane? FrozenPane { get; private set; }
+    public string? TabColor { get; private set; }
+    public bool IsVisible { get; private set; } = true;
     public IReadOnlyList<CellRange> MergedCells => _mergedCells;
     public IReadOnlyList<Chart> Charts => _charts;
+    public IReadOnlyList<ExcelTable> Tables => _tables;
+    public IReadOnlyList<WorksheetImage> Images => _images;
 
     public WorkSheet(string name)
     {
@@ -28,7 +34,7 @@ public class WorkSheet
         Cells = new();
     }
 
-    public Cell AddCell(CellPosition position, Action<CellBuilder> configure)
+    public Cell AddEmptyCell(CellPosition position, Action<CellBuilder> configure)
     {
         var builder = CellBuilder.Create();
         configure(builder);
@@ -41,7 +47,7 @@ public class WorkSheet
         return cell;
     }
 
-    public Cell AddCell(CellPosition position, CellValue value, Action<CellBuilder>? configure = null)
+    public Cell AddCell(CellPosition position, CellValue value, Action<CellBuilder>? configure)
     {
         var builder = CellBuilder.FromValue(value);
         configure?.Invoke(builder);
@@ -67,7 +73,7 @@ public class WorkSheet
             throw new ArgumentException("Invalid border color format", nameof(borders));
 
         var cell = Cell.Create(value, color ?? WorkSheetDefaults.FillColor, font ?? WorkSheetDefaults.Font,
-            borders ?? WorkSheetDefaults.CellBorders);
+            borders ?? WorkSheetDefaults.CellBorders, null);
         Cells.Cells[position] = cell;
     }
 
@@ -77,10 +83,7 @@ public class WorkSheet
         return Cells.Cells.TryGetValue(position, out var cell) ? cell.Value : null;
     }
 
-    public void InsertCell(int x, int y, Cell cell)
-    {
-        Cells.Cells[new((uint)x, (uint)y)] = cell;
-    }
+    public void InsertCell(int x, int y, Cell cell) => Cells.Cells[new((uint)x, (uint)y)] = cell;
 
 
     public void SetValue(uint x, uint y, CellValue value)
@@ -123,10 +126,8 @@ public class WorkSheet
     }
     
 
-    public void SetBorders(uint x, uint y, CellBorder borders)
-    {
-        SetBorders(x, y, CellBorders.Create(borders, borders, borders, borders));
-    }
+    public void SetBorders(uint x, uint y, CellBorder borders) 
+        => SetBorders(x, y, CellBorders.Create(borders, borders, borders, borders));
 
     public void SetDefaultFormatting(uint x, uint y)
     {
@@ -140,30 +141,17 @@ public class WorkSheet
         }
     }
     
-    public  void SetColumnWith(uint column, OneOf<double, CellWidth> width)
-    {
-        ExplicitColumnWidths[column] = width;
-    }
+    public  void SetColumnWidth(uint column, OneOf<double, CellWidth> width) 
+        => ExplicitColumnWidths[column] = width;
 
-    public void SetRowHeight(uint row, OneOf<double, RowHeight> height)
-    {
-        ExplicitRowHeights[row] = height;
-    }
+    public void SetRowHeight(uint row, OneOf<double, RowHeight> height) 
+        => ExplicitRowHeights[row] = height;
 
-    public void FreezePanes(uint row, uint column)
-    {
-        FrozenPane = new(row, column);
-    }
+    public void FreezePanes(uint row, uint column) => FrozenPane = new(row, column);
 
-    public void FreezeRows(uint row)
-    {
-        FrozenPane = new(row, 0);
-    }
+    public void FreezeRows(uint row) => FrozenPane = new(row, 0);
 
-    public void FreezeColumns(uint column)
-    {
-        FrozenPane = new(0, column);
-    }
+    public void FreezeColumns(uint column) => FrozenPane = new(0, column);
 
     public CellRange MergeCells(uint fromX, uint fromY, uint toX, uint toY) =>
         MergeCells(CellRange.FromBounds(fromX, fromY, toX, toY));
@@ -197,15 +185,11 @@ public class WorkSheet
         _mergedCells.Add(range);
     }
 
-    public HashSet<int> GetAllFontSizes()
-    {
-        return Cells.Cells.Values.Select(cell => cell.Font?.Size ?? WorkSheetDefaults.FontSize).ToHashSet();
-    }
+    public HashSet<int> GetAllFontSizes() => 
+        Cells.Cells.Values.Select(cell => cell.Font?.Size ?? WorkSheetDefaults.FontSize).ToHashSet();
 
-    public HashSet<string> GetAllFontNames()
-    {
-        return Cells.Cells.Values.Select(cell => cell.Font?.Name ?? WorkSheetDefaults.FontName).ToHashSet();
-    }
+    public HashSet<string> GetAllFontNames() => 
+        Cells.Cells.Values.Select(cell => cell.Font?.Name ?? WorkSheetDefaults.FontName).ToHashSet();
 
     public HashSet<string> GetAllColors()
     {
@@ -216,16 +200,12 @@ public class WorkSheet
         return cellColors.Concat(fontColors).Concat(borderColors).ToHashSet();
     }
 
-    public HashSet<string> GetAllCellColors()
-    {
-        return Cells.Cells.Values.Select(cell => cell.Color ?? WorkSheetDefaults.Color).ToHashSet();
-    }
-    
+    public HashSet<string> GetAllCellColors() 
+        => Cells.Cells.Values.Select(cell => cell.Color ?? WorkSheetDefaults.Color).ToHashSet();
 
-    public HashSet<CellFont> GetAllFonts()
-    {
-        return Cells.Cells.Values.Select(cell => cell.Font ?? WorkSheetDefaults.Font).ToHashSet();
-    }
+
+    public HashSet<CellFont> GetAllFonts() 
+        => Cells.Cells.Values.Select(cell => cell.Font ?? WorkSheetDefaults.Font).ToHashSet();
 
     public void AddValidation(uint x, uint y, CellValidation validation)
     {
@@ -240,10 +220,8 @@ public class WorkSheet
         Validations[range] = validation;
     }
 
-    public void AddValidation(CellRange range, CellValidation validation)
-    {
-        Validations[range] = validation;
-    }
+    public void AddValidation(CellRange range, CellValidation validation) 
+        => Validations[range] = validation;
 
     public void AddValidation(uint fromX, uint fromY, uint toX, uint toY, CellValidation validation)
     {
@@ -258,12 +236,66 @@ public class WorkSheet
 
         _charts.Add(chart);
     }
+
+    public void AutoFitColumn(uint column)
+    {
+        var cellsInColumn = Cells.Cells
+            .Where(kvp => kvp.Key.X == column)
+            .Select(kvp => kvp.Value);
+
+        var estimatedWidth = cellsInColumn.EstimateMaxWidth();
+        SetColumnWidth(column, estimatedWidth);
+    }
+
+    public void AutoFitAllColumns()
+    {
+        var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
+        foreach (var column in columns)
+            AutoFitColumn(column);
+    }
+
+    public void SetTabColor(string color)
+    {
+        if (!color.IsValidColor())
+            throw new ArgumentException("Invalid color format", nameof(color));
+        TabColor = color;
+    }
+
+    public void SetVisible(bool visible) => IsVisible = visible;
+
+    public ExcelTable AddTable(string name, CellRange range, bool showFilterButton = true)
+    {
+        if (_tables.Any(t => t.Name == name))
+            throw new ArgumentException($"Table with name '{name}' already exists", nameof(name));
+        
+        if (_tables.Any(t => t.Range.Overlaps(range)))
+            throw new ArgumentException("Table range overlaps an existing table", nameof(range));
+        
+        var table = new ExcelTable(name, range, showFilterButton, null);
+        _tables.Add(table);
+        return table;
+    }
+
+    public ExcelTable AddTable(string name, uint fromX, uint fromY, uint toX, uint toY, bool showFilterButton = true)
+    {
+        var range = CellRange.FromBounds(fromX, fromY, toX, toY);
+        return AddTable(name, range, showFilterButton);
+    }
+
+    public void AddImage(WorksheetImage image) 
+        => _images.Add(image);
+
+    public void AddImage(string filePath, CellPosition position, uint widthInPixels, uint heightInPixels)
+    {
+        var image = WorksheetImage.FromFile(filePath, position, widthInPixels, heightInPixels);
+        AddImage(image);
+    }
     
     private void EnsureCellExists(CellPosition position)
     {
         if (Cells.Cells.ContainsKey(position))
             return;
-        AddCell(position, string.Empty);
+        AddCell(position, string.Empty, null);
     }
 }
 

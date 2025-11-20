@@ -10,11 +10,17 @@ namespace FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 public class StyleHelper
 {
-    private readonly List<Font> _fonts =  [new()];
-    private readonly List<Fill> _fills = [new(new PatternFill { PatternType = PatternValues.None }), new(new PatternFill { PatternType = PatternValues.Gray125 }) ];
+    private readonly List<Font> _fonts = [new()];
+
+    private readonly List<Fill> _fills =
+    [
+        new(new PatternFill { PatternType = PatternValues.None }),
+        new(new PatternFill { PatternType = PatternValues.Gray125 })
+    ];
+
     private readonly Dictionary<string, uint> _fillIndexDictionary = new();
     private readonly List<Border> _borders = [new()];
-    private readonly NumberingFormatsProvider _numberingFormatsProvider = new ();
+    private readonly NumberingFormatsProvider _numberingFormatsProvider = new();
 
     private readonly List<CellFormat> _cellFormats =
     [
@@ -26,10 +32,11 @@ public class StyleHelper
             ApplyFont = false,
             ApplyFill = false,
             ApplyBorder = false
-        }];
+        }
+    ];
+
     private readonly Dictionary<StyleDefinition, uint> _styleIndexDictionary = new();
 
-    
 
     public void CollectStyles(WorkBook workBook)
     {
@@ -42,7 +49,7 @@ public class StyleHelper
             {
                 FillColor = cell.Color,
                 Font = cell.Font ?? WorkSheetDefaults.Font,
-                Borders = cell.Borders ?? WorkSheetDefaults.CellBorders, 
+                Borders = cell.Borders ?? WorkSheetDefaults.CellBorders,
                 FormatAsDate = cell.Value.CellValueType() == CellValueBasicType.DateType,
                 HorizontalAlignment = cell.Style.HorizontalAlignment,
                 VerticalAlignment = cell.Style.VerticalAlignment,
@@ -55,10 +62,10 @@ public class StyleHelper
             var fillId = AddFill(styleDef.FillColor);
             var borderId = AddBorder(styleDef.Borders);
 
-            var hasAlignment = styleDef.HorizontalAlignment.HasValue || 
-                              styleDef.VerticalAlignment.HasValue || 
-                              styleDef.TextRotation.HasValue || 
-                              styleDef.WrapText.HasValue;
+            var hasAlignment = styleDef.HorizontalAlignment.HasValue ||
+                               styleDef.VerticalAlignment.HasValue ||
+                               styleDef.TextRotation.HasValue ||
+                               styleDef.WrapText.HasValue;
 
             var cellFormat = new CellFormat
             {
@@ -75,14 +82,12 @@ public class StyleHelper
 
             if (hasAlignment)
                 cellFormat.Alignment = CreateAlignment(styleDef);
-                    
+
             _cellFormats.Add(cellFormat);
             var styleIndex = (uint)_cellFormats.Count - 1;
             _styleIndexDictionary.Add(styleDef, styleIndex);
         }
     }
-
-
 
 
     public Stylesheet GenerateStylesheet()
@@ -148,7 +153,7 @@ public class StyleHelper
 
         if (_fillIndexDictionary.TryGetValue(fillColor, out var fillId))
             return fillId;
-        
+
         var fill = new Fill();
         var patternFill = new PatternFill
         {
@@ -164,7 +169,6 @@ public class StyleHelper
 
         return fillId;
     }
-
 
 
     private uint AddBorder(CellBorders borderDef)

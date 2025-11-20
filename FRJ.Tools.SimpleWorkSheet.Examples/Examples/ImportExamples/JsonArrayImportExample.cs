@@ -14,7 +14,7 @@ public class JsonArrayImportExample : IExample
     {
         var sheet = new WorkSheet("JsonImport");
 
-        var jsonPath = Path.Combine("Examples", "ImportExamples", "data", "users.json");
+       var jsonPath = Path.Combine("Resources", "Data", "Json", "users.json");
         var json = File.ReadAllText(jsonPath);
 
         using var doc = JsonDocument.Parse(json);
@@ -33,7 +33,7 @@ public class JsonArrayImportExample : IExample
         for (uint c = 0; c < headers.Count; c++)
         {
             var header = headers[(int)c];
-            sheet.AddCell(c, 0, header, cell => cell
+            sheet.AddCell(c, 0, header, configure: cell => cell
                 .WithColor("4472C4")
                 .WithFont(f => f.Bold().WithColor("FFFFFF"))
                 .FromImportedValue(header, baseOptions));
@@ -63,7 +63,7 @@ public class JsonArrayImportExample : IExample
                     ? parser(processed)
                     : new(processed);
 
-                sheet.AddCell(c, r, value, cell => cell.FromImportedValue(raw, options));
+                sheet.AddCell(c, r, value, configure: cell => cell.FromImportedValue(raw, options));
             }
 
             r++;

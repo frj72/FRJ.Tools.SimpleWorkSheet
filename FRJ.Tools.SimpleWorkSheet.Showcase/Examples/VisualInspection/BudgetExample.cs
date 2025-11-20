@@ -17,9 +17,9 @@ public class BudgetExample : IShowcase
         sheet.AddCell(new(0, 0), "Monthly Budget", cell => cell.WithFont(f => f.Bold().WithSize(14)));
         
         sheet.AddCell(new(0, 2), "Income", cell => cell.WithFont(f => f.Bold()).WithColor("A9D08E"));
-        sheet.AddCell(new(0, 3), "Salary");
+        sheet.AddCell(new(0, 3), "Salary", null);
         sheet.AddCell(new(1, 3), 5000m, cell => cell.WithFormatCode("$#,##0.00"));
-        sheet.AddCell(new(0, 4), "Freelance");
+        sheet.AddCell(new(0, 4), "Freelance", null);
         sheet.AddCell(new(1, 4), 1000m, cell => cell.WithFormatCode("$#,##0.00"));
         sheet.AddCell(new(0, 5), "Total Income", cell => cell.WithFont(f => f.Bold()));
         sheet.AddCell(new(1, 5), new CellFormula("=SUM(B4:B5)"), cell => cell
@@ -28,13 +28,13 @@ public class BudgetExample : IShowcase
             .WithColor("D4F4DD"));
         
         sheet.AddCell(new(0, 7), "Expenses", cell => cell.WithFont(f => f.Bold()).WithColor("F4B084"));
-        sheet.AddCell(new(0, 8), "Rent");
+        sheet.AddCell(new(0, 8), "Rent", null);
         sheet.AddCell(new(1, 8), 1500m, cell => cell.WithFormatCode("$#,##0.00"));
-        sheet.AddCell(new(0, 9), "Food");
+        sheet.AddCell(new(0, 9), "Food", null);
         sheet.AddCell(new(1, 9), 600m, cell => cell.WithFormatCode("$#,##0.00"));
-        sheet.AddCell(new(0, 10), "Transportation");
+        sheet.AddCell(new(0, 10), "Transportation", null);
         sheet.AddCell(new(1, 10), 300m, cell => cell.WithFormatCode("$#,##0.00"));
-        sheet.AddCell(new(0, 11), "Utilities");
+        sheet.AddCell(new(0, 11), "Utilities", null);
         sheet.AddCell(new(1, 11), 200m, cell => cell.WithFormatCode("$#,##0.00"));
         sheet.AddCell(new(0, 12), "Total Expenses", cell => cell.WithFont(f => f.Bold()));
         sheet.AddCell(new(1, 12), new CellFormula("=SUM(B9:B12)"), cell => cell
@@ -48,8 +48,8 @@ public class BudgetExample : IShowcase
             .WithFont(f => f.Bold().WithSize(12))
             .WithColor("FFD966"));
         
-        sheet.SetColumnWith(0, 20.0);
-        sheet.SetColumnWith(1, 15.0);
+        sheet.SetColumnWidth(0, 20.0);
+        sheet.SetColumnWidth(1, 15.0);
         
         var workbook = new WorkBook("Budget", [sheet]);
         workbook.AddNamedRange("TotalIncome", "Budget", 1, 5, 1, 5);

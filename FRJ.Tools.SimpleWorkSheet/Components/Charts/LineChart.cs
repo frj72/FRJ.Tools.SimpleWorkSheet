@@ -69,4 +69,34 @@ public class LineChart : Chart
         base.AddSeries(name, dataRange);
         return this;
     }
+
+    public LineChart WithLegendPosition(ChartLegendPosition position)
+    {
+        LegendPosition = position;
+        return this;
+    }
+
+    public LineChart WithCategoryAxisTitle(string title)
+    {
+        CategoryAxisTitle = title;
+        return this;
+    }
+
+    public LineChart WithValueAxisTitle(string title)
+    {
+        ValueAxisTitle = title;
+        return this;
+    }
+
+    public LineChart WithDataLabels(bool show)
+    {
+        ShowDataLabels = show;
+        return this;
+    }
+
+    public LineChart WithMajorGridlines(bool show)
+    {
+        ShowMajorGridlines = show;
+        return this;
+    }
 }

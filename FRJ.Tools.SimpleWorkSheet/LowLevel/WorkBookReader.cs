@@ -36,15 +36,18 @@ public class WorkBookReader
                 continue;
             
             var worksheetPart = (WorksheetPart)workbookPart.GetPartById(sheetId);
-            sheets.Add(ParseWorksheet(worksheetPart, sheetName, workbookPart));
+            sheets.Add(ParseWorksheet(worksheetPart, sheet, workbookPart));
         }
 
         return new("ImportedWorkbook", sheets);
     }
 
-    private static WorkSheet ParseWorksheet(WorksheetPart worksheetPart, string sheetName, WorkbookPart workbookPart)
+    private static WorkSheet ParseWorksheet(WorksheetPart worksheetPart, Sheet sheetElement, WorkbookPart workbookPart)
     {
-        var workSheet = new WorkSheet(sheetName);
+        var workSheet = new WorkSheet(sheetElement.Name?.Value ?? "Sheet");
+        
+        if (sheetElement.State?.Value == SheetStateValues.Hidden)
+            workSheet.SetVisible(false);
         var sheetData = worksheetPart.Worksheet.Elements<SheetData>().FirstOrDefault();
         
         if (sheetData == null)
@@ -89,6 +92,8 @@ public class WorkBookReader
         ExtractRowHeights(worksheetPart, workSheet);
         ExtractFrozenPanes(worksheetPart, workSheet);
         ExtractMergedCells(worksheetPart, workSheet);
+        ExtractTabColor(worksheetPart, workSheet);
+        ExtractTables(worksheetPart, workSheet);
 
         return workSheet;
     }
@@ -304,7 +309,7 @@ public class WorkBookReader
             if (column.Min?.Value == null || column.Width?.Value == null || column.CustomWidth?.Value != true) continue;
             var colIndex = column.Min.Value - 1;
             OneOf<double, CellWidth> width = column.Width.Value;
-            workSheet.SetColumnWith(colIndex, width);
+            workSheet.SetColumnWidth(colIndex, width);
         }
     }
 
@@ -363,6 +368,49 @@ public class WorkBookReader
 
             var range = CellRange.FromPositions(start.Value, end.Value);
             workSheet.ImportMergedRange(range);
+        }
+    }
+
+    private static void ExtractTabColor(WorksheetPart worksheetPart, WorkSheet workSheet)
+    {
+        var sheetProperties = worksheetPart.Worksheet.Elements<SheetProperties>().FirstOrDefault();
+
+        var tabColor = sheetProperties?.Elements<TabColor>().FirstOrDefault();
+        if (tabColor?.Rgb?.Value != null)
+            workSheet.SetTabColor(tabColor.Rgb.Value);
+    }
+
+    private static void ExtractTables(WorksheetPart worksheetPart, WorkSheet workSheet)
+    {
+        var tableParts = worksheetPart.Worksheet.Elements<TableParts>().FirstOrDefault();
+        if (tableParts == null)
+            return;
+
+        foreach (var tablePart in tableParts.Elements<TablePart>())
+        {
+            var tablePartId = tablePart.Id?.Value;
+            if (tablePartId == null)
+                continue;
+
+            var tableDefinitionPart = (TableDefinitionPart)worksheetPart.GetPartById(tablePartId);
+            var table = tableDefinitionPart.Table;
+            
+            if (table.Name?.Value == null || table.Reference?.Value == null)
+                continue;
+
+            var referenceParts = table.Reference.Value.Split(':');
+            if (referenceParts.Length != 2)
+                continue;
+
+            var start = GetCellPosition(referenceParts[0]);
+            var end = GetCellPosition(referenceParts[1]);
+            if (start == null || end == null)
+                continue;
+
+            var range = CellRange.FromPositions(start.Value, end.Value);
+            var showFilter = table.Elements<AutoFilter>().Any();
+            
+            workSheet.AddTable(table.Name.Value, range, showFilter);
         }
     }
 }

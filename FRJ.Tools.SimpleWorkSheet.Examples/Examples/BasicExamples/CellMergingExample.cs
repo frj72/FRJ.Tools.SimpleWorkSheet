@@ -31,16 +31,16 @@ public class CellMergingExample : IExample
         sheet.AddCell(new(3, 2), "South", cell => cell.WithFont(font => font.Bold()));
         sheet.MergeCells(3, 2, 4, 2);
 
-        sheet.AddCell(new(1, 3), 125000);
-        sheet.AddCell(new(2, 3), 118500);
-        sheet.AddCell(new(3, 3), 98000);
-        sheet.AddCell(new(4, 3), 102500);
+        sheet.AddCell(new(1, 3), 125000, null);
+        sheet.AddCell(new(2, 3), 118500, null);
+        sheet.AddCell(new(3, 3), 98000, null);
+        sheet.AddCell(new(4, 3), 102500, null);
 
-        sheet.SetColumnWith(0, 18.0);
-        sheet.SetColumnWith(1, 14.0);
-        sheet.SetColumnWith(2, 14.0);
-        sheet.SetColumnWith(3, 14.0);
-        sheet.SetColumnWith(4, 14.0);
+        sheet.SetColumnWidth(0, 18.0);
+        sheet.SetColumnWidth(1, 14.0);
+        sheet.SetColumnWidth(2, 14.0);
+        sheet.SetColumnWidth(3, 14.0);
+        sheet.SetColumnWidth(4, 14.0);
 
         ExampleRunner.SaveWorkSheet(sheet, "37_CellMerging.xlsx");
     }

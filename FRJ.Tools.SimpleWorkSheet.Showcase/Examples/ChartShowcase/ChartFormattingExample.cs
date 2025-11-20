@@ -15,19 +15,19 @@ public class ChartFormattingExample : IShowcase
         var sheet = new WorkSheet("FormattedCharts");
         
         var months = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun" };
-        sheet.AddCell(new(0, 0), "Month");
+        sheet.AddCell(new(0, 0), "Month", null);
         for (uint i = 0; i < 6; i++)
-            sheet.AddCell(new(i + 1, 0), months[i]);
+            sheet.AddCell(new(i + 1, 0), months[i], null);
         
-        sheet.AddCell(new(0, 1), "2024");
+        sheet.AddCell(new(0, 1), "2024", null);
         var data2024 = new[] { 100, 110, 105, 120, 115, 125 };
         for (uint i = 0; i < 6; i++)
-            sheet.AddCell(new(i + 1, 1), data2024[i]);
+            sheet.AddCell(new(i + 1, 1), data2024[i], null);
         
-        sheet.AddCell(new(0, 2), "2025");
+        sheet.AddCell(new(0, 2), "2025", null);
         var data2025 = new[] { 120, 130, 125, 140, 135, 150 };
         for (uint i = 0; i < 6; i++)
-            sheet.AddCell(new(i + 1, 2), data2025[i]);
+            sheet.AddCell(new(i + 1, 2), data2025[i], null);
         
         var chart = BarChart.Create()
             .WithTitle("Year-over-Year Comparison")

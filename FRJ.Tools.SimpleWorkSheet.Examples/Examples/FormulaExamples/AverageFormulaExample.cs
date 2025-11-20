@@ -16,7 +16,7 @@ public class AverageFormulaExample : IExample
         var sheet = new WorkSheet("AverageFormula");
         
         var headers = SourceArray.Select(h => new CellValue(h));
-        sheet.AddRow(0, 0, headers, cell => cell
+        sheet.AddRow(0, 0, headers, configure: cell => cell
             .WithColor("2E75B6")
             .WithFont(font => font.Bold().WithColor("FFFFFF")));
         
@@ -32,11 +32,11 @@ public class AverageFormulaExample : IExample
             var row = i + 1;
             var student = students[i];
             
-            sheet.AddCell(0, row, student.Name);
-            sheet.AddCell(1, row, student.Scores[0]);
-            sheet.AddCell(2, row, student.Scores[1]);
-            sheet.AddCell(3, row, student.Scores[2]);
-            sheet.AddCell(4, row, new CellFormula($"=AVERAGE(B{row + 1}:D{row + 1})"), cell => cell
+            sheet.AddCell(0, row, student.Name, null);
+            sheet.AddCell(1, row, student.Scores[0], null);
+            sheet.AddCell(2, row, student.Scores[1], null);
+            sheet.AddCell(3, row, student.Scores[2], null);
+            sheet.AddCell(4, row, new CellFormula($"=AVERAGE(B{row + 1}:D{row + 1})"), configure: cell => cell
                 .WithFont(font => font.Bold())
                 .WithFormatCode("0.0"));
         }
