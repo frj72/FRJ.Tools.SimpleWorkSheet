@@ -850,6 +850,256 @@ public class ImportWorkbookBuilderTests
         var dateCell = sheet.Cells.Cells[new(2, 1)];
         Assert.Equal("yyyy-mm-dd", dateCell.Style.FormatCode);
     }
+
+    [Fact]
+    public void FromClass_SimpleObject_CreatesWorkbook()
+    {
+        var person = new { Name = "John", Age = 30, Email = "john@test.com" };
+        
+        var workbook = WorkbookBuilder.FromClass(person).Build();
+        
+        Assert.NotNull(workbook);
+        Assert.Single(workbook.Sheets);
+    }
+
+    [Fact]
+    public void FromClass_ListOfObjects_CreatesRows()
+    {
+        var data = new[]
+        {
+            new TestProduct { Id = 1, Name = "First" },
+            new TestProduct { Id = 2, Name = "Second" }
+        };
+        
+        var workbook = WorkbookBuilder.FromClass(data).Build();
+        
+        var sheet = workbook.Sheets.First();
+        Assert.NotNull(sheet.GetValue(0, 1));
+        Assert.NotNull(sheet.GetValue(0, 2));
+    }
+
+    [Fact]
+    public void FromClass_WithConfiguration_AppliesSettings()
+    {
+        var products = new TestProductCatalog
+        {
+            Products =
+            [
+                new TestProduct { Name = "Product A", Price = 19.99m },
+                new TestProduct { Name = "Product B", Price = 29.99m }
+            ]
+        };
+        
+        var workbook = WorkbookBuilder.FromClass(products)
+            .WithWorkbookName("Product List")
+            .WithDataSheetName("Products")
+            .Build();
+        
+        Assert.Equal("Product List", workbook.Name);
+        Assert.Equal("Products", workbook.Sheets.First().Name);
+    }
+
+    [Fact]
+    public void FromClass_WithParsers_TransformsData()
+    {
+        var sales = new[]
+        {
+            new TestProduct { Name = "Widget", Price = 100m },
+            new TestProduct { Name = "Gadget", Price = 200m }
+        };
+        
+        var workbook = WorkbookBuilder.FromClass(sales)
+            .WithColumnParser("Price", value => new(value.Value.AsT0 * 1.1m))
+            .Build();
+        
+        var sheet = workbook.Sheets.First();
+        var amountValue = sheet.GetValue(2, 1);
+        Assert.NotNull(amountValue);
+        Assert.Equal(110m, amountValue.Value.AsT0);
+    }
+
+    [Fact]
+    public void FromClass_NestedObject_FlattensCorrectly()
+    {
+        var employees = new[]
+        {
+            new TestEmployeeWithDetails { Name = "Alice", Details = new TestEmployeeDetails { Age = 30, Department = "IT" } }
+        };
+        
+        var workbook = WorkbookBuilder.FromClass(employees).Build();
+        
+        var sheet = workbook.Sheets.First();
+        var detailsAgeHeader = sheet.GetValue(1, 0);
+        Assert.NotNull(detailsAgeHeader);
+        Assert.Contains("Age", detailsAgeHeader.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromClass_WithChart_CreatesChartSheet()
+    {
+        var monthlyData = new[]
+        {
+            new TestMonthlyData { Month = "Jan", Sales = 1000 },
+            new TestMonthlyData { Month = "Feb", Sales = 1500 }
+        };
+        
+        var workbook = WorkbookBuilder.FromClass(monthlyData)
+            .WithChart(chart => chart
+                .UseColumns("Month", "Sales")
+                .AsLineChart()
+                .WithTitle("Monthly Sales"))
+            .Build();
+        
+        Assert.Equal(2, workbook.Sheets.Count());
+        var chartSheet = workbook.Sheets.Last();
+        Assert.Single(chartSheet.Charts);
+    }
+
+    [Fact]
+    public void FromClass_AllFeatures_WorkTogether()
+    {
+        var catalog = new TestProductCatalog
+        {
+            Products =
+            [
+                new TestProduct { Id = 1, Name = "Laptop", Price = 999.99m, InStock = true },
+                new TestProduct { Id = 2, Name = "Mouse", Price = 24.99m, InStock = false }
+            ]
+        };
+        
+        var workbook = WorkbookBuilder.FromClass(catalog)
+            .WithWorkbookName("Catalog")
+            .WithDataSheetName("Items")
+            .WithHeaderStyle(style => style.WithFillColor("4472C4"))
+            .WithNumberFormat("Products.Price", NumberFormat.Float2)
+            .WithFreezeHeaderRow()
+            .AutoFitAllColumns()
+            .Build();
+        
+        Assert.Equal("Catalog", workbook.Name);
+        var sheet = workbook.Sheets.First();
+        Assert.Equal("Items", sheet.Name);
+        Assert.NotNull(sheet.FrozenPane);
+        Assert.NotEmpty(sheet.ExplicitColumnWidths);
+    }
+
+    [Fact]
+    public void FromClass_EmptyObject_CreatesEmptyWorkbook()
+    {
+        var emptyObj = new { };
+        
+        var workbook = WorkbookBuilder.FromClass(emptyObj).Build();
+        
+        Assert.NotNull(workbook);
+        Assert.Single(workbook.Sheets);
+    }
+
+    [Fact]
+    public void FromClass_ProductCatalogWithProperties_SerializesAllProperties()
+    {
+        var products = new[]
+        {
+            new TestProduct
+            {
+                Id = 1,
+                Name = "Laptop",
+                Price = 999.99m,
+                InStock = true,
+                Category = "Electronics"
+            }
+        };
+
+        var workbook = WorkbookBuilder.FromClass(products).Build();
+        var sheet = workbook.Sheets.First();
+
+        Assert.Equal("Id", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("Name", sheet.GetValue(1, 0)?.Value.AsT2);
+        Assert.Equal("Price", sheet.GetValue(2, 0)?.Value.AsT2);
+        Assert.Equal("InStock", sheet.GetValue(3, 0)?.Value.AsT2);
+        Assert.Equal("Category", sheet.GetValue(4, 0)?.Value.AsT2);
+
+        Assert.Equal(1m, sheet.GetValue(0, 1)?.Value.AsT0);
+        Assert.Equal("Laptop", sheet.GetValue(1, 1)?.Value.AsT2);
+        Assert.Equal(999.99m, sheet.GetValue(2, 1)?.Value.AsT0);
+        Assert.Equal("TRUE", sheet.GetValue(3, 1)?.Value.AsT2);
+        Assert.Equal("Electronics", sheet.GetValue(4, 1)?.Value.AsT2);
+    }
+
+    [Fact]
+    public void FromClass_ProductCatalogGetterUsage_AllPropertiesReadCorrectly()
+    {
+        var product = new TestProduct
+        {
+            Id = 42,
+            Name = "Test Product",
+            Price = 123.45m,
+            InStock = false,
+            Category = "Test Category"
+        };
+
+        Assert.Equal(42, product.Id);
+        Assert.Equal("Test Product", product.Name);
+        Assert.Equal(123.45m, product.Price);
+        Assert.False(product.InStock);
+        Assert.Equal("Test Category", product.Category);
+
+        var catalog = new TestProductCatalog { Products = [product] };
+        Assert.Single(catalog.Products);
+        Assert.Equal(42, catalog.Products[0].Id);
+    }
+
+    private sealed class TestProductCatalog
+    {
+        public List<TestProduct> Products { get; init; } = [];
+    }
+
+    private sealed class TestProduct
+    {
+        public int Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+        public decimal Price { get; init; }
+        public bool InStock { get; init; }
+        public string Category { get; init; } = string.Empty;
+    }
+
+    private sealed class TestEmployeeWithDetails
+    {
+        public string Name { get; init; } = string.Empty;
+        public TestEmployeeDetails Details { get; init; } = new();
+    }
+
+    private sealed class TestEmployeeDetails
+    {
+        public int Age { get; init; }
+        public string Department { get; init; } = string.Empty;
+    }
+
+    private sealed class TestMonthlyData
+    {
+        public string Month { get; init; } = string.Empty;
+        public int Sales { get; init; }
+    }
+
+    [Fact]
+    public void TestEmployeeWithDetails_PropertiesWork()
+    {
+        var details = new TestEmployeeDetails { Age = 25, Department = "IT" };
+        var employee = new TestEmployeeWithDetails { Name = "Bob", Details = details };
+        
+        Assert.Equal("Bob", employee.Name);
+        Assert.Equal(25, employee.Details.Age);
+        Assert.Equal("IT", employee.Details.Department);
+    }
+
+    [Fact]
+    public void TestMonthlyData_PropertiesWork()
+    {
+        var data = new TestMonthlyData { Month = "March", Sales = 5000 };
+        
+        Assert.Equal("March", data.Month);
+        Assert.Equal(5000, data.Sales);
+    }
 }
+
 
 

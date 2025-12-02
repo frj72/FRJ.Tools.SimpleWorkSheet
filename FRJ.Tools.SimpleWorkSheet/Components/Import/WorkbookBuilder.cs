@@ -46,6 +46,12 @@ public class WorkbookBuilder
         return FromCsv(csvContent, hasHeader);
     }
 
+    public static WorkbookBuilder FromClass<T>(T source) where T:class
+    {
+        var jsonContent = JsonSerializer.Serialize(source);
+        return FromJson(jsonContent);
+    }
+
     public static WorkbookBuilder FromGenericTable(GenericTable table) => new(table);
 
     public WorkbookBuilder WithWorkbookName(string name)
