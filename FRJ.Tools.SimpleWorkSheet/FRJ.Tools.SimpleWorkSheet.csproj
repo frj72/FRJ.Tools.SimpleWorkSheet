@@ -9,7 +9,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageProjectUrl>https://github.com/frj72/FRJ.Tools.SimpleWorkSheet</PackageProjectUrl>
-        <Version>2.0.2</Version>
+        <Version>2.0.3</Version>
         <LangVersion>14</LangVersion>
     </PropertyGroup>
 
