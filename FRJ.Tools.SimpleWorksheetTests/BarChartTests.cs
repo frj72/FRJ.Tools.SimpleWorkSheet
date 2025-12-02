@@ -75,7 +75,7 @@ public class BarChartTests
     [Fact]
     public void WithDataRange_SingleCellCategoriesRange_ThrowsArgumentException()
     {
-        var categoriesRange = new CellRange(new(0, 0), new(0, 0)); // Invalid: single cell
+        var categoriesRange = new CellRange(new(0, 0), new(0, 0));
         var valuesRange = CellRange.FromBounds(1, 0, 1, 5);
 
         var chart = BarChart.Create();
@@ -88,7 +88,7 @@ public class BarChartTests
     public void WithDataRange_SingleCellValuesRange_ThrowsArgumentException()
     {
         var categoriesRange = CellRange.FromBounds(0, 0, 0, 5);
-        var valuesRange = new CellRange(new(1, 0), new(1, 0)); // Invalid: single cell
+        var valuesRange = new CellRange(new(1, 0), new(1, 0));
 
         var chart = BarChart.Create();
 
