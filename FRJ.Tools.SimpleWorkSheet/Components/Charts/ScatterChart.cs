@@ -92,4 +92,13 @@ public class ScatterChart : Chart
         ShowMajorGridlines = show;
         return this;
     }
+
+    public ScatterChart WithSeriesName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Series name cannot be null or empty", nameof(name));
+
+        SingleSeriesName = name;
+        return this;
+    }
 }

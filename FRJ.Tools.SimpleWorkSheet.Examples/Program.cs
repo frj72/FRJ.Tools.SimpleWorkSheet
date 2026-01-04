@@ -68,6 +68,7 @@ public static class Program
             new AreaChartExample(),
             new StackedAreaChartExample(),
             new ChartFormattingExample(),
+            new ChartSeriesNamesExample(),
             new JsonFluentImportPricesExample(),
             new JsonFluentImportPricesFlatExample(),
             new JsonFluentImportPersonsExample(),
@@ -93,7 +94,8 @@ public static class Program
             new GenericTableToWorkbookExample(),
             new GenericTableWorkbookAdvancedExample(),
             new BuiltInColorsExample(),
-            new ClassToWorkbookExample()
+            new ClassToWorkbookExample(),
+            new ChartSeriesNamesImportExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

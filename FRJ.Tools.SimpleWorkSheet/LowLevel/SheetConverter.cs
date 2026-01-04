@@ -591,6 +591,11 @@ public class SheetConverter
             barChartSeries.Append(new Index { Val = 0 });
             barChartSeries.Append(new Order { Val = 0 });
 
+            var seriesText = new SeriesText();
+            var stringValue = new NumericValue { Text = chart.SingleSeriesName ?? "Series 1" };
+            seriesText.Append(stringValue);
+            barChartSeries.Append(seriesText);
+
             var categoryAxisData = new CategoryAxisData();
             var catRef = new StringReference();
             catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(barChart.CategoriesRange.Value, sheetName) });
@@ -752,6 +757,11 @@ public class SheetConverter
             lineChartSeries.Append(new Index { Val = 0 });
             lineChartSeries.Append(new Order { Val = 0 });
 
+            var seriesText = new SeriesText();
+            var stringValue = new NumericValue { Text = chart.SingleSeriesName ?? "Series 1" };
+            seriesText.Append(stringValue);
+            lineChartSeries.Append(seriesText);
+
             var categoryAxisData = new CategoryAxisData();
             var catRef = new StringReference();
             catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(lineChart.CategoriesRange.Value, sheetName) });
@@ -884,6 +894,11 @@ public class SheetConverter
             areaChartSeries.Append(new Index { Val = 0 });
             areaChartSeries.Append(new Order { Val = 0 });
 
+            var seriesText = new SeriesText();
+            var stringValue = new NumericValue { Text = chart.SingleSeriesName ?? "Series 1" };
+            seriesText.Append(stringValue);
+            areaChartSeries.Append(seriesText);
+
             var categoryAxisData = new CategoryAxisData();
             var catRef = new StringReference();
             catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(areaChart.CategoriesRange.Value, sheetName) });
@@ -1012,6 +1027,11 @@ public class SheetConverter
             pieChartSeries.Append(new Index { Val = 0 });
             pieChartSeries.Append(new Order { Val = 0 });
 
+            var seriesText = new SeriesText();
+            var stringValue = new NumericValue { Text = chart.SingleSeriesName ?? "Series 1" };
+            seriesText.Append(stringValue);
+            pieChartSeries.Append(seriesText);
+
             var categoryAxisData = new CategoryAxisData();
             var catRef = new StringReference();
             catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(pieChart.CategoriesRange.Value, sheetName) });
@@ -1093,6 +1113,11 @@ public class SheetConverter
             var scatterChartSeries = new ScatterChartSeries();
             scatterChartSeries.Append(new Index { Val = 0 });
             scatterChartSeries.Append(new Order { Val = 0 });
+
+            var seriesText = new SeriesText();
+            var stringValue = new NumericValue { Text = chart.SingleSeriesName ?? "Series 1" };
+            seriesText.Append(stringValue);
+            scatterChartSeries.Append(seriesText);
 
             var xValues = new XValues();
             var xNumRef = new NumberReference();

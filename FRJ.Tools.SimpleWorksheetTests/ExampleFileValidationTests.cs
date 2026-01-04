@@ -88,6 +88,11 @@ public class ExampleFileValidationTests
     [InlineData("76_GenericTableToWorkbook.xlsx")]
     [InlineData("77_GenericTableWorkbookAdvanced.xlsx")]
     [InlineData("78_BuiltInColors.xlsx")]
+    [InlineData("84_ChartSeriesNames.xlsx")]
+    [InlineData("80_ChartSeriesNamesImport_Auto.xlsx")]
+    [InlineData("81_ChartSeriesNamesImport_Custom.xlsx")]
+    [InlineData("82_ChartSeriesNamesImport_CSV.xlsx")]
+    [InlineData("83_ChartSeriesNamesImport_GenericTable.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -108,7 +113,7 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 79;
+        const int expectedCount = 84;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
         
         Assert.Equal(expectedCount, actualFiles.Length);

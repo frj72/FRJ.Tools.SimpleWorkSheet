@@ -15,6 +15,7 @@ public abstract class Chart
     public string? ValueAxisTitle { get; protected set; }
     public bool ShowDataLabels { get; protected set; }
     public bool ShowMajorGridlines { get; protected set; } = true;
+    internal string? SingleSeriesName { get; set; }
 
     protected Chart(ChartType type) => Type = type;
 

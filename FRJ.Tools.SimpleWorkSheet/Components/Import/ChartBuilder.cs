@@ -17,6 +17,7 @@ public class ChartBuilder
     private (uint fromCol, uint fromRow, uint toCol, uint toRow)? _chartPosition;
     private (int width, int height)? _chartSize;
     private bool _showDataLabels;
+    private string? _seriesName;
 
     internal ChartBuilder(WorkbookBuilder parent) => _parent = parent;
 
@@ -118,6 +119,15 @@ public class ChartBuilder
         return this;
     }
 
+    public ChartBuilder WithSeriesName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Series name cannot be null or empty", nameof(name));
+
+        _seriesName = name;
+        return this;
+    }
+
     internal WorkSheet Build(WorkSheet dataSheet)
     {
         if (_categoryColumn == null || _valueColumn == null)
@@ -169,6 +179,8 @@ public class ChartBuilder
         if (_showDataLabels)
             chart = chart.WithDataLabels(true);
 
+        chart = chart.WithSeriesName(_seriesName ?? _valueColumn ?? "Series 1");
+
         return chart;
     }
 
@@ -195,6 +207,8 @@ public class ChartBuilder
         if (_showDataLabels)
             chart = chart.WithDataLabels(true);
 
+        chart = chart.WithSeriesName(_seriesName ?? _valueColumn ?? "Series 1");
+
         return chart;
     }
 
@@ -220,6 +234,8 @@ public class ChartBuilder
         if (_showDataLabels)
             chart = chart.WithDataLabels(true);
 
+        chart = chart.WithSeriesName(_seriesName ?? _valueColumn ?? "Series 1");
+
         return chart;
     }
 
@@ -240,6 +256,8 @@ public class ChartBuilder
             chart = chart.WithLegendPosition(_legendPosition.Value);
         if (_showDataLabels)
             chart = chart.WithDataLabels(true);
+
+        chart = chart.WithSeriesName(_seriesName ?? _valueColumn ?? "Series 1");
 
         return chart;
     }
@@ -265,6 +283,8 @@ public class ChartBuilder
             chart = chart.WithLegendPosition(_legendPosition.Value);
         if (_showDataLabels)
             chart = chart.WithDataLabels(true);
+
+        chart = chart.WithSeriesName(_seriesName ?? _valueColumn ?? "Series 1");
 
         return chart;
     }

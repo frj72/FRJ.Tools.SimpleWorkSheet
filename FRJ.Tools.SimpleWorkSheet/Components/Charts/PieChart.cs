@@ -87,4 +87,13 @@ public class PieChart : Chart
         ShowDataLabels = show;
         return this;
     }
+
+    public PieChart WithSeriesName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Series name cannot be null or empty", nameof(name));
+
+        SingleSeriesName = name;
+        return this;
+    }
 }
