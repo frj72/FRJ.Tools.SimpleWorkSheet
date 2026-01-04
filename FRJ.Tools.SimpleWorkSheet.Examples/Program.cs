@@ -95,7 +95,8 @@ public static class Program
             new GenericTableWorkbookAdvancedExample(),
             new BuiltInColorsExample(),
             new ClassToWorkbookExample(),
-            new ChartSeriesNamesImportExample()
+            new ChartSeriesNamesImportExample(),
+            new MultiTableMultiChartCommonSheetExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
