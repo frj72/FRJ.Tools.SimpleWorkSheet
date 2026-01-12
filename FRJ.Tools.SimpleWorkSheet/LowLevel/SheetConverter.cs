@@ -762,6 +762,12 @@ public class SheetConverter
             seriesText.Append(stringValue);
             lineChartSeries.Append(seriesText);
 
+            var marker = new Marker();
+            marker.Append(new Symbol { Val = ConvertLineChartMarkerStyle(lineChart.MarkerStyle) });
+            if (lineChart.MarkerStyle != LineChartMarkerStyle.None)
+                marker.Append(new Size { Val = (byte)5 });
+            lineChartSeries.Append(marker);
+
             var categoryAxisData = new CategoryAxisData();
             var catRef = new StringReference();
             catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(lineChart.CategoriesRange.Value, sheetName) });
@@ -789,6 +795,12 @@ public class SheetConverter
                 var stringValue = new NumericValue { Text = series.Name };
                 seriesText.Append(stringValue);
                 lineChartSeries.Append(seriesText);
+
+                var marker = new Marker();
+                marker.Append(new Symbol { Val = ConvertLineChartMarkerStyle(lineChart.MarkerStyle) });
+                if (lineChart.MarkerStyle != LineChartMarkerStyle.None)
+                    marker.Append(new Size { Val = (byte)5 });
+                lineChartSeries.Append(marker);
 
                 var values = new Values();
                 var numRef = new NumberReference();
@@ -1332,6 +1344,14 @@ public class SheetConverter
         
         return title;
     }
+
+    private static MarkerStyleValues ConvertLineChartMarkerStyle(LineChartMarkerStyle style) => style switch
+    {
+        LineChartMarkerStyle.None => MarkerStyleValues.None,
+        LineChartMarkerStyle.Circle => MarkerStyleValues.Circle,
+        LineChartMarkerStyle.Diamond => MarkerStyleValues.Diamond,
+        _ => MarkerStyleValues.None
+    };
 }
 
 
