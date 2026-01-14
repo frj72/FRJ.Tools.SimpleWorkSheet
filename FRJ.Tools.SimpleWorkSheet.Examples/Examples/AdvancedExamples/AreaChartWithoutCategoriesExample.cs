@@ -28,6 +28,6 @@ public class AreaChartWithoutCategoriesExample : IExample
 
         sheet.AddChart(areaChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "93_AreaChartWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "093_AreaChartWithoutCategories.xlsx");
     }
 }

@@ -30,6 +30,6 @@ public class ConditionalFormulaExample : IExample
                 .WithFont(font => font.Bold()));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "25_ConditionalFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "025_ConditionalFormula.xlsx");
     }
 }

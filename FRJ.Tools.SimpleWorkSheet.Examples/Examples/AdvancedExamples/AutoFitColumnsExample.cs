@@ -50,6 +50,6 @@ public class AutoFitColumnsExample : IExample
 
         sheet.AutoFitAllColumns();
 
-        ExampleRunner.SaveWorkSheet(sheet, "46_AutoFitColumns.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "046_AutoFitColumns.xlsx");
     }
 }

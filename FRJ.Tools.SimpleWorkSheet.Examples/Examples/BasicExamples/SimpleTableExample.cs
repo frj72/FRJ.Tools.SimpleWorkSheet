@@ -24,6 +24,6 @@ public class SimpleTableExample : IExample
         sheet.AddCell(1, 2, 25, null);
         sheet.AddCell(2, 2, "LA", null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "03_SimpleTable.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "003_SimpleTable.xlsx");
     }
 }

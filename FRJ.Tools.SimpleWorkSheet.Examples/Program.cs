@@ -113,7 +113,10 @@ public static class Program
             new ScatterChartWithDataLabelsExample(),
             new LineChartWithYAxisLabelsExample(),
             new LineChartMultipleSeriesWithYAxisLabelsExample(),
-            new ScatterChartWithYAxisLabelsExample()
+            new ScatterChartWithYAxisLabelsExample(),
+            new LineChartWithoutYAxisLabelsExample(),
+            new BarChartWithoutYAxisLabelsExample(),
+            new AreaChartWithoutYAxisLabelsExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

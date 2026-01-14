@@ -29,6 +29,6 @@ public class LineChartWithoutCategoriesExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "90_LineChartWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "090_LineChartWithoutCategories.xlsx");
     }
 }

@@ -31,6 +31,6 @@ public class BasicFormulasExample : IExample
         sheet.AddCell(0, 9, new CellFormula("=A4-A2"), configure: cell => cell
             .WithFont(font => font.Bold()));
         
-        ExampleRunner.SaveWorkSheet(sheet, "21_BasicFormulas.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "021_BasicFormulas.xlsx");
     }
 }

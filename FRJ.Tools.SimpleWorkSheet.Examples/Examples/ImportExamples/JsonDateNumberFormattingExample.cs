@@ -23,6 +23,6 @@ public class JsonDateNumberFormattingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "67_JsonDateNumberFormatting.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "067_JsonDateNumberFormatting.xlsx");
     }
 }

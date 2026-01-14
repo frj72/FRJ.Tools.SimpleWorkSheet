@@ -53,6 +53,6 @@ public class ColumnHidingExample : IExample
         sheet.SetColumnWidth(2, 20.0);
         sheet.SetColumnWidth(4, 20.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "86_ColumnHiding.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "086_ColumnHiding.xlsx");
     }
 }

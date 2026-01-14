@@ -29,6 +29,6 @@ public class BarChartWithoutCategoriesExample : IExample
 
         sheet.AddChart(barChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "92_BarChartWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "092_BarChartWithoutCategories.xlsx");
     }
 }

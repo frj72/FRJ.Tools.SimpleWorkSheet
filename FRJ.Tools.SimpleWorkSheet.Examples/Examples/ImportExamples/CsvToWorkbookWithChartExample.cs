@@ -31,6 +31,6 @@ public class CsvToWorkbookWithChartExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "73_CsvToWorkbookWithChart.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, "073_CsvToWorkbookWithChart.xlsx");
     }
 }

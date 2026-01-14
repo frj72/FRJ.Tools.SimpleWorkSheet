@@ -46,6 +46,6 @@ public class ClassToWorkbookExample : IExample
                 .WithValueAxisTitle("Price ($)"))
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "79_ClassToWorkbook.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, "079_ClassToWorkbook.xlsx");
     }
 }

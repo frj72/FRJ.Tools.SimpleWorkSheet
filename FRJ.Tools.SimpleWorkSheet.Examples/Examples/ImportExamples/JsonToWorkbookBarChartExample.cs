@@ -26,6 +26,6 @@ public class JsonToWorkbookBarChartExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "63_JsonToWorkbookBarChart.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, "063_JsonToWorkbookBarChart.xlsx");
     }
 }

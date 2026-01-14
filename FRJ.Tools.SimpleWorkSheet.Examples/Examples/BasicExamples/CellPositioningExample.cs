@@ -20,6 +20,6 @@ public class CellPositioningExample : IExample
         
         sheet.AddCell(new(0, 2), "Another CellPosition", null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "04_CellPositioning.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "004_CellPositioning.xlsx");
     }
 }

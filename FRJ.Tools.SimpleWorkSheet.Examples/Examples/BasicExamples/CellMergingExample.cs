@@ -42,6 +42,6 @@ public class CellMergingExample : IExample
         sheet.SetColumnWidth(3, 14.0);
         sheet.SetColumnWidth(4, 14.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "37_CellMerging.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "037_CellMerging.xlsx");
     }
 }

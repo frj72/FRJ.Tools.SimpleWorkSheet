@@ -37,6 +37,6 @@ public class RowHeightExample : IExample
             .WithColor("E7E6E6"));
         sheet.SetRowHeight(5, 40.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "31_RowHeight.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "031_RowHeight.xlsx");
     }
 }

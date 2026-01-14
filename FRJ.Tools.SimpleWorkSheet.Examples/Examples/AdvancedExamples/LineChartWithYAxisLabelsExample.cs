@@ -6,8 +6,8 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
 
 public class LineChartWithYAxisLabelsExample : IExample
 {
-    public string Name => "Line Chart With Y-Axis Labels";
-    public string Description => "Demonstrates line charts with y-axis tick labels showing values";
+    public string Name => "Line Chart With Explicit Y-Axis Labels";
+    public string Description => "Demonstrates line charts with y-axis tick labels explicitly enabled";
 
     public void Run()
     {
@@ -43,6 +43,6 @@ public class LineChartWithYAxisLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "97_LineChartWithYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "097_LineChartWithExplicitYAxisLabels.xlsx");
     }
 }

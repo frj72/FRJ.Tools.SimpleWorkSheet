@@ -81,7 +81,7 @@ public class NamedRangesExample : IExample
         workbook.AddNamedRange("TotalSales", "Sales", 5, 1, 5, 3);
 
         var bytes = SheetConverter.ToBinaryExcelFile(workbook);
-        var outputPath = Path.Combine("Output", "39_NamedRanges.xlsx");
+        var outputPath = Path.Combine("Output", "039_NamedRanges.xlsx");
         File.WriteAllBytes(outputPath, bytes);
     }
 }

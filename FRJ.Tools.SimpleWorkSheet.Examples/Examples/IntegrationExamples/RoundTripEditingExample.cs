@@ -55,7 +55,7 @@ public class RoundTripEditingExample : IExample
         Console.WriteLine("Step 3: Added new employee (Charlie) and highlighted Alice's status");
         Console.WriteLine();
         
-        ExampleRunner.SaveWorkSheet(loadedSheet, "36_RoundTripEditing.xlsx");
+        ExampleRunner.SaveWorkSheet(loadedSheet, "036_RoundTripEditing.xlsx");
         
         Console.WriteLine("Step 4: Saved modified file");
         Console.WriteLine($"  Total cells now: {loadedSheet.Cells.Cells.Count}");

@@ -55,6 +55,6 @@ public class ExcelTablesExample : IExample
 
         sheet.AutoFitAllColumns();
 
-        ExampleRunner.SaveWorkSheet(sheet, "49_ExcelTables.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "049_ExcelTables.xlsx");
     }
 }

@@ -17,6 +17,6 @@ public class JsonFluentImportPricesFlatExample : IExample
             .WithPreserveOriginalValue(false)
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "55_JsonFlatObjectImport.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "055_JsonFlatObjectImport.xlsx");
     }
 }

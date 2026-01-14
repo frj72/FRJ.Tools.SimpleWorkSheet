@@ -18,6 +18,6 @@ public class ValueOnlyExample : IExample
             sheet.AddCell(1, i, (i + 1) * 10, null);
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "05_ValueOnly.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "005_ValueOnly.xlsx");
     }
 }

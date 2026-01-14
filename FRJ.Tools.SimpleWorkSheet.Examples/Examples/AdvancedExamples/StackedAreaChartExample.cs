@@ -42,6 +42,6 @@ public class StackedAreaChartExample : IExample
 
         sheet.AddChart(chart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "52_StackedAreaChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "052_StackedAreaChart.xlsx");
     }
 }

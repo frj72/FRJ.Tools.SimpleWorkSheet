@@ -6,7 +6,7 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.StylingExamples;
 
 public class BuiltInColorsExample : IExample
 {
-    public string Name => "78_BuiltInColors";
+    public string Name => "078_BuiltInColors";
     public string Description => "Showcase of all built-in colors with visual samples";
 
     public void Run()

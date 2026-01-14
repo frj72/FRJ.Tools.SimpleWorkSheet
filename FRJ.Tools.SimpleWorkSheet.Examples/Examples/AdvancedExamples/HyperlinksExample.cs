@@ -45,6 +45,6 @@ public class HyperlinksExample : IExample
                 .WithHorizontalAlignment(HorizontalAlignment.Center)
                 .WithFillColor("F2F2F2")));
 
-        ExampleRunner.SaveWorkSheet(sheet, "34_Hyperlinks.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "034_Hyperlinks.xlsx");
     }
 }

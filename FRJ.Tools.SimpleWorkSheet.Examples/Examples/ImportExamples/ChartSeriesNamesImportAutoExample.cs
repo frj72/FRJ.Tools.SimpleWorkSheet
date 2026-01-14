@@ -36,6 +36,6 @@ public class ChartSeriesNamesImportAutoExample : IExample
             .AutoFitAllColumns()
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "80_ChartSeriesNamesImport_Auto.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, "080_ChartSeriesNamesImport_Auto.xlsx");
     }
 }

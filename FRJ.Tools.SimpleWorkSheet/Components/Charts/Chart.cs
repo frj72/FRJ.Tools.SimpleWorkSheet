@@ -14,7 +14,7 @@ public abstract class Chart
     public string? CategoryAxisTitle { get; protected set; }
     public string? ValueAxisTitle { get; protected set; }
     public bool ShowDataLabels { get; protected set; }
-    public bool ShowYAxisLabels { get; protected set; }
+    public bool ShowYAxisLabels { get; protected set; } = true;
     public bool ShowMajorGridlines { get; protected set; } = true;
     internal string? SingleSeriesName { get; set; }
 

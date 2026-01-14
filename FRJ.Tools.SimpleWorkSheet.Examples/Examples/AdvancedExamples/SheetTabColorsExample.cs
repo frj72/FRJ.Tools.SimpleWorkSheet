@@ -62,7 +62,7 @@ public class SheetTabColorsExample : IExample
         var outputPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "Output",
-            "47_SheetTabColors.xlsx");
+            "047_SheetTabColors.xlsx");
 
         workbook.SaveToFile(outputPath);
 

@@ -36,6 +36,6 @@ public class BorderStylesExample : IExample
             null);
         
         sheet.AddCell(0, 2, "Left Border Red", configure: cell => cell.WithBorders(leftBorder));
-        ExampleRunner.SaveWorkSheet(sheet, "08_BorderStyles.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "008_BorderStyles.xlsx");
     }
 }

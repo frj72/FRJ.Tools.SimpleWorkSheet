@@ -42,6 +42,6 @@ public class ScatterChartWithDataLabelsExample : IExample
 
         sheet.AddChart(scatterChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "96_ScatterChartWithDataLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "096_ScatterChartWithDataLabels.xlsx");
     }
 }

@@ -96,6 +96,12 @@ public class BarChart : Chart
         return this;
     }
 
+    public BarChart WithYAxisLabels(bool show)
+    {
+        ShowYAxisLabels = show;
+        return this;
+    }
+
     public BarChart WithMajorGridlines(bool show)
     {
         ShowMajorGridlines = show;

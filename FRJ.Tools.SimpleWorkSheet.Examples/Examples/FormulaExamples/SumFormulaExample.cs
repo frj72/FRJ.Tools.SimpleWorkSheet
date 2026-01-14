@@ -27,6 +27,6 @@ public class SumFormulaExample : IExample
             .WithFont(font => font.Bold())
             .WithFormatCode("$#,##0"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "22_SumFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "022_SumFormula.xlsx");
     }
 }

@@ -48,6 +48,6 @@ public class InsertImagesExample : IExample
         
         sheet.AutoFitAllColumns();
 
-        ExampleRunner.SaveWorkSheet(sheet, "50_InsertImages.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "050_InsertImages.xlsx");
     }
 }

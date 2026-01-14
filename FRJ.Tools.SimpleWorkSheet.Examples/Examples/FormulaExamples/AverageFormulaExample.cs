@@ -41,6 +41,6 @@ public class AverageFormulaExample : IExample
                 .WithFormatCode("0.0"));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "23_AverageFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "023_AverageFormula.xlsx");
     }
 }

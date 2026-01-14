@@ -58,6 +58,6 @@ public class LineChartExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "42_LineChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "042_LineChart.xlsx");
     }
 }

@@ -780,7 +780,8 @@ public class OpenXmlValidationTests
             Assert.Null(numberingFormat);
             
             var tickLabelPosition = valueAxis.Descendants<DocumentFormat.OpenXml.Drawing.Charts.TickLabelPosition>().FirstOrDefault();
-            Assert.Null(tickLabelPosition);
+            Assert.NotNull(tickLabelPosition);
+            Assert.Equal(DocumentFormat.OpenXml.Drawing.Charts.TickLabelPositionValues.None, tickLabelPosition.Val?.Value);
         }
         finally
         {

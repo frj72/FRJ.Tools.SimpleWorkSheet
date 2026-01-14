@@ -90,6 +90,6 @@ public class ConditionalHidingExample : IExample
         for (uint i = 1; i <= 6; i++)
             sheet.SetColumnWidth(i, 12.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "88_ConditionalHiding.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "088_ConditionalHiding.xlsx");
     }
 }

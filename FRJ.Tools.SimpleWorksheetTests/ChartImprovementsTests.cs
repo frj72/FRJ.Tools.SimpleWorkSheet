@@ -232,11 +232,11 @@ public class ChartImprovementsTests
     }
 
     [Fact]
-    public void LineChart_DefaultYAxisLabels_IsFalse()
+    public void LineChart_DefaultYAxisLabels_IsTrue()
     {
         var chart = LineChart.Create();
         
-        Assert.False(chart.ShowYAxisLabels);
+        Assert.True(chart.ShowYAxisLabels);
     }
 
     [Fact]
@@ -249,11 +249,11 @@ public class ChartImprovementsTests
     }
 
     [Fact]
-    public void AreaChart_DefaultYAxisLabels_IsFalse()
+    public void AreaChart_DefaultYAxisLabels_IsTrue()
     {
         var chart = AreaChart.Create();
         
-        Assert.False(chart.ShowYAxisLabels);
+        Assert.True(chart.ShowYAxisLabels);
     }
 
     [Fact]
@@ -266,10 +266,10 @@ public class ChartImprovementsTests
     }
 
     [Fact]
-    public void ScatterChart_DefaultYAxisLabels_IsFalse()
+    public void ScatterChart_DefaultYAxisLabels_IsTrue()
     {
         var chart = ScatterChart.Create();
         
-        Assert.False(chart.ShowYAxisLabels);
+        Assert.True(chart.ShowYAxisLabels);
     }
 }

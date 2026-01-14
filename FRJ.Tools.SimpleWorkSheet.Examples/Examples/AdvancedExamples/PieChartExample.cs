@@ -46,6 +46,6 @@ public class PieChartExample : IExample
 
         sheet.AddChart(pieChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "43_PieChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "043_PieChart.xlsx");
     }
 }

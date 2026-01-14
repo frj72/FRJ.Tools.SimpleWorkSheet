@@ -72,6 +72,6 @@ public class InvoiceGeneratorExample : IExample
             .WithColor("4472C4")
             .WithBorders(borders));
         
-        ExampleRunner.SaveWorkSheet(sheet, "19_InvoiceGenerator.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "019_InvoiceGenerator.xlsx");
     }
 }

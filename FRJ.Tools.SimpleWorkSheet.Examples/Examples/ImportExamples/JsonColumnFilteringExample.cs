@@ -21,6 +21,6 @@ public class JsonColumnFilteringExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "66_JsonColumnFiltering.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "066_JsonColumnFiltering.xlsx");
     }
 }

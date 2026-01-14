@@ -96,7 +96,7 @@ public class ChartSheetExample : IExample
         var outputPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "Output",
-            "45_ChartSheet.xlsx");
+            "045_ChartSheet.xlsx");
 
         workbook.SaveToFile(outputPath);
 

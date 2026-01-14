@@ -43,6 +43,6 @@ public class LineChartWithDataLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "94_LineChartWithDataLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "094_LineChartWithDataLabels.xlsx");
     }
 }

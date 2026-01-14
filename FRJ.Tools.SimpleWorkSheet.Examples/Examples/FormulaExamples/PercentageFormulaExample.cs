@@ -40,6 +40,6 @@ public class PercentageFormulaExample : IExample
                 .WithFont(font => font.Bold()));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "24_PercentageFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "024_PercentageFormula.xlsx");
     }
 }

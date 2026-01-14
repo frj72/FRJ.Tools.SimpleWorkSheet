@@ -39,6 +39,6 @@ public class CompleteStylingExample : IExample
                 .Bold())
             .WithBorders(borders));
         
-        ExampleRunner.SaveWorkSheet(sheet, "09_CompleteStyling.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "009_CompleteStyling.xlsx");
     }
 }

@@ -74,6 +74,6 @@ public class BarChartExample : IExample
 
         sheet.AddChart(horizontalChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "41_BarChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "041_BarChart.xlsx");
     }
 }

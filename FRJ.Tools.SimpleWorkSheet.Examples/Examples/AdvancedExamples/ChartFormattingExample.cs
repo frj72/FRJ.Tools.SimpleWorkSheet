@@ -76,6 +76,6 @@ public class ChartFormattingExample : IExample
 
         sheet.AddChart(chart3);
 
-        ExampleRunner.SaveWorkSheet(sheet, "53_ChartFormatting.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "053_ChartFormatting.xlsx");
     }
 }

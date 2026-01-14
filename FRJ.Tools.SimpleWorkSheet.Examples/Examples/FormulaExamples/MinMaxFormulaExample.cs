@@ -38,6 +38,6 @@ public class MinMaxFormulaExample : IExample
             .WithColor("FFFF00")
             .WithFont(font => font.Bold()));
         
-        ExampleRunner.SaveWorkSheet(sheet, "28_MinMaxFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "028_MinMaxFormula.xlsx");
     }
 }

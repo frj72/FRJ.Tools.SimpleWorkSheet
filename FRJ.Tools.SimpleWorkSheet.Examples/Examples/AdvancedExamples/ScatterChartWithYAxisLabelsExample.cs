@@ -6,8 +6,8 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
 
 public class ScatterChartWithYAxisLabelsExample : IExample
 {
-    public string Name => "Scatter Chart With Y-Axis Labels";
-    public string Description => "Demonstrates scatter charts with y-axis tick labels showing values";
+    public string Name => "Scatter Chart With Explicit Y-Axis Labels";
+    public string Description => "Demonstrates scatter charts with y-axis tick labels explicitly enabled";
 
     public void Run()
     {
@@ -42,6 +42,6 @@ public class ScatterChartWithYAxisLabelsExample : IExample
 
         sheet.AddChart(scatterChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "99_ScatterChartWithYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "099_ScatterChartWithExplicitYAxisLabels.xlsx");
     }
 }

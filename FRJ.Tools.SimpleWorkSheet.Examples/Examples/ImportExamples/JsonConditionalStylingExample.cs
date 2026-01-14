@@ -26,6 +26,6 @@ public class JsonConditionalStylingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "68_JsonConditionalStyling.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "068_JsonConditionalStyling.xlsx");
     }
 }

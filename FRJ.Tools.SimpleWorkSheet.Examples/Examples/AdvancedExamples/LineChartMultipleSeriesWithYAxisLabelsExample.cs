@@ -6,8 +6,8 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
 
 public class LineChartMultipleSeriesWithYAxisLabelsExample : IExample
 {
-    public string Name => "Line Chart Multiple Series With Y-Axis Labels";
-    public string Description => "Demonstrates multi-series line charts with y-axis tick labels";
+    public string Name => "Line Chart Multiple Series With Explicit Y-Axis Labels";
+    public string Description => "Demonstrates multi-series line charts with y-axis tick labels explicitly enabled";
 
     public void Run()
     {
@@ -57,6 +57,6 @@ public class LineChartMultipleSeriesWithYAxisLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "98_LineChartMultipleSeriesWithYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "098_LineChartMultipleSeriesWithExplicitYAxisLabels.xlsx");
     }
 }

@@ -31,6 +31,6 @@ public class ChartSeriesNamesImportGenericTableExample : IExample
             .AutoFitAllColumns()
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "83_ChartSeriesNamesImport_GenericTable.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, "083_ChartSeriesNamesImport_GenericTable.xlsx");
     }
 }

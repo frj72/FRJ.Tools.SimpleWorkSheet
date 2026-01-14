@@ -25,6 +25,6 @@ public class CountFormulaExample : IExample
         sheet.AddCell(0, 12, new CellFormula("=COUNTA(A2:A8)"), configure: cell => cell
             .WithColor("ADD8E6"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "27_CountFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "027_CountFormula.xlsx");
     }
 }

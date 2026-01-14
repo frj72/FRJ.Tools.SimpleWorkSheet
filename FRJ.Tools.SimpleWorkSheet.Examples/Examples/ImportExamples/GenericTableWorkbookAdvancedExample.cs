@@ -7,7 +7,7 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 
 public class GenericTableWorkbookAdvancedExample : IExample
 {
-    public string Name => "77_GenericTableWorkbookAdvanced";
+    public string Name => "077_GenericTableWorkbookAdvanced";
     public string Description => "GenericTable to Workbook with all advanced features: column ordering, filtering, formatting, and conditional styles";
 
     public void Run()

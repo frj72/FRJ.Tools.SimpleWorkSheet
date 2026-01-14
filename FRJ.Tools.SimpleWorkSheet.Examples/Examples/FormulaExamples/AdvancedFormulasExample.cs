@@ -119,6 +119,6 @@ public class AdvancedFormulasExample : IExample
         sheet.SetColumnWidth(5, 12.0);
         sheet.SetColumnWidth(6, 10.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "40_AdvancedFormulas.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "040_AdvancedFormulas.xlsx");
     }
 }

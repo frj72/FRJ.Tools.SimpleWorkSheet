@@ -52,6 +52,6 @@ public class RowHidingExample : IExample
         sheet.SetColumnWidth(2, 15.0);
         sheet.SetColumnWidth(3, 15.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "87_RowHiding.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "087_RowHiding.xlsx");
     }
 }

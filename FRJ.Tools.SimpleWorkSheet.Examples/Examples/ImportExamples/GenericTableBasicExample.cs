@@ -6,7 +6,7 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 
 public class GenericTableBasicExample : IExample
 {
-    public string Name => "74_GenericTableBasic";
+    public string Name => "074_GenericTableBasic";
     public string Description => "Basic Generic Table import";
 
     public void Run()

@@ -33,6 +33,6 @@ public class FontVariationsExample : IExample
                 .Italic()
                 .Underline()));
         
-        ExampleRunner.SaveWorkSheet(sheet, "06_FontVariations.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "006_FontVariations.xlsx");
     }
 }

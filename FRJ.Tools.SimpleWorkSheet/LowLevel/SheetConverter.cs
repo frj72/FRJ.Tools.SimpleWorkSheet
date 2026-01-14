@@ -699,15 +699,21 @@ public class SheetConverter
         var valueAxis = new ValueAxis();
         valueAxis.Append(new AxisId { Val = 2 });
         valueAxis.Append(new Scaling(new Orientation { Val = OrientationValues.MinMax }));
+        valueAxis.Append(new Delete { Val = false });
         valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis.Append(new MajorGridlines());
-        valueAxis.Append(new NumberingFormat 
-        { 
-            FormatCode = "General", 
-            SourceLinked = true 
-        });
-        valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        if (!chart.ShowYAxisLabels)
+            valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.None });
+        else
+        {
+            valueAxis.Append(new NumberingFormat 
+            { 
+                FormatCode = "General", 
+                SourceLinked = true 
+            });
+            valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        }
         valueAxis.Append(new CrossingAxis { Val = 1 });
         valueAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
         if (!string.IsNullOrEmpty(chart.ValueAxisTitle))
@@ -878,10 +884,13 @@ public class SheetConverter
         var valueAxis = new ValueAxis();
         valueAxis.Append(new AxisId { Val = 2 });
         valueAxis.Append(new Scaling(new Orientation { Val = OrientationValues.MinMax }));
+        valueAxis.Append(new Delete { Val = false });
         valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis.Append(new MajorGridlines());
-        if (chart.ShowYAxisLabels)
+        if (!chart.ShowYAxisLabels)
+            valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.None });
+        else
         {
             valueAxis.Append(new NumberingFormat { FormatCode = "General", SourceLinked = true });
             valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
@@ -1021,10 +1030,13 @@ public class SheetConverter
         var valueAxis = new ValueAxis();
         valueAxis.Append(new AxisId { Val = 2 });
         valueAxis.Append(new Scaling(new Orientation { Val = OrientationValues.MinMax }));
+        valueAxis.Append(new Delete { Val = false });
         valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis.Append(new MajorGridlines());
-        if (chart.ShowYAxisLabels)
+        if (!chart.ShowYAxisLabels)
+            valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.None });
+        else
         {
             valueAxis.Append(new NumberingFormat { FormatCode = "General", SourceLinked = true });
             valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
@@ -1231,6 +1243,7 @@ public class SheetConverter
         var valueAxis1 = new ValueAxis();
         valueAxis1.Append(new AxisId { Val = 1 });
         valueAxis1.Append(new Scaling(new Orientation { Val = OrientationValues.MinMax }));
+        valueAxis1.Append(new Delete { Val = false });
         valueAxis1.Append(new AxisPosition { Val = AxisPositionValues.Bottom });
         valueAxis1.Append(new CrossingAxis { Val = 2 });
         valueAxis1.Append(new Crosses { Val = CrossesValues.AutoZero });
@@ -1241,10 +1254,13 @@ public class SheetConverter
         var valueAxis2 = new ValueAxis();
         valueAxis2.Append(new AxisId { Val = 2 });
         valueAxis2.Append(new Scaling(new Orientation { Val = OrientationValues.MinMax }));
+        valueAxis2.Append(new Delete { Val = false });
         valueAxis2.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis2.Append(new MajorGridlines());
-        if (chart.ShowYAxisLabels)
+        if (!chart.ShowYAxisLabels)
+            valueAxis2.Append(new TickLabelPosition { Val = TickLabelPositionValues.None });
+        else
         {
             valueAxis2.Append(new NumberingFormat { FormatCode = "General", SourceLinked = true });
             valueAxis2.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });

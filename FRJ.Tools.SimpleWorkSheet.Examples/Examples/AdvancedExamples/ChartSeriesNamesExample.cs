@@ -72,6 +72,6 @@ public class ChartSeriesNamesExample : IExample
 
         sheet.AddChart(multiSeriesChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "84_ChartSeriesNames.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "084_ChartSeriesNames.xlsx");
     }
 }

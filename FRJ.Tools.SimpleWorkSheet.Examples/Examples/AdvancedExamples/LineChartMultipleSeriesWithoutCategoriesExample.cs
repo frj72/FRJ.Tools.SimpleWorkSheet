@@ -40,6 +40,6 @@ public class LineChartMultipleSeriesWithoutCategoriesExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "91_LineChartMultipleSeriesWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "091_LineChartMultipleSeriesWithoutCategories.xlsx");
     }
 }

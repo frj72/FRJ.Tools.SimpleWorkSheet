@@ -55,7 +55,7 @@ public class SheetVisibilityExample : IExample
         var outputPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "Output",
-            "48_SheetVisibility.xlsx");
+            "048_SheetVisibility.xlsx");
 
         workbook.SaveToFile(outputPath);
 

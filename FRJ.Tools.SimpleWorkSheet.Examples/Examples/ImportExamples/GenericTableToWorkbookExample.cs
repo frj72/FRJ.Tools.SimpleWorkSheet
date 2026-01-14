@@ -7,7 +7,7 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 
 public class GenericTableToWorkbookExample : IExample
 {
-    public string Name => "76_GenericTableToWorkbook";
+    public string Name => "076_GenericTableToWorkbook";
     public string Description => "Generic Table to Workbook with chart";
 
     public void Run()

@@ -22,6 +22,6 @@ public class DataTypesExample : IExample
         sheet.AddCell(0, 4, "DateTimeOffset:", null);
         sheet.AddCell(1, 4, DateTimeOffset.Now, null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "02_DataTypes.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "002_DataTypes.xlsx");
     }
 }

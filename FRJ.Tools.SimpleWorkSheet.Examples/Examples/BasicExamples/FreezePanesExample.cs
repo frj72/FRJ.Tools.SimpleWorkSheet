@@ -25,6 +25,6 @@ public class FreezePanesExample : IExample
 
         sheet.FreezePanes(1, 0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "32_FreezePanes.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "032_FreezePanes.xlsx");
     }
 }

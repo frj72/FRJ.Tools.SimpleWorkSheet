@@ -35,6 +35,6 @@ public class AreaChartExample : IExample
 
         sheet.AddChart(chart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "51_AreaChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "051_AreaChart.xlsx");
     }
 }

@@ -37,6 +37,6 @@ public class MultiRangeFormulaExample : IExample
             .WithFont(font => font.Bold())
             .WithFormatCode("$#,##0"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "26_MultiRangeFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "026_MultiRangeFormula.xlsx");
     }
 }

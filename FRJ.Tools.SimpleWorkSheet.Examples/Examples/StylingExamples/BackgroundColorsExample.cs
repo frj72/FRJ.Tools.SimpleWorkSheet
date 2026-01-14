@@ -19,6 +19,6 @@ public class BackgroundColorsExample : IExample
         sheet.AddCell(0, 4, "Gray Background", configure: cell => cell.WithColor("CCCCCC"));
         sheet.AddCell(0, 5, "Light Blue Background", configure: cell => cell.WithColor("ADD8E6"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "07_BackgroundColors.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "007_BackgroundColors.xlsx");
     }
 }

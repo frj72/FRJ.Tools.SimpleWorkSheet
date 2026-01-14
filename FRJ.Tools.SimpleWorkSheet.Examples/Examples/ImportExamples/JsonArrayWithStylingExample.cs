@@ -20,6 +20,6 @@ public class JsonArrayWithStylingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "57_JsonArrayWithStyling.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "057_JsonArrayWithStyling.xlsx");
     }
 }

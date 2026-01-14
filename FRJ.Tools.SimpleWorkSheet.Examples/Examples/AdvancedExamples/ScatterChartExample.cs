@@ -52,6 +52,6 @@ public class ScatterChartExample : IExample
 
         sheet.AddChart(scatterChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "44_ScatterChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "044_ScatterChart.xlsx");
     }
 }

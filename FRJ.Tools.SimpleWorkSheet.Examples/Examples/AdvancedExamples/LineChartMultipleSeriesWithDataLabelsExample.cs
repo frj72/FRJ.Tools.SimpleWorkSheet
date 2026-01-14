@@ -57,6 +57,6 @@ public class LineChartMultipleSeriesWithDataLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "95_LineChartMultipleSeriesWithDataLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "095_LineChartMultipleSeriesWithDataLabels.xlsx");
     }
 }

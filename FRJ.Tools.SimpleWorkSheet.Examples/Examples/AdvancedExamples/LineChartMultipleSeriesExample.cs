@@ -56,6 +56,6 @@ public class LineChartMultipleSeriesExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "89_LineChartMultipleSeries.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, "089_LineChartMultipleSeries.xlsx");
     }
 }
