@@ -619,7 +619,7 @@ public class SheetConverter
         barChartElement.Append(new BarGrouping { Val = BarGroupingValues.Clustered });
         barChartElement.Append(new VaryColors { Val = false });
 
-        if (barChart is { CategoriesRange: not null, ValuesRange: not null })
+        if (barChart.ValuesRange != null)
         {
             var barChartSeries = new BarChartSeries();
             barChartSeries.Append(new Index { Val = 0 });
@@ -630,11 +630,14 @@ public class SheetConverter
             seriesText.Append(stringValue);
             barChartSeries.Append(seriesText);
 
-            var categoryAxisData = new CategoryAxisData();
-            var catRef = new StringReference();
-            catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(barChart.CategoriesRange.Value, sheetName) });
-            categoryAxisData.Append(catRef);
-            barChartSeries.Append(categoryAxisData);
+            if (barChart.CategoriesRange != null)
+            {
+                var categoryAxisData = new CategoryAxisData();
+                var catRef = new StringReference();
+                catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(barChart.CategoriesRange.Value, sheetName) });
+                categoryAxisData.Append(catRef);
+                barChartSeries.Append(categoryAxisData);
+            }
 
             var values = new Values();
             var numRef = new NumberReference();
@@ -785,7 +788,7 @@ public class SheetConverter
         lineChartElement.Append(new Grouping { Val = GroupingValues.Standard });
         lineChartElement.Append(new VaryColors { Val = false });
 
-        if (lineChart is { CategoriesRange: not null, ValuesRange: not null })
+        if (lineChart.ValuesRange != null)
         {
             var lineChartSeries = new LineChartSeries();
             lineChartSeries.Append(new Index { Val = 0 });
@@ -802,11 +805,14 @@ public class SheetConverter
                 marker.Append(new Size { Val = (byte)5 });
             lineChartSeries.Append(marker);
 
-            var categoryAxisData = new CategoryAxisData();
-            var catRef = new StringReference();
-            catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(lineChart.CategoriesRange.Value, sheetName) });
-            categoryAxisData.Append(catRef);
-            lineChartSeries.Append(categoryAxisData);
+            if (lineChart.CategoriesRange != null)
+            {
+                var categoryAxisData = new CategoryAxisData();
+                var catRef = new StringReference();
+                catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(lineChart.CategoriesRange.Value, sheetName) });
+                categoryAxisData.Append(catRef);
+                lineChartSeries.Append(categoryAxisData);
+            }
 
             var values = new Values();
             var numRef = new NumberReference();
@@ -934,7 +940,7 @@ public class SheetConverter
         areaChartElement.Append(grouping);
         areaChartElement.Append(new VaryColors { Val = false });
 
-        if (areaChart is { CategoriesRange: not null, ValuesRange: not null })
+        if (areaChart.ValuesRange != null)
         {
             var areaChartSeries = new AreaChartSeries();
             areaChartSeries.Append(new Index { Val = 0 });
@@ -945,11 +951,14 @@ public class SheetConverter
             seriesText.Append(stringValue);
             areaChartSeries.Append(seriesText);
 
-            var categoryAxisData = new CategoryAxisData();
-            var catRef = new StringReference();
-            catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(areaChart.CategoriesRange.Value, sheetName) });
-            categoryAxisData.Append(catRef);
-            areaChartSeries.Append(categoryAxisData);
+            if (areaChart.CategoriesRange != null)
+            {
+                var categoryAxisData = new CategoryAxisData();
+                var catRef = new StringReference();
+                catRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(areaChart.CategoriesRange.Value, sheetName) });
+                categoryAxisData.Append(catRef);
+                areaChartSeries.Append(categoryAxisData);
+            }
 
             var values = new Values();
             var numRef = new NumberReference();

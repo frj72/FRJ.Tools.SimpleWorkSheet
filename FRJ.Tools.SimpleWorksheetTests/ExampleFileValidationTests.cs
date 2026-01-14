@@ -99,6 +99,10 @@ public partial class ExampleFileValidationTests
     [InlineData("87_RowHiding.xlsx")]
     [InlineData("88_ConditionalHiding.xlsx")]
     [InlineData("89_LineChartMultipleSeries.xlsx")]
+    [InlineData("90_LineChartWithoutCategories.xlsx")]
+    [InlineData("91_LineChartMultipleSeriesWithoutCategories.xlsx")]
+    [InlineData("92_BarChartWithoutCategories.xlsx")]
+    [InlineData("93_AreaChartWithoutCategories.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -119,7 +123,7 @@ public partial class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 89;
+        const int expectedCount = 93;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
 
         Assert.Equal(expectedCount, actualFiles.Length);
@@ -130,12 +134,14 @@ public partial class ExampleFileValidationTests
     {
         var prefixes = Directory.GetFiles(ExamplesPath, "*.xlsx")
             .Select(Path.GetFileName)
-            .Select(name => ExampleFileName().Match(name!))
+            .Where(name => !string.IsNullOrEmpty(name))
+            .Cast<string>()
+            .Select(fileName => ExampleFileName().Match(fileName))
             .Where(match => match.Success)
-            .Select(match => match.Groups[1].Value)
-            .Select(int.Parse)
+            .Select(match => int.Parse(match.Groups[1].Value))
             .ToList();
-        bool isValidSequence = prefixes.Order().SequenceEqual(Enumerable.Range(1, prefixes.Count));
+        
+        var isValidSequence = prefixes.Order().SequenceEqual(Enumerable.Range(1, prefixes.Count));
         Assert.True(isValidSequence);
     }
 

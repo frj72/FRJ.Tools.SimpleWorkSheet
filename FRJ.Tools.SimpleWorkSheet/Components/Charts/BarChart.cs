@@ -33,6 +33,15 @@ public class BarChart : Chart
         return this;
     }
 
+    public BarChart WithDataRange(CellRange valuesRange)
+    {
+        ChartDataRange.ValidateDataRange(valuesRange);
+
+        CategoriesRange = null;
+        ValuesRange = valuesRange;
+        return this;
+    }
+
     public BarChart WithPosition(uint fromColumn, uint fromRow, uint toColumn, uint toRow)
     {
         Position = new(fromColumn, fromRow, toColumn, toRow);

@@ -33,6 +33,15 @@ public class AreaChart : Chart
         return this;
     }
 
+    public AreaChart WithDataRange(CellRange valuesRange)
+    {
+        ChartDataRange.ValidateDataRange(valuesRange);
+
+        CategoriesRange = null;
+        ValuesRange = valuesRange;
+        return this;
+    }
+
     public AreaChart WithPosition(uint fromColumn, uint fromRow, uint toColumn, uint toRow)
     {
         Position = new(fromColumn, fromRow, toColumn, toRow);

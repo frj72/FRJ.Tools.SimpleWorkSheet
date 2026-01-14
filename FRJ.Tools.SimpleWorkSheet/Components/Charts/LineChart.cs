@@ -34,6 +34,15 @@ public class LineChart : Chart
         return this;
     }
 
+    public LineChart WithDataRange(CellRange valuesRange)
+    {
+        ChartDataRange.ValidateDataRange(valuesRange);
+
+        CategoriesRange = null;
+        ValuesRange = valuesRange;
+        return this;
+    }
+
     public LineChart WithPosition(uint fromColumn, uint fromRow, uint toColumn, uint toRow)
     {
         Position = new(fromColumn, fromRow, toColumn, toRow);
