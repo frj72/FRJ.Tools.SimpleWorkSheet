@@ -57,6 +57,7 @@ public static class Program
             new AdvancedFormulasExample(),
             new BarChartExample(),
             new LineChartExample(),
+            new LineChartMultipleSeriesExample(),
             new PieChartExample(),
             new ScatterChartExample(),
             new ChartSheetExample(),

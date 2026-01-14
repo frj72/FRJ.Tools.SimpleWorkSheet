@@ -1,11 +1,12 @@
+using System.Text.RegularExpressions;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
-public class ExampleFileValidationTests
+public partial class ExampleFileValidationTests
 {
     private static readonly string ExamplesPath = Path.Combine(
-        Directory.GetCurrentDirectory(), 
+        Directory.GetCurrentDirectory(),
         "../../../..",
         "FRJ.Tools.SimpleWorkSheet.Examples/Output");
 
@@ -94,18 +95,22 @@ public class ExampleFileValidationTests
     [InlineData("82_ChartSeriesNamesImport_CSV.xlsx")]
     [InlineData("83_ChartSeriesNamesImport_GenericTable.xlsx")]
     [InlineData("85_MultiTableMultiChartCommonSheet.xlsx")]
+    [InlineData("86_ColumnHiding.xlsx")]
+    [InlineData("87_RowHiding.xlsx")]
+    [InlineData("88_ConditionalHiding.xlsx")]
+    [InlineData("89_LineChartMultipleSeries.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
-        
+
         if (!File.Exists(filePath))
             Assert.Fail($"Example file not found: {filePath}");
 
         var exception = Record.Exception(() => WorkBookReader.LoadFromFile(filePath));
-        
+
         if (exception != null)
             Assert.Fail($"Failed to load {fileName}: {exception.Message}\n{exception.StackTrace}");
-        
+
         var workbook = WorkBookReader.LoadFromFile(filePath);
         Assert.NotNull(workbook);
         Assert.NotEmpty(workbook.Sheets);
@@ -114,9 +119,26 @@ public class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 88;
+        const int expectedCount = 89;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
-        
+
         Assert.Equal(expectedCount, actualFiles.Length);
     }
+
+    [Fact]
+    public void AllExampleFiles_Have_Correct_Numbering()
+    {
+        var prefixes = Directory.GetFiles(ExamplesPath, "*.xlsx")
+            .Select(Path.GetFileName)
+            .Select(name => ExampleFileName().Match(name!))
+            .Where(match => match.Success)
+            .Select(match => match.Groups[1].Value)
+            .Select(int.Parse)
+            .ToList();
+        bool isValidSequence = prefixes.Order().SequenceEqual(Enumerable.Range(1, prefixes.Count));
+        Assert.True(isValidSequence);
+    }
+
+    [GeneratedRegex(@"^(\d+)_[^\.]+\.xlsx$")]
+    private static partial Regex ExampleFileName();
 }
