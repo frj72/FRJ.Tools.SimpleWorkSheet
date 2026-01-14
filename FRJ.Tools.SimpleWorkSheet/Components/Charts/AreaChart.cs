@@ -96,6 +96,12 @@ public class AreaChart : Chart
         return this;
     }
 
+    public AreaChart WithYAxisLabels(bool show)
+    {
+        ShowYAxisLabels = show;
+        return this;
+    }
+
     public AreaChart WithMajorGridlines(bool show)
     {
         ShowMajorGridlines = show;

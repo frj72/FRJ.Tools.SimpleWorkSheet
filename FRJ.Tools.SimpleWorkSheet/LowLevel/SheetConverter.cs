@@ -851,6 +851,14 @@ public class SheetConverter
                 lineChartElement.Append(lineChartSeries);
             }
 
+        lineChartElement.Append(new DataLabels(
+            new ShowLegendKey { Val = false }, 
+            new ShowValue { Val = chart.ShowDataLabels }, 
+            new ShowCategoryName { Val = false }, 
+            new ShowSeriesName { Val = false }, 
+            new ShowPercent { Val = false }, 
+            new ShowBubbleSize { Val = false }));
+
         lineChartElement.Append(new AxisId { Val = 1 });
         lineChartElement.Append(new AxisId { Val = 2 });
 
@@ -873,6 +881,11 @@ public class SheetConverter
         valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis.Append(new MajorGridlines());
+        if (chart.ShowYAxisLabels)
+        {
+            valueAxis.Append(new NumberingFormat { FormatCode = "General", SourceLinked = true });
+            valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        }
         valueAxis.Append(new CrossingAxis { Val = 1 });
         valueAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
         if (!string.IsNullOrEmpty(chart.ValueAxisTitle))
@@ -1011,6 +1024,11 @@ public class SheetConverter
         valueAxis.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis.Append(new MajorGridlines());
+        if (chart.ShowYAxisLabels)
+        {
+            valueAxis.Append(new NumberingFormat { FormatCode = "General", SourceLinked = true });
+            valueAxis.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        }
         valueAxis.Append(new CrossingAxis { Val = 1 });
         valueAxis.Append(new Crosses { Val = CrossesValues.AutoZero });
         if (!string.IsNullOrEmpty(chart.ValueAxisTitle))
@@ -1102,6 +1120,14 @@ public class SheetConverter
             pieChartElement.Append(pieChartSeries);
         }
 
+        pieChartElement.Append(new DataLabels(
+            new ShowLegendKey { Val = false }, 
+            new ShowValue { Val = chart.ShowDataLabels }, 
+            new ShowCategoryName { Val = false }, 
+            new ShowSeriesName { Val = false }, 
+            new ShowPercent { Val = false }, 
+            new ShowBubbleSize { Val = false }));
+
         plotArea.Append(pieChartElement);
         chartElement.Append(plotArea);
 
@@ -1189,6 +1215,14 @@ public class SheetConverter
             scatterChartElement.Append(scatterChartSeries);
         }
 
+        scatterChartElement.Append(new DataLabels(
+            new ShowLegendKey { Val = false }, 
+            new ShowValue { Val = chart.ShowDataLabels }, 
+            new ShowCategoryName { Val = false }, 
+            new ShowSeriesName { Val = false }, 
+            new ShowPercent { Val = false }, 
+            new ShowBubbleSize { Val = false }));
+
         scatterChartElement.Append(new AxisId { Val = 1 });
         scatterChartElement.Append(new AxisId { Val = 2 });
 
@@ -1210,6 +1244,11 @@ public class SheetConverter
         valueAxis2.Append(new AxisPosition { Val = AxisPositionValues.Left });
         if (chart.ShowMajorGridlines)
             valueAxis2.Append(new MajorGridlines());
+        if (chart.ShowYAxisLabels)
+        {
+            valueAxis2.Append(new NumberingFormat { FormatCode = "General", SourceLinked = true });
+            valueAxis2.Append(new TickLabelPosition { Val = TickLabelPositionValues.NextTo });
+        }
         valueAxis2.Append(new CrossingAxis { Val = 1 });
         valueAxis2.Append(new Crosses { Val = CrossesValues.AutoZero });
         if (!string.IsNullOrEmpty(chart.ValueAxisTitle))

@@ -103,6 +103,12 @@ public class LineChart : Chart
         return this;
     }
 
+    public LineChart WithYAxisLabels(bool show)
+    {
+        ShowYAxisLabels = show;
+        return this;
+    }
+
     public LineChart WithMajorGridlines(bool show)
     {
         ShowMajorGridlines = show;

@@ -221,4 +221,55 @@ public class ChartImprovementsTests
         
         Assert.NotEmpty(binary);
     }
+
+    [Fact]
+    public void LineChart_WithYAxisLabels_SetsProperty()
+    {
+        var chart = LineChart.Create()
+            .WithYAxisLabels(true);
+        
+        Assert.True(chart.ShowYAxisLabels);
+    }
+
+    [Fact]
+    public void LineChart_DefaultYAxisLabels_IsFalse()
+    {
+        var chart = LineChart.Create();
+        
+        Assert.False(chart.ShowYAxisLabels);
+    }
+
+    [Fact]
+    public void AreaChart_WithYAxisLabels_SetsProperty()
+    {
+        var chart = AreaChart.Create()
+            .WithYAxisLabels(true);
+        
+        Assert.True(chart.ShowYAxisLabels);
+    }
+
+    [Fact]
+    public void AreaChart_DefaultYAxisLabels_IsFalse()
+    {
+        var chart = AreaChart.Create();
+        
+        Assert.False(chart.ShowYAxisLabels);
+    }
+
+    [Fact]
+    public void ScatterChart_WithYAxisLabels_SetsProperty()
+    {
+        var chart = ScatterChart.Create()
+            .WithYAxisLabels(true);
+        
+        Assert.True(chart.ShowYAxisLabels);
+    }
+
+    [Fact]
+    public void ScatterChart_DefaultYAxisLabels_IsFalse()
+    {
+        var chart = ScatterChart.Create();
+        
+        Assert.False(chart.ShowYAxisLabels);
+    }
 }

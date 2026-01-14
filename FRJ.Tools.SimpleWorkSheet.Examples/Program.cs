@@ -107,7 +107,13 @@ public static class Program
             new MultiTableMultiChartCommonSheetExample(),
             new ColumnHidingExample(),
             new RowHidingExample(),
-            new ConditionalHidingExample()
+            new ConditionalHidingExample(),
+            new LineChartWithDataLabelsExample(),
+            new LineChartMultipleSeriesWithDataLabelsExample(),
+            new ScatterChartWithDataLabelsExample(),
+            new LineChartWithYAxisLabelsExample(),
+            new LineChartMultipleSeriesWithYAxisLabelsExample(),
+            new ScatterChartWithYAxisLabelsExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

@@ -87,6 +87,12 @@ public class ScatterChart : Chart
         return this;
     }
 
+    public ScatterChart WithYAxisLabels(bool show)
+    {
+        ShowYAxisLabels = show;
+        return this;
+    }
+
     public ScatterChart WithMajorGridlines(bool show)
     {
         ShowMajorGridlines = show;
