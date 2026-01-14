@@ -306,8 +306,15 @@ public class WorkBookReader
 
         foreach (var column in columns.Elements<Column>())
         {
-            if (column.Min?.Value == null || column.Width?.Value == null || column.CustomWidth?.Value != true) continue;
+            if (column.Min?.Value == null) continue;
             var colIndex = column.Min.Value - 1;
+            
+            if (column.Hidden?.Value == true)
+                workSheet.HideColumn(colIndex);
+            
+            if (column.Width?.Value == null || column.CustomWidth?.Value != true)
+                continue;
+            
             OneOf<double, CellWidth> width = column.Width.Value;
             workSheet.SetColumnWidth(colIndex, width);
         }
@@ -320,12 +327,19 @@ public class WorkBookReader
             return;
 
         foreach (var row in sheetData.Elements<Row>())
-            if (row.RowIndex?.Value != null && row.Height?.Value != null && row.CustomHeight?.Value == true)
-            {
-                var rowIndex = row.RowIndex.Value - 1;
-                OneOf<double, RowHeight> height = row.Height.Value;
-                workSheet.SetRowHeight(rowIndex, height);
-            }
+        {
+            if (row.RowIndex?.Value == null) continue;
+            var rowIndex = row.RowIndex.Value - 1;
+            
+            if (row.Hidden?.Value == true)
+                workSheet.HideRow(rowIndex);
+            
+            if (row.Height?.Value == null || row.CustomHeight?.Value != true)
+                continue;
+            
+            OneOf<double, RowHeight> height = row.Height.Value;
+            workSheet.SetRowHeight(rowIndex, height);
+        }
     }
 
     private static void ExtractFrozenPanes(WorksheetPart worksheetPart, WorkSheet workSheet)

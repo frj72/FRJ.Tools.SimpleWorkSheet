@@ -17,6 +17,8 @@ public class WorkSheet
     private readonly Dictionary<uint, OneOf<double, CellWidth>> _explicitColumnWidths = new();
     private readonly Dictionary<uint, OneOf<double, RowHeight>> _explicitRowHeights = new();
     private readonly Dictionary<CellRange, CellValidation> _validations = new();
+    private readonly Dictionary<uint, bool> _hiddenColumns = new();
+    private readonly Dictionary<uint, bool> _hiddenRows = new();
     public string Name { get; }
     public CellCollection Cells { get; }
 
@@ -25,6 +27,10 @@ public class WorkSheet
     public IReadOnlyDictionary<uint, OneOf<double, RowHeight>> ExplicitRowHeights => _explicitRowHeights;
 
     public IReadOnlyDictionary<CellRange, CellValidation> Validations => _validations;
+
+    public IReadOnlyDictionary<uint, bool> HiddenColumns => _hiddenColumns;
+
+    public IReadOnlyDictionary<uint, bool> HiddenRows => _hiddenRows;
 
     public FreezePane? FrozenPane { get; private set; }
     public string? TabColor { get; private set; }
@@ -262,6 +268,54 @@ public class WorkSheet
     }
 
     public void SetVisible(bool visible) => IsVisible = visible;
+
+    public void SetColumnHidden(uint column, bool hidden)
+    {
+        if (hidden)
+            _hiddenColumns[column] = true;
+        else
+            _hiddenColumns.Remove(column);
+    }
+
+    public void HideColumn(uint column) => SetColumnHidden(column, true);
+
+    public void ShowColumn(uint column) => SetColumnHidden(column, false);
+
+    public void HideColumns(params uint[] columns)
+    {
+        foreach (var column in columns)
+            HideColumn(column);
+    }
+
+    public void ShowColumns(params uint[] columns)
+    {
+        foreach (var column in columns)
+            ShowColumn(column);
+    }
+
+    public void SetRowHidden(uint row, bool hidden)
+    {
+        if (hidden)
+            _hiddenRows[row] = true;
+        else
+            _hiddenRows.Remove(row);
+    }
+
+    public void HideRow(uint row) => SetRowHidden(row, true);
+
+    public void ShowRow(uint row) => SetRowHidden(row, false);
+
+    public void HideRows(params uint[] rows)
+    {
+        foreach (var row in rows)
+            HideRow(row);
+    }
+
+    public void ShowRows(params uint[] rows)
+    {
+        foreach (var row in rows)
+            ShowRow(row);
+    }
 
     public ExcelTable AddTable(string name, CellRange range, bool showFilterButton = true)
     {

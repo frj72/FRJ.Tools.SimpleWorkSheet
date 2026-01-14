@@ -103,11 +103,25 @@ public class SheetConverter
                     var row = new Row { RowIndex = rowGroup.Key + 1 };
 
                     if (workSheet.ExplicitRowHeights.TryGetValue(rowGroup.Key, out var rowHeight))
+                    {
                         if (rowHeight.IsT0)
                         {
                             row.Height = rowHeight.AsT0;
                             row.CustomHeight = true;
                         }
+
+                        if (rowHeight is { IsT1: true, AsT1: RowHeight.Hidden })
+                        {
+                            row.Hidden = true;
+                            row.CustomHeight = true;
+                        }
+                    }
+
+                    if (workSheet.HiddenRows.TryGetValue(rowGroup.Key, out var isHidden) && isHidden)
+                    {
+                        row.Hidden = true;
+                        row.CustomHeight = true;
+                    }
 
                     foreach (var cellEntry in rowGroup.OrderBy(ce => ce.Key.X))
                     {
@@ -132,24 +146,44 @@ public class SheetConverter
                 
                 var columns = new Columns();
 
-                foreach (var columnWidth in workSheet.ExplicitColumnWidths)
+                var allColumnIndices = workSheet.ExplicitColumnWidths.Keys
+                    .Concat(workSheet.HiddenColumns.Keys)
+                    .Distinct()
+                    .OrderBy(x => x);
+
+                foreach (var columnIndex in allColumnIndices)
                 {
                     var column = new Column
                     {
-                        Min = columnWidth.Key + 1,
-                        Max = columnWidth.Key + 1
+                        Min = columnIndex + 1,
+                        Max = columnIndex + 1
                     };
 
-                    if (columnWidth.Value.IsT0)
+                    if (workSheet.ExplicitColumnWidths.TryGetValue(columnIndex, out var columnWidth))
                     {
-                        column.Width = columnWidth.Value.AsT0;
-                        column.CustomWidth = true;
+                        if (columnWidth.IsT0)
+                        {
+                            column.Width = columnWidth.AsT0;
+                            column.CustomWidth = true;
+                        }
+
+                        if (columnWidth is { IsT1: true, AsT1: CellWidth.AutoExpand })
+                        {
+                            column.BestFit = true;
+                            column.CustomWidth = false;
+                        }
+
+                        if (columnWidth is { IsT1: true, AsT1: CellWidth.Hidden })
+                        {
+                            column.Hidden = true;
+                            column.CustomWidth = true;
+                        }
                     }
 
-                    if (columnWidth.Value is { IsT1: true, AsT1: CellWidth.AutoExpand })
+                    if (workSheet.HiddenColumns.TryGetValue(columnIndex, out var isHidden) && isHidden)
                     {
-                        column.BestFit = true;
-                        column.CustomWidth = false;
+                        column.Hidden = true;
+                        column.CustomWidth = true;
                     }
 
                     columns.Append(column);

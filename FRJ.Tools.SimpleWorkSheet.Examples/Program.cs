@@ -11,7 +11,7 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static void Main()
     {
         var examples = new List<IExample>
         {
@@ -96,61 +96,21 @@ public static class Program
             new BuiltInColorsExample(),
             new ClassToWorkbookExample(),
             new ChartSeriesNamesImportExample(),
-            new MultiTableMultiChartCommonSheetExample()
+            new MultiTableMultiChartCommonSheetExample(),
+            new ColumnHidingExample(),
+            new RowHidingExample(),
+            new ConditionalHidingExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");
         Console.WriteLine("====================================\n");
 
-        if (args.Length > 0 && args[0] == "all")
-        {
-            RunAllExamples(examples);
-            return;
-        }
-
-        ShowMenu(examples);
-    }
-
-    private static void ShowMenu(List<IExample> examples)
-    {
-        while (true)
-        {
-            Console.WriteLine("\nSelect an example to run:");
-            Console.WriteLine("0. Run all examples");
-            
-            for (var i = 0; i < examples.Count; i++) Console.WriteLine($"{i + 1}. {examples[i].Name}");
-
-            Console.WriteLine("q. Quit");
-            Console.Write("\nYour choice: ");
-            
-            var input = Console.ReadLine();
-            
-            if (input?.ToLower() == "q")
-                break;
-                
-            if (int.TryParse(input, out var choice))
-                switch (choice)
-                {
-                    case 0:
-                        RunAllExamples(examples);
-                        break;
-                    case > 0 when choice <= examples.Count:
-                        ExampleRunner.RunExample(examples[choice - 1]);
-                        break;
-                    default:
-                        Console.WriteLine("Invalid choice. Please try again.");
-                        break;
-                }
-            else
-                Console.WriteLine("Invalid input. Please enter a number or 'q' to quit.");
-        }
-        
-        Console.WriteLine("\nGoodbye!");
+        RunAllExamples(examples);
     }
 
     private static void RunAllExamples(List<IExample> examples)
     {
-        Console.WriteLine("\nRunning all examples...\n");
+        Console.WriteLine("Running all examples...\n");
         
         foreach (var example in examples) ExampleRunner.RunExample(example);
 
