@@ -24,7 +24,6 @@ public static class CellValueExtensions
             if (value.IsDateTime() || value.IsDateTimeOffset())
                 return CellValueBasicType.DateType;
             return CellValueBasicType.String;
-        
         }
     }
 }

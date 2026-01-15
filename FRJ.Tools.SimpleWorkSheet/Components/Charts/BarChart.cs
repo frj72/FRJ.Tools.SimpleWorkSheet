@@ -1,4 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Charts;
 
@@ -66,9 +67,18 @@ public class BarChart : Chart
         return this;
     }
 
-    public new BarChart AddSeries(string name, CellRange dataRange)
+    public new BarChart AddSeries(string name, CellRange dataRange, string? color = null)
     {
-        base.AddSeries(name, dataRange);
+        base.AddSeries(name, dataRange, color);
+        return this;
+    }
+
+    public BarChart WithSeriesColor(string color)
+    {
+        if (!((string?)color).IsValidColor())
+            throw new ArgumentException("Invalid color format", nameof(color));
+
+        SingleSeriesColor = color;
         return this;
     }
 

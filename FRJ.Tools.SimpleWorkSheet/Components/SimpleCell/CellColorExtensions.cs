@@ -5,8 +5,8 @@ public static class CellColorExtensions
     extension(string? hexValue)
     {
         public bool IsValidColor() =>
-            string.IsNullOrEmpty(hexValue) || 
-            hexValue is [ _, _, _, _, _, _] or [ _, _, _, _, _, _, _, _] &&
+            string.IsNullOrEmpty(hexValue) ||
+            hexValue is [_, _, _, _, _, _] or [_, _, _, _, _, _, _, _] &&
             hexValue[..].All(c => char.IsDigit(c) || c is >= 'a' and <= 'f' || c is >= 'A' and <= 'F');
 
         public string ToArgbColor()

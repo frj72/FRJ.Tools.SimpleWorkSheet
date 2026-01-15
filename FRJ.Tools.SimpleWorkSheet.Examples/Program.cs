@@ -116,7 +116,12 @@ public static class Program
             new ScatterChartWithYAxisLabelsExample(),
             new LineChartWithoutYAxisLabelsExample(),
             new BarChartWithoutYAxisLabelsExample(),
-            new AreaChartWithoutYAxisLabelsExample()
+            new AreaChartWithoutYAxisLabelsExample(),
+            new LineChartWithCustomColorExample(),
+            new LineChartMultipleSeriesWithColorsExample(),
+            new BarChartWithCustomColorsExample(),
+            new AreaChartWithCustomColorsExample(),
+            new ChartColorPaletteExample()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

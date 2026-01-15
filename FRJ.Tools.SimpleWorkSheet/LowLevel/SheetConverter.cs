@@ -595,6 +595,33 @@ public class SheetConverter
         }
     }
 
+    private static void AddSeriesColor(OpenXmlCompositeElement seriesElement, string? color, bool includeFill, bool includeLine)
+    {
+        if (string.IsNullOrEmpty(color))
+            return;
+
+        var rgb = color.ToArgbColor()[2..];
+        var shapeProperties = new DocumentFormat.OpenXml.Drawing.Charts.ShapeProperties();
+
+        if (includeFill)
+        {
+            var solidFill = new SolidFill();
+            solidFill.Append(new RgbColorModelHex { Val = rgb });
+            shapeProperties.Append(solidFill);
+        }
+
+        if (includeLine)
+        {
+            var outline = new DocumentFormat.OpenXml.Drawing.Outline();
+            var lineFill = new SolidFill();
+            lineFill.Append(new RgbColorModelHex { Val = rgb });
+            outline.Append(lineFill);
+            shapeProperties.Append(outline);
+        }
+
+        seriesElement.Append(shapeProperties);
+    }
+
     private static void GenerateBarChartPart(ChartPart chartPart, BarChart barChart, string sheetName, Chart chart)
     {
 
@@ -645,6 +672,8 @@ public class SheetConverter
             values.Append(numRef);
             barChartSeries.Append(values);
 
+            AddSeriesColor(barChartSeries, chart.SingleSeriesColor, includeFill: true, includeLine: false);
+
             barChartElement.Append(barChartSeries);
         }
 
@@ -666,6 +695,8 @@ public class SheetConverter
                 numRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(series.DataRange, sheetName) });
                 values.Append(numRef);
                 barChartSeries.Append(values);
+
+                AddSeriesColor(barChartSeries, series.Color, includeFill: true, includeLine: false);
 
                 barChartElement.Append(barChartSeries);
             }
@@ -826,6 +857,8 @@ public class SheetConverter
             values.Append(numRef);
             lineChartSeries.Append(values);
 
+            AddSeriesColor(lineChartSeries, chart.SingleSeriesColor, includeFill: false, includeLine: true);
+
             lineChartElement.Append(lineChartSeries);
         }
 
@@ -853,6 +886,8 @@ public class SheetConverter
                 numRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(series.DataRange, sheetName) });
                 values.Append(numRef);
                 lineChartSeries.Append(values);
+
+                AddSeriesColor(lineChartSeries, series.Color, includeFill: false, includeLine: true);
 
                 lineChartElement.Append(lineChartSeries);
             }
@@ -988,6 +1023,8 @@ public class SheetConverter
             values.Append(numRef);
             areaChartSeries.Append(values);
 
+            AddSeriesColor(areaChartSeries, chart.SingleSeriesColor, includeFill: true, includeLine: false);
+
             areaChartElement.Append(areaChartSeries);
         }
 
@@ -1009,6 +1046,8 @@ public class SheetConverter
                 numRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(series.DataRange, sheetName) });
                 values.Append(numRef);
                 areaChartSeries.Append(values);
+
+                AddSeriesColor(areaChartSeries, series.Color, includeFill: true, includeLine: false);
 
                 areaChartElement.Append(areaChartSeries);
             }
@@ -1129,6 +1168,8 @@ public class SheetConverter
             values.Append(numRef);
             pieChartSeries.Append(values);
 
+            AddSeriesColor(pieChartSeries, chart.SingleSeriesColor, includeFill: true, includeLine: false);
+
             pieChartElement.Append(pieChartSeries);
         }
 
@@ -1223,6 +1264,8 @@ public class SheetConverter
             yNumRef.Append(new Formula { Text = ChartDataRange.ToRangeReference(scatterChart.YRange.Value, sheetName) });
             yValues.Append(yNumRef);
             scatterChartSeries.Append(yValues);
+
+            AddSeriesColor(scatterChartSeries, chart.SingleSeriesColor, includeFill: false, includeLine: true);
 
             scatterChartElement.Append(scatterChartSeries);
         }

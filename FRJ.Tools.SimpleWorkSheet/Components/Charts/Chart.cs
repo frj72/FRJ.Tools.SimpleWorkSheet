@@ -17,13 +17,14 @@ public abstract class Chart
     public bool ShowYAxisLabels { get; protected set; } = true;
     public bool ShowMajorGridlines { get; protected set; } = true;
     internal string? SingleSeriesName { get; set; }
+    internal string? SingleSeriesColor { get; set; }
 
     protected Chart(ChartType type) => Type = type;
 
-    public void AddSeries(string name, CellRange dataRange)
+    public void AddSeries(string name, CellRange dataRange, string? color = null)
     {
         ChartDataRange.ValidateDataRange(dataRange);
-        var series = new ChartSeries(name, dataRange);
+        var series = new ChartSeries(name, dataRange, color);
         Series.Add(series);
     }
 }

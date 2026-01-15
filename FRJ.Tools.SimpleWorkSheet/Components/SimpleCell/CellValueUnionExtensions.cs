@@ -18,7 +18,7 @@ public static class CellValueUnionExtensions
 
         public double AsDouble() =>
             value.Match(
-                d => (double) d,
+                d => (double)d,
                 l => l,
                 s => double.TryParse(s, out var result) ? result : 0.0,
                 dt => dt.Ticks,
@@ -28,7 +28,7 @@ public static class CellValueUnionExtensions
 
         public long AsLong() =>
             value.Match(
-                d => (long) d,
+                d => (long)d,
                 l => l,
                 s => long.TryParse(s, out var result) ? result : 0L,
                 dt => dt.Ticks,
@@ -38,11 +38,11 @@ public static class CellValueUnionExtensions
 
         public int AsInt() =>
             value.Match(
-                d => (int) d,
-                l => (int) l,
+                d => (int)d,
+                l => (int)l,
                 s => int.TryParse(s, out var result) ? result : 0,
-                dt => (int) dt.Ticks,
-                dto => (int) dto.Ticks,
+                dt => (int)dt.Ticks,
+                dto => (int)dto.Ticks,
                 _ => throw new InvalidOperationException("Cannot convert a formula to an int")
             );
 
@@ -58,7 +58,7 @@ public static class CellValueUnionExtensions
 
         public DateTime AsDateTime() =>
             value.Match(
-                d => new((long) d),
+                d => new((long)d),
                 l => new(l),
                 s => DateTime.TryParse(s, null, DateTimeStyles.RoundtripKind, out var result) ? result : DateTime.MinValue,
                 dt => dt,
@@ -68,7 +68,7 @@ public static class CellValueUnionExtensions
 
         public DateTimeOffset AsDateTimeOffset() =>
             value.Match(
-                d => new DateTime((long) d),
+                d => new DateTime((long)d),
                 l => new DateTime(l),
                 s => DateTimeOffset.TryParse(s, null, DateTimeStyles.RoundtripKind, out var result) ? result : DateTimeOffset.MinValue,
                 dt => new(dt),

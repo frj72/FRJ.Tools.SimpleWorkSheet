@@ -1,5 +1,6 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
@@ -60,6 +61,16 @@ public class PieChartTests
 
         Assert.Equal(categoriesRange, chart.CategoriesRange);
         Assert.Equal(valuesRange, chart.ValuesRange);
+    }
+
+    [Fact]
+    public void WithSeriesColor_ReturnsSameInstance()
+    {
+        var chart = PieChart.Create();
+
+        var result = chart.WithSeriesColor(Colors.Red);
+
+        Assert.Same(chart, result);
     }
 
     [Fact]

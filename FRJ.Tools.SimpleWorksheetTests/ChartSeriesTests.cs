@@ -13,6 +13,7 @@ public class ChartSeriesTests
 
         Assert.Equal("Test Series", series.Name);
         Assert.Equal(range, series.DataRange);
+        Assert.Null(series.Color);
     }
 
     [Fact]

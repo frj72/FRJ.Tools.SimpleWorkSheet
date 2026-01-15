@@ -32,6 +32,7 @@ public static class CellExtensions
                 throw new ArgumentException("Invalid border color format", nameof(borders));
             return cell with { Style = cell.Style.WithBorders(borders) };
         }
+
         public Cell SetDefaultFormatting()
             => cell with { Style = WorkSheetDefaults.DefaultCellStyle };
     }
@@ -58,7 +59,6 @@ public static class CellExtensions
             var textSize = (float)(cellFont.Size ?? WorkSheetDefaults.FontSize);
 
             using var font = new SKFont(typeface, textSize);
-
 
             var textToEstimate = cell.Value.CellValueType() switch
             {

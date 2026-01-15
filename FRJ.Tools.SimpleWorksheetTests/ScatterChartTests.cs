@@ -1,5 +1,6 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Charts;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
@@ -52,6 +53,16 @@ public class ScatterChartTests
 
         Assert.Equal(xRange, chart.XRange);
         Assert.Equal(yRange, chart.YRange);
+    }
+
+    [Fact]
+    public void WithSeriesColor_ReturnsSameInstance()
+    {
+        var chart = ScatterChart.Create();
+
+        var result = chart.WithSeriesColor(Colors.Red);
+
+        Assert.Same(chart, result);
     }
 
     [Fact]

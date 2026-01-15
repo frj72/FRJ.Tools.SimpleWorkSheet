@@ -1,4 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Charts;
 
@@ -70,9 +71,18 @@ public class PieChart : Chart
         return this;
     }
 
-    public new PieChart AddSeries(string name, CellRange dataRange)
+    public new PieChart AddSeries(string name, CellRange dataRange, string? color = null)
     {
-        base.AddSeries(name, dataRange);
+        base.AddSeries(name, dataRange, color);
+        return this;
+    }
+
+    public PieChart WithSeriesColor(string color)
+    {
+        if (!((string?)color).IsValidColor())
+            throw new ArgumentException("Invalid color format", nameof(color));
+
+        SingleSeriesColor = color;
         return this;
     }
 
