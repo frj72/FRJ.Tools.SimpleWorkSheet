@@ -106,6 +106,21 @@ public class GenericTableBuilderTests
     }
 
     [Fact]
+    public void AutoFitAllColumns_WithCalibration_EnablesAutoFit()
+    {
+        var table = GenericTable.Create("A", "B");
+        table.AddRow(new CellValue("Short"), new CellValue("VeryLongValue"));
+        
+        var sheet = GenericTableBuilder.FromGenericTable(table)
+            .AutoFitAllColumns(0.9)
+            .Build();
+        
+        Assert.NotNull(sheet);
+        Assert.Equal("A", sheet.GetValue(0, 0)?.Value.AsT2);
+        Assert.Equal("B", sheet.GetValue(1, 0)?.Value.AsT2);
+    }
+
+    [Fact]
     public void WithColumnOrder_ReordersColumns()
     {
         var table = GenericTable.Create("A", "B", "C");

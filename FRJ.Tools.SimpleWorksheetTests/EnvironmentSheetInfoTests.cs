@@ -1,5 +1,6 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
+using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
@@ -178,5 +179,68 @@ public class EnvironmentSheetInfoTests
         var withImplicitDefaults = EnvironmentSheetInfo.GetWidth("Aptos Narrow", 12, "Test");
 
         Assert.Equal(withExplicitDefaults, withImplicitDefaults);
+    }
+
+    [Fact]
+    public void CreateSimpleCalibrationWorkBook_WithNullFactor_CreatesWorkbookWith6ColumnsAnd2Rows()
+    {
+        var workbook = EnvironmentSheetInfo.CreateSimpleCalibrationWorkBook();
+
+        Assert.NotNull(workbook);
+        Assert.Single(workbook.Sheets);
+
+        var bytes = SheetConverter.ToBinaryExcelFile(workbook);
+        using var stream = new MemoryStream(bytes);
+        var loadedWorkbook = WorkBookReader.LoadFromStream(stream);
+        var sheet = loadedWorkbook.Sheets.First();
+        
+        for (uint row = 0; row < 2; row++)
+            for (uint col = 0; col < 6; col++)
+            {
+                var cell = sheet.Cells.Cells[new CellPosition(col, row)];
+                Assert.NotNull(cell);
+            }
+    }
+
+    [Fact]
+    public void CreateSimpleCalibrationWorkBook_With09Factor_CreatesWorkbookWith6ColumnsAnd2Rows()
+    {
+        var workbook = EnvironmentSheetInfo.CreateSimpleCalibrationWorkBook(0.9);
+
+        Assert.NotNull(workbook);
+        Assert.Single(workbook.Sheets);
+
+        var bytes = SheetConverter.ToBinaryExcelFile(workbook);
+        using var stream = new MemoryStream(bytes);
+        var loadedWorkbook = WorkBookReader.LoadFromStream(stream);
+        var sheet = loadedWorkbook.Sheets.First();
+        
+        for (uint row = 0; row < 2; row++)
+            for (uint col = 0; col < 6; col++)
+            {
+                var cell = sheet.Cells.Cells[new CellPosition(col, row)];
+                Assert.NotNull(cell);
+            }
+    }
+
+    [Fact]
+    public void CreateSimpleCalibrationWorkBook_With11Factor_CreatesWorkbookWith6ColumnsAnd2Rows()
+    {
+        var workbook = EnvironmentSheetInfo.CreateSimpleCalibrationWorkBook(1.1);
+
+        Assert.NotNull(workbook);
+        Assert.Single(workbook.Sheets);
+
+        var bytes = SheetConverter.ToBinaryExcelFile(workbook);
+        using var stream = new MemoryStream(bytes);
+        var loadedWorkbook = WorkBookReader.LoadFromStream(stream);
+        var sheet = loadedWorkbook.Sheets.First();
+        
+        for (uint row = 0; row < 2; row++)
+            for (uint col = 0; col < 6; col++)
+            {
+                var cell = sheet.Cells.Cells[new CellPosition(col, row)];
+                Assert.NotNull(cell);
+            }
     }
 }

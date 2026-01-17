@@ -1099,6 +1099,20 @@ public class ImportWorkbookBuilderTests
         Assert.Equal("March", data.Month);
         Assert.Equal(5000, data.Sales);
     }
+
+    [Fact]
+    public void AutoFitAllColumns_WithCalibration_EnablesAutoFit()
+    {
+        const string json = """[{"name": "John", "age": 30, "city": "New York"}]""";
+        
+        var workbook = WorkbookBuilder.FromJson(json)
+            .AutoFitAllColumns(0.9)
+            .Build();
+        
+        Assert.NotNull(workbook);
+        var sheet = workbook.Sheets.First();
+        Assert.NotEmpty(sheet.ExplicitColumnWidths);
+    }
 }
 
 

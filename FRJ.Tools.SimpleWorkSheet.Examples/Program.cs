@@ -1,6 +1,7 @@
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.AdvancedExamples;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.BasicExamples;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.BatchExamples;
+using FRJ.Tools.SimpleWorkSheet.Examples.Examples.CalibrationExamples;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.FormulaExamples;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.IntegrationExamples;
@@ -122,7 +123,10 @@ public static class Program
             new LineChartMultipleSeriesWithColorsExample(),
             new BarChartWithCustomColorsExample(),
             new AreaChartWithCustomColorsExample(),
-            new ChartColorPaletteExample()
+            new ChartColorPaletteExample(),
+            new SimpleCalibrationWorkbookDefaultExample(),
+            new SimpleCalibrationWorkbook09Example(),
+            new SimpleCalibrationWorkbook11Example()
         };
 
         Console.WriteLine("FRJ.Tools.SimpleWorkSheet - Examples");

@@ -119,6 +119,9 @@ public partial class ExampleFileValidationTests
     [InlineData("106_AreaChartWithCustomColors.xlsx")]
     [InlineData("107_ChartColorPalette.xlsx")]
     [InlineData("108_EnvironmentSheetInfo.xlsx")]
+    [InlineData("109_SimpleCalibrationWorkbook_Default.xlsx")]
+    [InlineData("110_SimpleCalibrationWorkbook_0.9.xlsx")]
+    [InlineData("111_SimpleCalibrationWorkbook_1.1.xlsx")]
     public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
@@ -139,8 +142,10 @@ public partial class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 108;
-        var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx");
+        const int expectedCount = 111;
+        var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx")
+            .Where(file => !Path.GetFileName(file).StartsWith("~$"))
+            .ToArray();
 
         Assert.Equal(expectedCount, actualFiles.Length);
     }
