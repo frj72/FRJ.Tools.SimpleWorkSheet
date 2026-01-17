@@ -66,6 +66,7 @@ public static class Program
             new ScatterChartExample(),
             new ChartSheetExample(),
             new AutoFitColumnsExample(),
+            new EnvironmentSheetInfoExample(),
             new SheetTabColorsExample(),
             new SheetVisibilityExample(),
             new ExcelTablesExample(),
