@@ -9,6 +9,10 @@ public class RowHidingExample : IExample
     public string Name => "Row Hiding";
     public string Description => "Demonstrates hiding rows in various ways";
 
+
+    public int ExampleNumber { get; }
+
+    public RowHidingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("HiddenRows");
@@ -52,6 +56,6 @@ public class RowHidingExample : IExample
         sheet.SetColumnWidth(2, 15.0);
         sheet.SetColumnWidth(3, 15.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "087_RowHiding.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_RowHiding.xlsx");
     }
 }

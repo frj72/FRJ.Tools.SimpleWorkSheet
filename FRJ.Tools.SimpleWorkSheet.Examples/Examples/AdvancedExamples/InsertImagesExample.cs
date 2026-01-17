@@ -8,6 +8,10 @@ public class InsertImagesExample : IExample
     public string Name => "Insert Images";
     public string Description => "Adding images to worksheets";
 
+
+    public int ExampleNumber { get; }
+
+    public InsertImagesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("ImageDemo");
@@ -48,6 +52,6 @@ public class InsertImagesExample : IExample
         
         sheet.AutoFitAllColumns();
 
-        ExampleRunner.SaveWorkSheet(sheet, "050_InsertImages.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_InsertImages.xlsx");
     }
 }

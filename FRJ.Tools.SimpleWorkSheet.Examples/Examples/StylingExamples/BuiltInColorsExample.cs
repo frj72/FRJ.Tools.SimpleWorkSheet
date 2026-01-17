@@ -6,8 +6,12 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.StylingExamples;
 
 public class BuiltInColorsExample : IExample
 {
-    public string Name => "078_BuiltInColors";
+    public string Name => "BuiltInColors";
     public string Description => "Showcase of all built-in colors with visual samples";
+
+    public int ExampleNumber { get; }
+
+    public BuiltInColorsExample(int exampleNumber) => ExampleNumber = exampleNumber;
 
     public void Run()
     {
@@ -22,7 +26,7 @@ public class BuiltInColorsExample : IExample
         sheet.SetColumnWidth(1, 30.0);
         sheet.FreezePanes(1, 0);
 
-        ExampleRunner.SaveWorkSheet(sheet, $"{Name}.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_{Name}.xlsx");
     }
 
     private static void AddHeaders(WorkSheet sheet)

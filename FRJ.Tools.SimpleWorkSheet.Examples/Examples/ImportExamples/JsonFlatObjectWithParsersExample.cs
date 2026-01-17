@@ -8,6 +8,10 @@ public class JsonFlatObjectWithParsersExample : IExample
     public string Name => "JSON Flat Object with Column Parsers";
     public string Description => "Imports flat JSON object with custom column parsers to format values";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonFlatObjectWithParsersExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices_flat.json");
@@ -19,6 +23,6 @@ public class JsonFlatObjectWithParsersExample : IExample
             .WithColumnParser("price_100", value => new(value.Value.AsT0 * 100))
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "058_JsonFlatObjectWithParsers.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonFlatObjectWithParsers.xlsx");
     }
 }

@@ -9,6 +9,10 @@ public class CsvSimulationExample : IExample
     public string Name => "CSV Simulation";
     public string Description => "Simulating CSV import with metadata preservation";
 
+
+    public int ExampleNumber { get; }
+
+    public CsvSimulationExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("CsvSimulation");
@@ -52,6 +56,6 @@ public class CsvSimulationExample : IExample
             }
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "015_CsvSimulation.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CsvSimulation.xlsx");
     }
 }

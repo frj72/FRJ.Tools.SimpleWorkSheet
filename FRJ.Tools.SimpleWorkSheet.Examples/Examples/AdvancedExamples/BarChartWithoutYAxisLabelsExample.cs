@@ -9,6 +9,10 @@ public class BarChartWithoutYAxisLabelsExample : IExample
     public string Name => "Bar Chart Without Y-Axis Labels";
     public string Description => "Demonstrates bar charts with y-axis tick labels explicitly disabled";
 
+
+    public int ExampleNumber { get; }
+
+    public BarChartWithoutYAxisLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Product Sales");
@@ -42,6 +46,6 @@ public class BarChartWithoutYAxisLabelsExample : IExample
 
         sheet.AddChart(barChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "101_BarChartWithoutYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BarChartWithoutYAxisLabels.xlsx");
     }
 }

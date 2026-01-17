@@ -8,6 +8,10 @@ public class JsonFluentImportPricesExample : IExample
     public string Name => "JSON Array Fluent Import";
     public string Description => "Simple fluent import of JSON array with automatic schema discovery and type detection";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonFluentImportPricesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
@@ -18,6 +22,6 @@ public class JsonFluentImportPricesExample : IExample
             .WithTrimWhitespace(true)
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "054_JsonArrayFluentImport.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonArrayFluentImport.xlsx");
     }
 }

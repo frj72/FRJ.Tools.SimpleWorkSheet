@@ -8,6 +8,10 @@ public class JsonConditionalStylingExample : IExample
     public string Name => "JSON with Conditional Styling";
     public string Description => "Applies conditional styling based on cell values in imported JSON data";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonConditionalStylingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
@@ -26,6 +30,6 @@ public class JsonConditionalStylingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "068_JsonConditionalStyling.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonConditionalStyling.xlsx");
     }
 }

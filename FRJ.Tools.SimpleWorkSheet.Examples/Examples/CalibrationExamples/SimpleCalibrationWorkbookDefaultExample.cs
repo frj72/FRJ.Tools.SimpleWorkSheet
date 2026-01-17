@@ -8,9 +8,13 @@ public class SimpleCalibrationWorkbookDefaultExample : IExample
     public string Name => "Simple Calibration Workbook - Default (Auto-Fit)";
     public string Description => "Demonstrates CreateSimpleCalibrationWorkBook with default calibration (null = auto-fit)";
 
+
+    public int ExampleNumber { get; }
+
+    public SimpleCalibrationWorkbookDefaultExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var workbook = EnvironmentSheetInfo.CreateSimpleCalibrationWorkBook();
-        ExampleRunner.SaveWorkBook(workbook, "109_SimpleCalibrationWorkbook_Default.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_SimpleCalibrationWorkbook_Default.xlsx");
     }
 }

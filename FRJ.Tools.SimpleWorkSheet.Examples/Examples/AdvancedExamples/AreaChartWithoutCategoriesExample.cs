@@ -9,6 +9,10 @@ public class AreaChartWithoutCategoriesExample : IExample
     public string Name => "Area Chart Without Categories";
     public string Description => "Demonstrates area charts without explicit x-axis categories";
 
+
+    public int ExampleNumber { get; }
+
+    public AreaChartWithoutCategoriesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Growth Data");
@@ -28,6 +32,6 @@ public class AreaChartWithoutCategoriesExample : IExample
 
         sheet.AddChart(areaChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "093_AreaChartWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AreaChartWithoutCategories.xlsx");
     }
 }

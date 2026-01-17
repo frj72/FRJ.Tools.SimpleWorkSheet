@@ -9,6 +9,10 @@ public class LineChartMultipleSeriesWithYAxisLabelsExample : IExample
     public string Name => "Line Chart Multiple Series With Explicit Y-Axis Labels";
     public string Description => "Demonstrates multi-series line charts with y-axis tick labels explicitly enabled";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartMultipleSeriesWithYAxisLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Department Performance");
@@ -57,6 +61,6 @@ public class LineChartMultipleSeriesWithYAxisLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "098_LineChartMultipleSeriesWithExplicitYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartMultipleSeriesWithExplicitYAxisLabels.xlsx");
     }
 }

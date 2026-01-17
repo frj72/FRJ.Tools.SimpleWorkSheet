@@ -9,6 +9,10 @@ public class StackedAreaChartExample : IExample
     public string Name => "Stacked Area Chart";
     public string Description => "Stacked area charts showing cumulative values";
 
+
+    public int ExampleNumber { get; }
+
+    public StackedAreaChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] Months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
     private static readonly int[] ProductA = [5000, 6000, 5500, 7000, 6500, 8000];
     private static readonly int[] ProductB = [3000, 4000, 3500, 5000, 4500, 6000];
@@ -42,6 +46,6 @@ public class StackedAreaChartExample : IExample
 
         sheet.AddChart(chart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "052_StackedAreaChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_StackedAreaChart.xlsx");
     }
 }

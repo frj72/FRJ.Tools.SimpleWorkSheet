@@ -9,6 +9,10 @@ public class RoundTripEditingExample : IExample
     public string Name => "Round-Trip Editing";
     public string Description => "Load an Excel file, modify it, and save it back";
 
+
+    public int ExampleNumber { get; }
+
+    public RoundTripEditingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var originalSheet = new WorkSheet("Employees");
@@ -55,7 +59,7 @@ public class RoundTripEditingExample : IExample
         Console.WriteLine("Step 3: Added new employee (Charlie) and highlighted Alice's status");
         Console.WriteLine();
         
-        ExampleRunner.SaveWorkSheet(loadedSheet, "036_RoundTripEditing.xlsx");
+        ExampleRunner.SaveWorkSheet(loadedSheet, $"{ExampleNumber:000}_RoundTripEditing.xlsx");
         
         Console.WriteLine("Step 4: Saved modified file");
         Console.WriteLine($"  Total cells now: {loadedSheet.Cells.Cells.Count}");

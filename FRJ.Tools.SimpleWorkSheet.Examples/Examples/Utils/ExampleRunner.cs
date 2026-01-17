@@ -36,6 +36,8 @@ public static class ExampleRunner
         Console.WriteLine(example.Description);
         Console.WriteLine();
         
+        _ = example.ExampleNumber;
+        
         try
         {
             example.Run();

@@ -9,6 +9,10 @@ public class ScatterChartWithDataLabelsExample : IExample
     public string Name => "Scatter Chart With Data Labels";
     public string Description => "Demonstrates scatter charts with data labels showing y-values";
 
+
+    public int ExampleNumber { get; }
+
+    public ScatterChartWithDataLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Temperature vs Sales");
@@ -42,6 +46,6 @@ public class ScatterChartWithDataLabelsExample : IExample
 
         sheet.AddChart(scatterChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "096_ScatterChartWithDataLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ScatterChartWithDataLabels.xlsx");
     }
 }

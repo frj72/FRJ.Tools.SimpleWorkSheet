@@ -9,6 +9,10 @@ public class ChartSeriesNamesExample : IExample
     public string Name => "Chart Series Names";
     public string Description => "Demonstrates custom series names in chart legends";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartSeriesNamesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Sales Data");
@@ -72,6 +76,6 @@ public class ChartSeriesNamesExample : IExample
 
         sheet.AddChart(multiSeriesChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "084_ChartSeriesNames.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ChartSeriesNames.xlsx");
     }
 }

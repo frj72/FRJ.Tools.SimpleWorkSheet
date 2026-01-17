@@ -9,6 +9,10 @@ public class LineChartMultipleSeriesExample : IExample
     public string Name => "Line Chart Multiple Series";
     public string Description => "Demonstrates line charts with multiple data series";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartMultipleSeriesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Regional Sales");
@@ -56,6 +60,6 @@ public class LineChartMultipleSeriesExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "089_LineChartMultipleSeries.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartMultipleSeries.xlsx");
     }
 }

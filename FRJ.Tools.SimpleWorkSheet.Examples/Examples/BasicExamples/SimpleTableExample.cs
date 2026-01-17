@@ -8,6 +8,10 @@ public class SimpleTableExample : IExample
     public string Name => "Simple Table";
     public string Description => "Creating a basic 3x3 table with headers";
 
+
+    public int ExampleNumber { get; }
+
+    public SimpleTableExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("SimpleTable");
@@ -24,6 +28,6 @@ public class SimpleTableExample : IExample
         sheet.AddCell(1, 2, 25, null);
         sheet.AddCell(2, 2, "LA", null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "003_SimpleTable.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_SimpleTable.xlsx");
     }
 }

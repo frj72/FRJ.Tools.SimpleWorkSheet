@@ -9,6 +9,10 @@ public class ExcelTablesExample : IExample
     public string Name => "Excel Tables";
     public string Description => "Native Excel tables with automatic filters";
 
+
+    public int ExampleNumber { get; }
+
+    public ExcelTablesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] Headers = ["Product", "Category", "Price", "Quantity", "Total"];
     private static readonly object[][] Data =
     [
@@ -55,6 +59,6 @@ public class ExcelTablesExample : IExample
 
         sheet.AutoFitAllColumns();
 
-        ExampleRunner.SaveWorkSheet(sheet, "049_ExcelTables.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ExcelTables.xlsx");
     }
 }

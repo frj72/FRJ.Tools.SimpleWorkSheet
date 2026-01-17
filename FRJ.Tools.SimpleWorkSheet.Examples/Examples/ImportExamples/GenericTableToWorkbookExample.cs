@@ -7,8 +7,12 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 
 public class GenericTableToWorkbookExample : IExample
 {
-    public string Name => "076_GenericTableToWorkbook";
+    public string Name => "GenericTableToWorkbook";
     public string Description => "Generic Table to Workbook with chart";
+
+    public int ExampleNumber { get; }
+
+    public GenericTableToWorkbookExample(int exampleNumber) => ExampleNumber = exampleNumber;
 
     public void Run()
     {
@@ -38,6 +42,6 @@ public class GenericTableToWorkbookExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, $"{Name}.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_{Name}.xlsx");
     }
 }

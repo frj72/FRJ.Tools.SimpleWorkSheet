@@ -9,6 +9,10 @@ public class FreezePanesExample : IExample
     public string Name => "Freeze Panes";
     public string Description => "Demonstrates freezing rows and columns";
 
+
+    public int ExampleNumber { get; }
+
+    public FreezePanesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArrayHeaders = ["Column A", "Column B", "Column C", "Column D", "Column E"];
 
     public void Run()
@@ -25,6 +29,6 @@ public class FreezePanesExample : IExample
 
         sheet.FreezePanes(1, 0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "032_FreezePanes.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_FreezePanes.xlsx");
     }
 }

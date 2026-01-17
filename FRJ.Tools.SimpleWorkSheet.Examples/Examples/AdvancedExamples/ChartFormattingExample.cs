@@ -9,6 +9,10 @@ public class ChartFormattingExample : IExample
     public string Name => "Chart Formatting";
     public string Description => "Advanced chart formatting: legends, axis titles, data labels, gridlines";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartFormattingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] Quarters = ["Q1", "Q2", "Q3", "Q4"];
     private static readonly int[] Revenue = [125000, 142000, 138500, 159200];
     private static readonly int[] Expenses = [95000, 108000, 103000, 119000];
@@ -76,6 +80,6 @@ public class ChartFormattingExample : IExample
 
         sheet.AddChart(chart3);
 
-        ExampleRunner.SaveWorkSheet(sheet, "053_ChartFormatting.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ChartFormatting.xlsx");
     }
 }

@@ -9,6 +9,10 @@ public class ImportOptionsExample : IExample
     public string Name => "Import Options";
     public string Description => "Configuring ImportOptions for different scenarios";
 
+
+    public int ExampleNumber { get; }
+
+    public ImportOptionsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("ImportOptions");
@@ -37,6 +41,6 @@ public class ImportOptionsExample : IExample
         sheet.AddCell(0, 1, "Advanced Import", configure: cell => cell
             .FromImportedValue("raw_json_value", advancedOptions));
         
-        ExampleRunner.SaveWorkSheet(sheet, "014_ImportOptions.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ImportOptions.xlsx");
     }
 }

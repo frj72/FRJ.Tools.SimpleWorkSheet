@@ -12,6 +12,10 @@ public class MultiTableMultiChartCommonSheetExample : IExample
     public string Name => "Multi Table Multi Chart Common Sheet";
     public string Description => "Creates 3 Generic Tables with business data, converts them to styled worksheets, and creates 4 charts on a single dashboard sheet";
 
+
+    public int ExampleNumber { get; }
+
+    public MultiTableMultiChartCommonSheetExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var salesTable = CreateSalesTable();
@@ -83,7 +87,7 @@ public class MultiTableMultiChartCommonSheetExample : IExample
 
         var workbook = new WorkBook("MultiTable Charts Demo", [salesSheet, expensesSheet, budgetSheet, dashboardSheet]);
 
-        ExampleRunner.SaveWorkBook(workbook, "085_MultiTableMultiChartCommonSheet.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_MultiTableMultiChartCommonSheet.xlsx");
     }
 
     private static GenericTable CreateSalesTable()

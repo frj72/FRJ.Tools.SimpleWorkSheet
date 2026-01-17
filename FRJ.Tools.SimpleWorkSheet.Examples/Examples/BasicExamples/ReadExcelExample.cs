@@ -9,6 +9,10 @@ public class ReadExcelExample : IExample
     public string Name => "Read Excel File";
     public string Description => "Demonstrates loading and reading existing Excel files";
 
+
+    public int ExampleNumber { get; }
+
+    public ReadExcelExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var originalSheet = new WorkSheet("SampleData");
@@ -71,7 +75,7 @@ public class ReadExcelExample : IExample
         }
         
         var loadedSheet = loadedWorkbook.Sheets.First();
-        ExampleRunner.SaveWorkSheet(loadedSheet, "035_ReadExcel.xlsx");
+        ExampleRunner.SaveWorkSheet(loadedSheet, $"{ExampleNumber:000}_ReadExcel.xlsx");
         
         File.Delete(tempPath);
     }

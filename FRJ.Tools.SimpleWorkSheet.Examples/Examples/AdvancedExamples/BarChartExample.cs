@@ -9,6 +9,10 @@ public class BarChartExample : IExample
     public string Name => "Bar Chart";
     public string Description => "Demonstrates creating bar charts with data visualization";
 
+
+    public int ExampleNumber { get; }
+
+    public BarChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Sales Data");
@@ -74,6 +78,6 @@ public class BarChartExample : IExample
 
         sheet.AddChart(horizontalChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "041_BarChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BarChart.xlsx");
     }
 }

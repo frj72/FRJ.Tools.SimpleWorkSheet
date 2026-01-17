@@ -9,6 +9,10 @@ public class ColumnAdditionExample : IExample
     public string Name => "Column Addition";
     public string Description => "Adding multiple cells in a column";
 
+
+    public int ExampleNumber { get; }
+
+    public ColumnAdditionExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArrayMonths = ["Jan", "Feb", "Mar", "Apr", "May"];
     private static readonly int[] SourceArraySales= [100, 150, 200, 175, 225];
 
@@ -25,6 +29,6 @@ public class ColumnAdditionExample : IExample
         
         sheet.AddColumn(1, 0, sales, null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "011_ColumnAddition.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ColumnAddition.xlsx");
     }
 }

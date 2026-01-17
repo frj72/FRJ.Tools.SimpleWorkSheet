@@ -9,6 +9,10 @@ public class JsonToWorkbookMultipleChartsExample : IExample
     public string Name => "JSON to Workbook with Multiple Charts";
     public string Description => "Creates workbook with data sheet and multiple charts (pie + area) with full formatting";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonToWorkbookMultipleChartsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
@@ -36,6 +40,6 @@ public class JsonToWorkbookMultipleChartsExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "064_JsonToWorkbookMultipleCharts.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_JsonToWorkbookMultipleCharts.xlsx");
     }
 }

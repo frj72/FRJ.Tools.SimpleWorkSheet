@@ -8,6 +8,10 @@ public class RowHeightExample : IExample
     public string Name => "Row Height Control";
     public string Description => "Demonstrates explicit row height settings";
 
+
+    public int ExampleNumber { get; }
+
+    public RowHeightExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("RowHeights");
@@ -37,6 +41,6 @@ public class RowHeightExample : IExample
             .WithColor("E7E6E6"));
         sheet.SetRowHeight(5, 40.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "031_RowHeight.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_RowHeight.xlsx");
     }
 }

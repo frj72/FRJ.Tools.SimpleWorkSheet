@@ -9,6 +9,10 @@ public class PieChartExample : IExample
     public string Name => "Pie Chart";
     public string Description => "Demonstrates pie charts for distribution visualization";
 
+
+    public int ExampleNumber { get; }
+
+    public PieChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Market Share");
@@ -46,6 +50,6 @@ public class PieChartExample : IExample
 
         sheet.AddChart(pieChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "043_PieChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_PieChart.xlsx");
     }
 }

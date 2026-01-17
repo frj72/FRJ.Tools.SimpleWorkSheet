@@ -8,6 +8,10 @@ public class JsonToWorkbookLineChartExample : IExample
     public string Name => "JSON to Workbook with Line Chart";
     public string Description => "Creates workbook with data sheet and line chart using column names from JSON";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonToWorkbookLineChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
@@ -26,6 +30,6 @@ public class JsonToWorkbookLineChartExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "062_JsonToWorkbookLineChart.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_JsonToWorkbookLineChart.xlsx");
     }
 }

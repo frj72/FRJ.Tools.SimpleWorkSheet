@@ -11,6 +11,10 @@ public class JsonSparseArrayImportExample : IExample
     public string Name => "JSON Sparse Array Import";
     public string Description => "Imports JSON array with different keys per object (sparse data)";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonSparseArrayImportExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("JsonSparseImport");
@@ -78,6 +82,6 @@ public class JsonSparseArrayImportExample : IExample
             r++;
         }
         sheet.AutoFitAllColumns();
-        ExampleRunner.SaveWorkSheet(sheet, "030_JsonSparseArrayImport.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonSparseArrayImport.xlsx");
     }
 }

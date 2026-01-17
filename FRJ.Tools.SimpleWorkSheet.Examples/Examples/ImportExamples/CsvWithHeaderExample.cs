@@ -8,6 +8,10 @@ public class CsvWithHeaderExample : IExample
     public string Name => "CSV Import with Header";
     public string Description => "Imports CSV file with header row using fluent API";
 
+
+    public int ExampleNumber { get; }
+
+    public CsvWithHeaderExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var csvPath = Path.Combine("Resources", "Data", "Csv", "MixedTypes.csv");
@@ -20,6 +24,6 @@ public class CsvWithHeaderExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "070_CsvWithHeader.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CsvWithHeader.xlsx");
     }
 }

@@ -6,8 +6,12 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 
 public class GenericTableBasicExample : IExample
 {
-    public string Name => "074_GenericTableBasic";
+    public string Name => "GenericTableBasic";
     public string Description => "Basic Generic Table import";
+
+    public int ExampleNumber { get; }
+
+    public GenericTableBasicExample(int exampleNumber) => ExampleNumber = exampleNumber;
 
     public void Run()
     {
@@ -26,6 +30,6 @@ public class GenericTableBasicExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, $"{Name}.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_{Name}.xlsx");
     }
 }

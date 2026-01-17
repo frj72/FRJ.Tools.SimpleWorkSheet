@@ -9,6 +9,10 @@ public class LineChartMultipleSeriesWithDataLabelsExample : IExample
     public string Name => "Line Chart Multiple Series With Data Labels";
     public string Description => "Demonstrates line charts with multiple series and data labels";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartMultipleSeriesWithDataLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Regional Comparison");
@@ -57,6 +61,6 @@ public class LineChartMultipleSeriesWithDataLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "095_LineChartMultipleSeriesWithDataLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartMultipleSeriesWithDataLabels.xlsx");
     }
 }

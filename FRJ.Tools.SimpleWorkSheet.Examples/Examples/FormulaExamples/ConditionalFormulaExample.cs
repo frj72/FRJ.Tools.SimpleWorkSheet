@@ -9,6 +9,10 @@ public class ConditionalFormulaExample : IExample
     public string Name => "IF Formula";
     public string Description => "Conditional logic with IF function";
 
+
+    public int ExampleNumber { get; }
+
+    public ConditionalFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArray = ["Score", "Grade"];
 
     public void Run()
@@ -30,6 +34,6 @@ public class ConditionalFormulaExample : IExample
                 .WithFont(font => font.Bold()));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "025_ConditionalFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ConditionalFormula.xlsx");
     }
 }

@@ -9,6 +9,10 @@ public class AreaChartWithoutYAxisLabelsExample : IExample
     public string Name => "Area Chart Without Y-Axis Labels";
     public string Description => "Demonstrates area charts with y-axis tick labels explicitly disabled";
 
+
+    public int ExampleNumber { get; }
+
+    public AreaChartWithoutYAxisLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Website Traffic");
@@ -42,6 +46,6 @@ public class AreaChartWithoutYAxisLabelsExample : IExample
 
         sheet.AddChart(areaChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "102_AreaChartWithoutYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AreaChartWithoutYAxisLabels.xlsx");
     }
 }

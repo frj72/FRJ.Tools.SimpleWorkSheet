@@ -9,6 +9,10 @@ public class BasicFormulasExample : IExample
     public string Name => "Basic Formulas";
     public string Description => "Simple arithmetic formulas";
 
+
+    public int ExampleNumber { get; }
+
+    public BasicFormulasExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("BasicFormulas");
@@ -31,6 +35,6 @@ public class BasicFormulasExample : IExample
         sheet.AddCell(0, 9, new CellFormula("=A4-A2"), configure: cell => cell
             .WithFont(font => font.Bold()));
         
-        ExampleRunner.SaveWorkSheet(sheet, "021_BasicFormulas.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BasicFormulas.xlsx");
     }
 }

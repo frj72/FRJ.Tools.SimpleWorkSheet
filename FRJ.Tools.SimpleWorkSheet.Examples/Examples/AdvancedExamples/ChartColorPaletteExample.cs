@@ -10,6 +10,10 @@ public class ChartColorPaletteExample : IExample
     public string Name => "Chart Color Palette";
     public string Description => "Shows a simple palette of chart series colors using Colors";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartColorPaletteExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Color Palette");
@@ -56,6 +60,6 @@ public class ChartColorPaletteExample : IExample
             sheet.AddChart(chart);
         }
 
-        ExampleRunner.SaveWorkSheet(sheet, "107_ChartColorPalette.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ChartColorPalette.xlsx");
     }
 }

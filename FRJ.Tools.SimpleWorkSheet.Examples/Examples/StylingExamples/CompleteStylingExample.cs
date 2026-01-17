@@ -9,6 +9,10 @@ public class CompleteStylingExample : IExample
     public string Name => "Complete Styling";
     public string Description => "Combining all style elements";
 
+
+    public int ExampleNumber { get; }
+
+    public CompleteStylingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("CompleteStyling");
@@ -39,6 +43,6 @@ public class CompleteStylingExample : IExample
                 .Bold())
             .WithBorders(borders));
         
-        ExampleRunner.SaveWorkSheet(sheet, "009_CompleteStyling.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CompleteStyling.xlsx");
     }
 }

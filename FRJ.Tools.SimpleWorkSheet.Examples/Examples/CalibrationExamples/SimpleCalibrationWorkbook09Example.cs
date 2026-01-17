@@ -8,9 +8,13 @@ public class SimpleCalibrationWorkbook09Example : IExample
     public string Name => "Simple Calibration Workbook - 0.9 Factor";
     public string Description => "Demonstrates CreateSimpleCalibrationWorkBook with 0.9 calibration factor";
 
+
+    public int ExampleNumber { get; }
+
+    public SimpleCalibrationWorkbook09Example(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var workbook = EnvironmentSheetInfo.CreateSimpleCalibrationWorkBook(0.9);
-        ExampleRunner.SaveWorkBook(workbook, "110_SimpleCalibrationWorkbook_0.9.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_SimpleCalibrationWorkbook_0.9.xlsx");
     }
 }

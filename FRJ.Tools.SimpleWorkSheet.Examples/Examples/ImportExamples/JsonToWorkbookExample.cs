@@ -8,6 +8,10 @@ public class JsonToWorkbookExample : IExample
     public string Name => "JSON to Workbook";
     public string Description => "Creates a workbook from JSON with single data sheet";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonToWorkbookExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
@@ -23,6 +27,6 @@ public class JsonToWorkbookExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "061_JsonToWorkbook.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_JsonToWorkbook.xlsx");
     }
 }

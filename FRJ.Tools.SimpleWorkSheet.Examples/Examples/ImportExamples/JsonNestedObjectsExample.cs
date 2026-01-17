@@ -8,6 +8,10 @@ public class JsonNestedObjectsExample : IExample
     public string Name => "JSON Nested Objects Import";
     public string Description => "Imports JSON with nested objects, flattening them with dot notation (e.g., address.city)";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonNestedObjectsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
@@ -20,6 +24,6 @@ public class JsonNestedObjectsExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "060_JsonNestedObjects.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonNestedObjects.xlsx");
     }
 }

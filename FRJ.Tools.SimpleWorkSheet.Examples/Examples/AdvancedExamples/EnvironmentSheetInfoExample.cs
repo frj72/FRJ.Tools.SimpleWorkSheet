@@ -8,6 +8,10 @@ public class EnvironmentSheetInfoExample : IExample
     public string Name => "Environment Sheet Info - Width Estimation";
     public string Description => "Demonstrates using EnvironmentSheetInfo.GetWidth to estimate text width before adding cells";
 
+
+    public int ExampleNumber { get; }
+
+    public EnvironmentSheetInfoExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Width Estimation");
@@ -94,6 +98,6 @@ public class EnvironmentSheetInfoExample : IExample
         sheet.SetColumnWidth(4, 35.0);
         sheet.SetColumnWidth(5, 18.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "108_EnvironmentSheetInfo.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_EnvironmentSheetInfo.xlsx");
     }
 }

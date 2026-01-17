@@ -9,6 +9,10 @@ public class CountFormulaExample : IExample
     public string Name => "COUNT Formulas";
     public string Description => "Counting cells with COUNT and COUNTA";
 
+
+    public int ExampleNumber { get; }
+
+    public CountFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("CountFormulas");
@@ -25,6 +29,6 @@ public class CountFormulaExample : IExample
         sheet.AddCell(0, 12, new CellFormula("=COUNTA(A2:A8)"), configure: cell => cell
             .WithColor("ADD8E6"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "027_CountFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CountFormula.xlsx");
     }
 }

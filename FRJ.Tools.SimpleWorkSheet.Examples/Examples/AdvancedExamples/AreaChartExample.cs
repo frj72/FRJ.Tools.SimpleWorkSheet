@@ -9,6 +9,10 @@ public class AreaChartExample : IExample
     public string Name => "Area Chart";
     public string Description => "Area charts showing trends over time";
 
+
+    public int ExampleNumber { get; }
+
+    public AreaChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] Months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
     private static readonly int[] Sales = [12000, 15000, 13500, 18000, 16500, 21000];
 
@@ -35,6 +39,6 @@ public class AreaChartExample : IExample
 
         sheet.AddChart(chart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "051_AreaChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AreaChart.xlsx");
     }
 }

@@ -9,6 +9,10 @@ public class CsvToWorkbookWithChartExample : IExample
     public string Name => "CSV to Workbook with Chart";
     public string Description => "Creates workbook with data sheet and chart from CSV file";
 
+
+    public int ExampleNumber { get; }
+
+    public CsvToWorkbookWithChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var csvPath = Path.Combine("Resources", "Data", "Csv", "MixedTypes.csv");
@@ -31,6 +35,6 @@ public class CsvToWorkbookWithChartExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "073_CsvToWorkbookWithChart.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_CsvToWorkbookWithChart.xlsx");
     }
 }

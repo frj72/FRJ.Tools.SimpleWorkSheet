@@ -9,6 +9,10 @@ public class SumFormulaExample : IExample
     public string Name => "SUM Formula";
     public string Description => "Using SUM function with ranges";
 
+
+    public int ExampleNumber { get; }
+
+    public SumFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("SumFormula");
@@ -27,6 +31,6 @@ public class SumFormulaExample : IExample
             .WithFont(font => font.Bold())
             .WithFormatCode("$#,##0"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "022_SumFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_SumFormula.xlsx");
     }
 }

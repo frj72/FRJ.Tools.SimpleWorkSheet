@@ -10,6 +10,10 @@ public class LineChartWithCustomColorExample : IExample
     public string Name => "Line Chart With Custom Color";
     public string Description => "Demonstrates line chart series color customization";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartWithCustomColorExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Revenue Trend");
@@ -44,6 +48,6 @@ public class LineChartWithCustomColorExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "103_LineChartWithCustomColor.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartWithCustomColor.xlsx");
     }
 }

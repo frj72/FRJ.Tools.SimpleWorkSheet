@@ -9,6 +9,10 @@ public class ScatterChartWithYAxisLabelsExample : IExample
     public string Name => "Scatter Chart With Explicit Y-Axis Labels";
     public string Description => "Demonstrates scatter charts with y-axis tick labels explicitly enabled";
 
+
+    public int ExampleNumber { get; }
+
+    public ScatterChartWithYAxisLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Age vs Income");
@@ -42,6 +46,6 @@ public class ScatterChartWithYAxisLabelsExample : IExample
 
         sheet.AddChart(scatterChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "099_ScatterChartWithExplicitYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ScatterChartWithExplicitYAxisLabels.xlsx");
     }
 }

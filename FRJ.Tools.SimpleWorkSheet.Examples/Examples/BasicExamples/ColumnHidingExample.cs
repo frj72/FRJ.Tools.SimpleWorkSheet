@@ -9,6 +9,10 @@ public class ColumnHidingExample : IExample
     public string Name => "Column Hiding";
     public string Description => "Demonstrates hiding columns in various ways";
 
+
+    public int ExampleNumber { get; }
+
+    public ColumnHidingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("HiddenColumns");
@@ -53,6 +57,6 @@ public class ColumnHidingExample : IExample
         sheet.SetColumnWidth(2, 20.0);
         sheet.SetColumnWidth(4, 20.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "086_ColumnHiding.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ColumnHiding.xlsx");
     }
 }

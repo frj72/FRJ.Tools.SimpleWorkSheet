@@ -9,6 +9,10 @@ public class MinMaxFormulaExample : IExample
     public string Name => "MIN/MAX Formulas";
     public string Description => "Finding minimum and maximum values";
 
+
+    public int ExampleNumber { get; }
+
+    public MinMaxFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("MinMaxFormula");
@@ -38,6 +42,6 @@ public class MinMaxFormulaExample : IExample
             .WithColor("FFFF00")
             .WithFont(font => font.Bold()));
         
-        ExampleRunner.SaveWorkSheet(sheet, "028_MinMaxFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_MinMaxFormula.xlsx");
     }
 }

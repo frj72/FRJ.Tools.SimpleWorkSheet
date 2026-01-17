@@ -9,6 +9,10 @@ public class LineChartMultipleSeriesWithoutCategoriesExample : IExample
     public string Name => "Line Chart Multiple Series Without Categories";
     public string Description => "Demonstrates line charts with multiple series without explicit x-axis categories";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartMultipleSeriesWithoutCategoriesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Metrics Data");
@@ -40,6 +44,6 @@ public class LineChartMultipleSeriesWithoutCategoriesExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "091_LineChartMultipleSeriesWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartMultipleSeriesWithoutCategories.xlsx");
     }
 }

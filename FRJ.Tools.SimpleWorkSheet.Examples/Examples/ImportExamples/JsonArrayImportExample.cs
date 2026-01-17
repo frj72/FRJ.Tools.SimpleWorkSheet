@@ -10,6 +10,10 @@ public class JsonArrayImportExample : IExample
     public string Name => "JSON Array Import";
     public string Description => "Imports a JSON array into a worksheet (one row per object)";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonArrayImportExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("JsonImport");
@@ -69,6 +73,6 @@ public class JsonArrayImportExample : IExample
             r++;
         }
 
-        ExampleRunner.SaveWorkSheet(sheet, "029_JsonArrayImport.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonArrayImport.xlsx");
     }
 }

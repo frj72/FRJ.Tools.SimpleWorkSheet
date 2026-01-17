@@ -9,6 +9,10 @@ public class ComplexTableExample : IExample
     public string Name => "Complex Table";
     public string Description => "Multi-row, multi-column table with headers and data";
 
+
+    public int ExampleNumber { get; }
+
+    public ComplexTableExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArray = ["ID", "Product", "Category", "Price", "Stock", "Status"];
 
     public void Run()
@@ -55,6 +59,6 @@ public class ComplexTableExample : IExample
                 .WithFont(font => font.Bold()));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "018_ComplexTable.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ComplexTable.xlsx");
     }
 }

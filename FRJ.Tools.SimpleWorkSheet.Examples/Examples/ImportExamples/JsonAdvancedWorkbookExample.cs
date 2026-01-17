@@ -9,6 +9,10 @@ public class JsonAdvancedWorkbookExample : IExample
     public string Name => "JSON Advanced Workbook Features";
     public string Description => "Showcases frozen headers, custom chart positioning, sizing, and data labels";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonAdvancedWorkbookExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
@@ -34,6 +38,6 @@ public class JsonAdvancedWorkbookExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "069_JsonAdvancedWorkbook.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_JsonAdvancedWorkbook.xlsx");
     }
 }

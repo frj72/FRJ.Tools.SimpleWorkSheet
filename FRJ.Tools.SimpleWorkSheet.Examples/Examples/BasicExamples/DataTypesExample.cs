@@ -8,6 +8,10 @@ public class DataTypesExample : IExample
     public string Name => "Data Types";
     public string Description => "Demonstrating different value types";
 
+
+    public int ExampleNumber { get; }
+
+    public DataTypesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("DataTypes");
@@ -22,6 +26,6 @@ public class DataTypesExample : IExample
         sheet.AddCell(0, 4, "DateTimeOffset:", null);
         sheet.AddCell(1, 4, DateTimeOffset.Now, null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "002_DataTypes.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_DataTypes.xlsx");
     }
 }

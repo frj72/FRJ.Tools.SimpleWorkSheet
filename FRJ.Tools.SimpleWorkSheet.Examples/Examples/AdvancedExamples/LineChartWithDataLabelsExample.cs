@@ -9,6 +9,10 @@ public class LineChartWithDataLabelsExample : IExample
     public string Name => "Line Chart With Data Labels";
     public string Description => "Demonstrates line charts with data labels showing y-values";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartWithDataLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Sales Trend");
@@ -43,6 +47,6 @@ public class LineChartWithDataLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "094_LineChartWithDataLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartWithDataLabels.xlsx");
     }
 }

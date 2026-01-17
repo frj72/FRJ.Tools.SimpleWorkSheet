@@ -8,6 +8,10 @@ public class JsonMultiColumnAllFeaturesExample : IExample
     public string Name => "JSON Multi-Column with All Features";
     public string Description => "Imports JSON array with styling, custom parsers, and auto-fit - showcasing all Phase 1.2 features";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonMultiColumnAllFeaturesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
@@ -26,6 +30,6 @@ public class JsonMultiColumnAllFeaturesExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "059_JsonMultiColumnAllFeatures.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonMultiColumnAllFeatures.xlsx");
     }
 }

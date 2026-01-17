@@ -10,6 +10,10 @@ public class BarChartWithCustomColorsExample : IExample
     public string Name => "Bar Chart With Custom Colors";
     public string Description => "Demonstrates bar chart series color customization";
 
+
+    public int ExampleNumber { get; }
+
+    public BarChartWithCustomColorsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Quarterly Sales");
@@ -49,6 +53,6 @@ public class BarChartWithCustomColorsExample : IExample
 
         sheet.AddChart(barChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "105_BarChartWithCustomColors.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BarChartWithCustomColors.xlsx");
     }
 }

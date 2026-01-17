@@ -8,6 +8,10 @@ public class DataValidationExample : IExample
     public string Name => "Data Validation";
     public string Description => "Demonstrates various data validation rules";
 
+
+    public int ExampleNumber { get; }
+
+    public DataValidationExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Validation");
@@ -83,6 +87,6 @@ public class DataValidationExample : IExample
         sheet.SetColumnWidth(1, 15.0);
         sheet.SetColumnWidth(2, 40.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "038_DataValidation.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_DataValidation.xlsx");
     }
 }

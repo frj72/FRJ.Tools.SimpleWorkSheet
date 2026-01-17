@@ -8,6 +8,10 @@ public class JsonColumnOrderingExample : IExample
     public string Name => "JSON Column Ordering";
     public string Description => "Controls column order in imported JSON data";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonColumnOrderingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
@@ -21,6 +25,6 @@ public class JsonColumnOrderingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "065_JsonColumnOrdering.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonColumnOrdering.xlsx");
     }
 }

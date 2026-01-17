@@ -9,6 +9,10 @@ public class AutoFitColumnsExample : IExample
     public string Name => "Auto-Fit Columns";
     public string Description => "Automatically adjust column widths to fit content";
 
+
+    public int ExampleNumber { get; }
+
+    public AutoFitColumnsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArrayHeaders = ["Product", "Description", "Price", "Quantity", "Total"];
     private static readonly object[][] SourceArrayData =
     [
@@ -50,6 +54,6 @@ public class AutoFitColumnsExample : IExample
 
         sheet.AutoFitAllColumns();
 
-        ExampleRunner.SaveWorkSheet(sheet, "046_AutoFitColumns.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AutoFitColumns.xlsx");
     }
 }

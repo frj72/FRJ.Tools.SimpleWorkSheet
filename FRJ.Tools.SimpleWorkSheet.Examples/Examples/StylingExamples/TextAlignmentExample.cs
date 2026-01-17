@@ -9,6 +9,10 @@ public class TextAlignmentExample : IExample
     public string Name => "Text Alignment";
     public string Description => "Demonstrates horizontal/vertical alignment, rotation, and wrapping";
 
+
+    public int ExampleNumber { get; }
+
+    public TextAlignmentExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Alignment");
@@ -51,6 +55,6 @@ public class TextAlignmentExample : IExample
             .WithFont(font => font.Bold()));
         sheet.SetRowHeight(5, 40.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "033_TextAlignment.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_TextAlignment.xlsx");
     }
 }

@@ -9,6 +9,10 @@ public class LineChartExample : IExample
     public string Name => "Line Chart";
     public string Description => "Demonstrates line charts for trend visualization";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Monthly Sales");
@@ -58,6 +62,6 @@ public class LineChartExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "042_LineChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChart.xlsx");
     }
 }

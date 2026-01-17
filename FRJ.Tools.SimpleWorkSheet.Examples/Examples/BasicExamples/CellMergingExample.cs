@@ -9,6 +9,10 @@ public class CellMergingExample : IExample
     public string Name => "Cell Merging";
     public string Description => "Demonstrates merging cells to create grouped headers";
 
+
+    public int ExampleNumber { get; }
+
+    public CellMergingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Cell Merging");
@@ -42,6 +46,6 @@ public class CellMergingExample : IExample
         sheet.SetColumnWidth(3, 14.0);
         sheet.SetColumnWidth(4, 14.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "037_CellMerging.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CellMerging.xlsx");
     }
 }

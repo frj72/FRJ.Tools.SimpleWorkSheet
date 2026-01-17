@@ -9,6 +9,10 @@ public class SheetTabColorsExample : IExample
     public string Name => "Sheet Tab Colors";
     public string Description => "Setting custom colors for sheet tabs";
 
+    public int ExampleNumber { get; }
+
+    public SheetTabColorsExample(int exampleNumber) => ExampleNumber = exampleNumber;
+
     public void Run()
     {
         var summarySheet = new WorkSheet("Summary");
@@ -62,7 +66,7 @@ public class SheetTabColorsExample : IExample
         var outputPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "Output",
-            "047_SheetTabColors.xlsx");
+            $"{ExampleNumber:000}_SheetTabColors.xlsx");
 
         workbook.SaveToFile(outputPath);
 

@@ -9,6 +9,10 @@ public class CellPositioningExample : IExample
     public string Name => "Cell Positioning";
     public string Description => "Using coordinates vs CellPosition objects";
 
+
+    public int ExampleNumber { get; }
+
+    public CellPositioningExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Positioning");
@@ -20,6 +24,6 @@ public class CellPositioningExample : IExample
         
         sheet.AddCell(new(0, 2), "Another CellPosition", null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "004_CellPositioning.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CellPositioning.xlsx");
     }
 }

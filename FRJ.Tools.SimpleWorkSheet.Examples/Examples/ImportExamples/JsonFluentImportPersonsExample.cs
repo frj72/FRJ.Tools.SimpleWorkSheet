@@ -8,6 +8,10 @@ public class JsonFluentImportPersonsExample : IExample
     public string Name => "JSON Multi-Column Array Import";
     public string Description => "Fluent import of JSON array with multiple properties per object";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonFluentImportPersonsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
@@ -18,6 +22,6 @@ public class JsonFluentImportPersonsExample : IExample
             .WithTrimWhitespace(true)
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "056_JsonMultiColumnArrayImport.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonMultiColumnArrayImport.xlsx");
     }
 }

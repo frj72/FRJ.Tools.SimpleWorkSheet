@@ -9,6 +9,10 @@ public class PercentageFormulaExample : IExample
     public string Name => "Percentage Formula";
     public string Description => "Calculating percentages and ratios";
 
+
+    public int ExampleNumber { get; }
+
+    public PercentageFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArray = ["Product", "Sales", "Target", "Achievement %"];
 
     public void Run()
@@ -40,6 +44,6 @@ public class PercentageFormulaExample : IExample
                 .WithFont(font => font.Bold()));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "024_PercentageFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_PercentageFormula.xlsx");
     }
 }

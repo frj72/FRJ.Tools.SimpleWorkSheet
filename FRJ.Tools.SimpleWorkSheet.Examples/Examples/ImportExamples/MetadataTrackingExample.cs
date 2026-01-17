@@ -8,6 +8,10 @@ public class MetadataTrackingExample : IExample
     public string Name => "Metadata Tracking";
     public string Description => "Adding cells with source and import metadata";
 
+
+    public int ExampleNumber { get; }
+
+    public MetadataTrackingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("MetadataTracking");
@@ -29,6 +33,6 @@ public class MetadataTrackingExample : IExample
                 .WithSource("calculation")
                 .AddCustomData("formula", "A1 + A2")));
         
-        ExampleRunner.SaveWorkSheet(sheet, "013_MetadataTracking.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_MetadataTracking.xlsx");
     }
 }

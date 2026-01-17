@@ -10,6 +10,10 @@ public class ClassToWorkbookExample : IExample
     public string Name => "Class to Workbook";
     public string Description => "Creates a workbook from a C# class instance using FromClass<T>";
 
+
+    public int ExampleNumber { get; }
+
+    public ClassToWorkbookExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var products = new[]
@@ -46,6 +50,6 @@ public class ClassToWorkbookExample : IExample
                 .WithValueAxisTitle("Price ($)"))
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "079_ClassToWorkbook.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_ClassToWorkbook.xlsx");
     }
 }

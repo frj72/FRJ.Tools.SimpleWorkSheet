@@ -9,6 +9,10 @@ public class JsonDateNumberFormattingExample : IExample
     public string Name => "JSON with Date and Number Formatting";
     public string Description => "Applies consistent date formatting and number formatting to imported JSON data";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonDateNumberFormattingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
@@ -23,6 +27,6 @@ public class JsonDateNumberFormattingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "067_JsonDateNumberFormatting.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonDateNumberFormatting.xlsx");
     }
 }

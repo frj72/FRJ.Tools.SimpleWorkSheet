@@ -7,8 +7,12 @@ namespace FRJ.Tools.SimpleWorkSheet.Examples.Examples.ImportExamples;
 
 public class GenericTableAdvancedExample : IExample
 {
-    public string Name => "075_GenericTableAdvanced";
+    public string Name => "GenericTableAdvanced";
     public string Description => "Advanced Generic Table with filtering, parsers, and conditional styles";
+
+    public int ExampleNumber { get; }
+
+    public GenericTableAdvancedExample(int exampleNumber) => ExampleNumber = exampleNumber;
 
     public void Run()
     {
@@ -60,6 +64,6 @@ public class GenericTableAdvancedExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, $"{Name}.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_{Name}.xlsx");
     }
 }

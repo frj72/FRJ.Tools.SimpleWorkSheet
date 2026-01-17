@@ -8,6 +8,10 @@ public class BulkUpdatesExample : IExample
     public string Name => "Bulk Updates";
     public string Description => "Using UpdateCell for modifying existing data";
 
+
+    public int ExampleNumber { get; }
+
+    public BulkUpdatesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("BulkUpdates");
@@ -24,6 +28,6 @@ public class BulkUpdatesExample : IExample
                 .WithFont(font => font.Italic()));
         }
 
-        ExampleRunner.SaveWorkSheet(sheet, "012_BulkUpdates.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BulkUpdates.xlsx");
     }
 }

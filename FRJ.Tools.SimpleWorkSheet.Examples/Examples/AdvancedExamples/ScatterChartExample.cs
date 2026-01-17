@@ -9,6 +9,10 @@ public class ScatterChartExample : IExample
     public string Name => "Scatter Chart";
     public string Description => "Demonstrates scatter charts for correlation analysis";
 
+
+    public int ExampleNumber { get; }
+
+    public ScatterChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Correlation Data");
@@ -52,6 +56,6 @@ public class ScatterChartExample : IExample
 
         sheet.AddChart(scatterChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "044_ScatterChart.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ScatterChart.xlsx");
     }
 }

@@ -10,6 +10,10 @@ public class ChartSheetExample : IExample
     public string Name => "Chart Sheet";
     public string Description => "Demonstrates creating a dedicated chart dashboard sheet that references data from another sheet";
 
+    public int ExampleNumber { get; }
+
+    public ChartSheetExample(int exampleNumber) => ExampleNumber = exampleNumber;
+
     public void Run()
     {
         var dataSheet = new WorkSheet("Data");
@@ -96,7 +100,7 @@ public class ChartSheetExample : IExample
         var outputPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "Output",
-            "045_ChartSheet.xlsx");
+            $"{ExampleNumber:000}_ChartSheet.xlsx");
 
         workbook.SaveToFile(outputPath);
 

@@ -10,6 +10,10 @@ public class AreaChartWithCustomColorsExample : IExample
     public string Name => "Area Chart With Custom Colors";
     public string Description => "Demonstrates area chart series color customization";
 
+
+    public int ExampleNumber { get; }
+
+    public AreaChartWithCustomColorsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Product Revenue");
@@ -48,6 +52,6 @@ public class AreaChartWithCustomColorsExample : IExample
 
         sheet.AddChart(areaChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "106_AreaChartWithCustomColors.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AreaChartWithCustomColors.xlsx");
     }
 }

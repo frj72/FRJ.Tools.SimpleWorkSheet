@@ -8,6 +8,10 @@ public class FontVariationsExample : IExample
     public string Name => "Font Variations";
     public string Description => "Bold, italic, size, color, name changes";
 
+
+    public int ExampleNumber { get; }
+
+    public FontVariationsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("FontVariations");
@@ -33,6 +37,6 @@ public class FontVariationsExample : IExample
                 .Italic()
                 .Underline()));
         
-        ExampleRunner.SaveWorkSheet(sheet, "006_FontVariations.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_FontVariations.xlsx");
     }
 }

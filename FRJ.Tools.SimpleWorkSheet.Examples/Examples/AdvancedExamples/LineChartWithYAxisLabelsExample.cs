@@ -9,6 +9,10 @@ public class LineChartWithYAxisLabelsExample : IExample
     public string Name => "Line Chart With Explicit Y-Axis Labels";
     public string Description => "Demonstrates line charts with y-axis tick labels explicitly enabled";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartWithYAxisLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Revenue Trend");
@@ -43,6 +47,6 @@ public class LineChartWithYAxisLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "097_LineChartWithExplicitYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartWithExplicitYAxisLabels.xlsx");
     }
 }

@@ -9,6 +9,10 @@ public class LineChartWithoutYAxisLabelsExample : IExample
     public string Name => "Line Chart Without Y-Axis Labels";
     public string Description => "Demonstrates line charts with y-axis tick labels explicitly disabled";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartWithoutYAxisLabelsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Revenue Trend");
@@ -43,6 +47,6 @@ public class LineChartWithoutYAxisLabelsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "100_LineChartWithoutYAxisLabels.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartWithoutYAxisLabels.xlsx");
     }
 }

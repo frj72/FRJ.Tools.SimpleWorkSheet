@@ -9,6 +9,10 @@ public class ChartSeriesNamesImportGenericTableExample : IExample
     public string Name => "Chart Series Names Import - Generic Table";
     public string Description => "Demonstrates series name detection from GenericTable column names";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartSeriesNamesImportGenericTableExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var table = GenericTable.Create("Product", "Q1", "Q2", "Q3", "Q4");
@@ -31,6 +35,6 @@ public class ChartSeriesNamesImportGenericTableExample : IExample
             .AutoFitAllColumns()
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "083_ChartSeriesNamesImport_GenericTable.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_ChartSeriesNamesImport_GenericTable.xlsx");
     }
 }

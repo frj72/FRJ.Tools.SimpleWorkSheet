@@ -11,6 +11,10 @@ public class NamedRangesExample : IExample
     public string Name => "Named Ranges";
     public string Description => "Demonstrates named ranges and formulas using them";
 
+    public int ExampleNumber { get; }
+
+    public NamedRangesExample(int exampleNumber) => ExampleNumber = exampleNumber;
+
     public void Run()
     {
         var sheet = new WorkSheet("Sales");
@@ -81,7 +85,7 @@ public class NamedRangesExample : IExample
         workbook.AddNamedRange("TotalSales", "Sales", 5, 1, 5, 3);
 
         var bytes = SheetConverter.ToBinaryExcelFile(workbook);
-        var outputPath = Path.Combine("Output", "039_NamedRanges.xlsx");
+        var outputPath = Path.Combine("Output", $"{ExampleNumber:000}_NamedRanges.xlsx");
         File.WriteAllBytes(outputPath, bytes);
     }
 }

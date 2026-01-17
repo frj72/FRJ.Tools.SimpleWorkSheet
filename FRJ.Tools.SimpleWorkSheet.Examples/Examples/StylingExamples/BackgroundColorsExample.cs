@@ -8,6 +8,10 @@ public class BackgroundColorsExample : IExample
     public string Name => "Background Colors";
     public string Description => "Different fill colors";
 
+
+    public int ExampleNumber { get; }
+
+    public BackgroundColorsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("BackgroundColors");
@@ -19,6 +23,6 @@ public class BackgroundColorsExample : IExample
         sheet.AddCell(0, 4, "Gray Background", configure: cell => cell.WithColor("CCCCCC"));
         sheet.AddCell(0, 5, "Light Blue Background", configure: cell => cell.WithColor("ADD8E6"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "007_BackgroundColors.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BackgroundColors.xlsx");
     }
 }

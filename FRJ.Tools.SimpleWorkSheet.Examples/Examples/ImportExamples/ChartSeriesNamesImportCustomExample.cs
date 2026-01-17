@@ -8,6 +8,10 @@ public class ChartSeriesNamesImportCustomExample : IExample
     public string Name => "Chart Series Names Import - Custom Name";
     public string Description => "Demonstrates custom series name override for JSON imports";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartSeriesNamesImportCustomExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonData = """
@@ -37,6 +41,6 @@ public class ChartSeriesNamesImportCustomExample : IExample
             .AutoFitAllColumns()
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "081_ChartSeriesNamesImport_Custom.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_ChartSeriesNamesImport_Custom.xlsx");
     }
 }

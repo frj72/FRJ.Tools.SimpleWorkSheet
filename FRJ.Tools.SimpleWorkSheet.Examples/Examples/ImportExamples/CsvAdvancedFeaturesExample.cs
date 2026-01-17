@@ -9,6 +9,10 @@ public class CsvAdvancedFeaturesExample : IExample
     public string Name => "CSV with Advanced Features";
     public string Description => "CSV import with styling, column ordering, filtering, formatting, and conditional styles";
 
+
+    public int ExampleNumber { get; }
+
+    public CsvAdvancedFeaturesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var csvPath = Path.Combine("Resources", "Data", "Csv", "MixedTypes.csv");
@@ -28,6 +32,6 @@ public class CsvAdvancedFeaturesExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "072_CsvAdvancedFeatures.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CsvAdvancedFeatures.xlsx");
     }
 }

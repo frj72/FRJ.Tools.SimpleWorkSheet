@@ -8,6 +8,10 @@ public class ValueOnlyExample : IExample
     public string Name => "Value Only";
     public string Description => "Adding cells with just values, no styling";
 
+
+    public int ExampleNumber { get; }
+
+    public ValueOnlyExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("ValueOnly");
@@ -18,6 +22,6 @@ public class ValueOnlyExample : IExample
             sheet.AddCell(1, i, (i + 1) * 10, null);
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "005_ValueOnly.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ValueOnly.xlsx");
     }
 }

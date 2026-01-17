@@ -9,6 +9,10 @@ public class InvoiceGeneratorExample : IExample
     public string Name => "Invoice Generator";
     public string Description => "Real-world invoice creation";
 
+
+    public int ExampleNumber { get; }
+
+    public InvoiceGeneratorExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArray = ["Item", "Description", "Quantity", "Unit Price", "Total"];
 
     public void Run()
@@ -72,6 +76,6 @@ public class InvoiceGeneratorExample : IExample
             .WithColor("4472C4")
             .WithBorders(borders));
         
-        ExampleRunner.SaveWorkSheet(sheet, "019_InvoiceGenerator.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_InvoiceGenerator.xlsx");
     }
 }

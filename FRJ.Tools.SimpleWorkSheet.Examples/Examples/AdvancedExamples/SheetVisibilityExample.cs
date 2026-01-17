@@ -10,6 +10,10 @@ public class SheetVisibilityExample : IExample
     public string Name => "Sheet Visibility";
     public string Description => "Hiding sheets for data and calculations";
 
+    public int ExampleNumber { get; }
+
+    public SheetVisibilityExample(int exampleNumber) => ExampleNumber = exampleNumber;
+
     public void Run()
     {
         var reportSheet = new WorkSheet("Sales Report");
@@ -55,7 +59,7 @@ public class SheetVisibilityExample : IExample
         var outputPath = Path.Combine(
             Directory.GetCurrentDirectory(),
             "Output",
-            "048_SheetVisibility.xlsx");
+            $"{ExampleNumber:000}_SheetVisibility.xlsx");
 
         workbook.SaveToFile(outputPath);
 

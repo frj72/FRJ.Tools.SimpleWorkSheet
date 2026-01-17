@@ -9,6 +9,10 @@ public class BorderStylesExample : IExample
     public string Name => "Border Styles";
     public string Description => "Various border configurations";
 
+
+    public int ExampleNumber { get; }
+
+    public BorderStylesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("BorderStyles");
@@ -36,6 +40,6 @@ public class BorderStylesExample : IExample
             null);
         
         sheet.AddCell(0, 2, "Left Border Red", configure: cell => cell.WithBorders(leftBorder));
-        ExampleRunner.SaveWorkSheet(sheet, "008_BorderStyles.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BorderStyles.xlsx");
     }
 }

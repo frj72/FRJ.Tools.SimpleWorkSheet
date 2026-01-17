@@ -8,6 +8,10 @@ public class ChartSeriesNamesImportCsvExample : IExample
     public string Name => "Chart Series Names Import - CSV";
     public string Description => "Demonstrates series name detection from CSV column headers";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartSeriesNamesImportCsvExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var csvData = """
@@ -33,6 +37,6 @@ public class ChartSeriesNamesImportCsvExample : IExample
             .AutoFitAllColumns()
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "082_ChartSeriesNamesImport_CSV.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_ChartSeriesNamesImport_CSV.xlsx");
     }
 }

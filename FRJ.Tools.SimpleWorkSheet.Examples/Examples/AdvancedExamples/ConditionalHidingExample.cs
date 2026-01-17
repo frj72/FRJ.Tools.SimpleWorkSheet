@@ -9,6 +9,10 @@ public class ConditionalHidingExample : IExample
     public string Name => "Conditional Hiding";
     public string Description => "Demonstrates hiding rows and columns based on conditions";
 
+
+    public int ExampleNumber { get; }
+
+    public ConditionalHidingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("ConditionalHiding");
@@ -90,6 +94,6 @@ public class ConditionalHidingExample : IExample
         for (uint i = 1; i <= 6; i++)
             sheet.SetColumnWidth(i, 12.0);
         
-        ExampleRunner.SaveWorkSheet(sheet, "088_ConditionalHiding.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ConditionalHiding.xlsx");
     }
 }

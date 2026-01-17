@@ -8,6 +8,10 @@ public class JsonColumnFilteringExample : IExample
     public string Name => "JSON Column Filtering";
     public string Description => "Includes/excludes specific columns from imported JSON data";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonColumnFilteringExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Orders.json");
@@ -21,6 +25,6 @@ public class JsonColumnFilteringExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "066_JsonColumnFiltering.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonColumnFiltering.xlsx");
     }
 }

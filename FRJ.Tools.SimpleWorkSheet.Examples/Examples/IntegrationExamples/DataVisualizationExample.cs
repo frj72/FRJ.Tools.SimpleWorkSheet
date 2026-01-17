@@ -9,6 +9,10 @@ public class DataVisualizationExample : IExample
     public string Name => "Data Visualization";
     public string Description => "Simple chart-like data presentation";
 
+
+    public int ExampleNumber { get; }
+
+    public DataVisualizationExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArray = ["Month", "Sales", "Target", "Achievement"];
 
     public void Run()
@@ -67,6 +71,6 @@ public class DataVisualizationExample : IExample
             .WithFont(font => font.Bold())
             .WithColor(overallAchievement >= 1.0 ? "00FF00" : "FFAA00"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "020_DataVisualization.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_DataVisualization.xlsx");
     }
 }

@@ -8,6 +8,10 @@ public class CsvWithoutHeaderExample : IExample
     public string Name => "CSV Import without Header";
     public string Description => "Imports CSV file without header row - auto-generates column names";
 
+
+    public int ExampleNumber { get; }
+
+    public CsvWithoutHeaderExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var csvPath = Path.Combine("Resources", "Data", "Csv", "MixedTypesWithoutHeader.csv");
@@ -20,6 +24,6 @@ public class CsvWithoutHeaderExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "071_CsvWithoutHeader.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_CsvWithoutHeader.xlsx");
     }
 }

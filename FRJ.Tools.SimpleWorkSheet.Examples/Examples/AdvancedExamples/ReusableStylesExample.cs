@@ -9,6 +9,10 @@ public class ReusableStylesExample : IExample
     public string Name => "Reusable Styles";
     public string Description => "Creating and applying style templates";
 
+
+    public int ExampleNumber { get; }
+
+    public ReusableStylesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("ReusableStyles");
@@ -43,6 +47,6 @@ public class ReusableStylesExample : IExample
         sheet.AddStyledCell(1, 2, "Marketing", dataStyle);
         sheet.AddStyledCell(2, 2, "$90,000", dataStyle);
         
-        ExampleRunner.SaveWorkSheet(sheet, "017_ReusableStyles.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ReusableStyles.xlsx");
     }
 }

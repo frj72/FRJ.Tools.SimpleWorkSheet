@@ -9,6 +9,10 @@ public class RowAdditionExample : IExample
     public string Name => "Row Addition";
     public string Description => "Adding multiple cells in a row with consistent styling";
 
+
+    public int ExampleNumber { get; }
+
+    public RowAdditionExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArrayHeaders = ["Product", "Price", "Quantity", "Total"];
     private static readonly string[] SourceArrayRow1 = ["Widget", "9.99", "10", "99.90"];
     private static readonly string[] SourceArrayRow2 = ["Gadget", "19.99", "5", "99.95"];
@@ -31,6 +35,6 @@ public class RowAdditionExample : IExample
         
         sheet.AddRow(2, 0, row2, null);
         
-        ExampleRunner.SaveWorkSheet(sheet, "010_RowAddition.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_RowAddition.xlsx");
     }
 }

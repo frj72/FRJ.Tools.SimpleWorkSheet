@@ -10,6 +10,10 @@ public class LineChartMultipleSeriesWithColorsExample : IExample
     public string Name => "Line Chart Multiple Series With Colors";
     public string Description => "Demonstrates line chart series color customization for multiple series";
 
+
+    public int ExampleNumber { get; }
+
+    public LineChartMultipleSeriesWithColorsExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Regional Sales");
@@ -57,6 +61,6 @@ public class LineChartMultipleSeriesWithColorsExample : IExample
 
         sheet.AddChart(lineChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "104_LineChartMultipleSeriesWithColors.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_LineChartMultipleSeriesWithColors.xlsx");
     }
 }

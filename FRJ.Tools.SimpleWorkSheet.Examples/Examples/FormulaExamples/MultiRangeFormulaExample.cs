@@ -9,6 +9,10 @@ public class MultiRangeFormulaExample : IExample
     public string Name => "Multi-Range Formulas";
     public string Description => "Using formulas across multiple ranges";
 
+
+    public int ExampleNumber { get; }
+
+    public MultiRangeFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("MultiRangeFormula");
@@ -37,6 +41,6 @@ public class MultiRangeFormulaExample : IExample
             .WithFont(font => font.Bold())
             .WithFormatCode("$#,##0"));
         
-        ExampleRunner.SaveWorkSheet(sheet, "026_MultiRangeFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_MultiRangeFormula.xlsx");
     }
 }

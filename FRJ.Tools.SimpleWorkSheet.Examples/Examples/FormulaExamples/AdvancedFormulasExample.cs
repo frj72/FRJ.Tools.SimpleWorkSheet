@@ -9,6 +9,10 @@ public class AdvancedFormulasExample : IExample
     public string Name => "Advanced Formulas";
     public string Description => "Demonstrates FormulaBuilder helper methods";
 
+
+    public int ExampleNumber { get; }
+
+    public AdvancedFormulasExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Advanced Formulas");
@@ -119,6 +123,6 @@ public class AdvancedFormulasExample : IExample
         sheet.SetColumnWidth(5, 12.0);
         sheet.SetColumnWidth(6, 10.0);
 
-        ExampleRunner.SaveWorkSheet(sheet, "040_AdvancedFormulas.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AdvancedFormulas.xlsx");
     }
 }

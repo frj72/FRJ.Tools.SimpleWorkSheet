@@ -8,6 +8,10 @@ public class JsonToWorkbookBarChartExample : IExample
     public string Name => "JSON to Workbook with Bar Chart";
     public string Description => "Creates workbook with data sheet and bar chart using column names from JSON";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonToWorkbookBarChartExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Persons.json");
@@ -26,6 +30,6 @@ public class JsonToWorkbookBarChartExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkBook(workbook, "063_JsonToWorkbookBarChart.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_JsonToWorkbookBarChart.xlsx");
     }
 }

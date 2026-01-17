@@ -8,10 +8,14 @@ public class HelloWorldExample : IExample
     public string Name => "Hello World";
     public string Description => "Simple cell creation and basic worksheet setup";
 
+
+    public int ExampleNumber { get; }
+
+    public HelloWorldExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("HelloWorld");
         sheet.AddCell(0, 0, "Hello World", null);
-        ExampleRunner.SaveWorkSheet(sheet, "001_HelloWorld.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_HelloWorld.xlsx");
     }
 }

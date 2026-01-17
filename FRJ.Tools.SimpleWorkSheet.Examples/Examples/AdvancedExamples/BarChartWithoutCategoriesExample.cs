@@ -9,6 +9,10 @@ public class BarChartWithoutCategoriesExample : IExample
     public string Name => "Bar Chart Without Categories";
     public string Description => "Demonstrates bar charts without explicit x-axis categories";
 
+
+    public int ExampleNumber { get; }
+
+    public BarChartWithoutCategoriesExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Revenue Data");
@@ -29,6 +33,6 @@ public class BarChartWithoutCategoriesExample : IExample
 
         sheet.AddChart(barChart);
 
-        ExampleRunner.SaveWorkSheet(sheet, "092_BarChartWithoutCategories.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_BarChartWithoutCategories.xlsx");
     }
 }

@@ -8,6 +8,10 @@ public class ChartSeriesNamesImportAutoExample : IExample
     public string Name => "Chart Series Names Import - Auto Detection";
     public string Description => "Demonstrates automatic series name detection from JSON column names";
 
+
+    public int ExampleNumber { get; }
+
+    public ChartSeriesNamesImportAutoExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonData = """
@@ -36,6 +40,6 @@ public class ChartSeriesNamesImportAutoExample : IExample
             .AutoFitAllColumns()
             .Build();
 
-        ExampleRunner.SaveWorkBook(workbook, "080_ChartSeriesNamesImport_Auto.xlsx");
+        ExampleRunner.SaveWorkBook(workbook, $"{ExampleNumber:000}_ChartSeriesNamesImport_Auto.xlsx");
     }
 }

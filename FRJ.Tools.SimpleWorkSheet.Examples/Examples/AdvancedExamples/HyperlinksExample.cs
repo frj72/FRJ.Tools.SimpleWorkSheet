@@ -9,6 +9,10 @@ public class HyperlinksExample : IExample
     public string Name => "Hyperlinks";
     public string Description => "Demonstrates external URLs and email links";
 
+
+    public int ExampleNumber { get; }
+
+    public HyperlinksExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("Hyperlinks");
@@ -45,6 +49,6 @@ public class HyperlinksExample : IExample
                 .WithHorizontalAlignment(HorizontalAlignment.Center)
                 .WithFillColor("F2F2F2")));
 
-        ExampleRunner.SaveWorkSheet(sheet, "034_Hyperlinks.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_Hyperlinks.xlsx");
     }
 }

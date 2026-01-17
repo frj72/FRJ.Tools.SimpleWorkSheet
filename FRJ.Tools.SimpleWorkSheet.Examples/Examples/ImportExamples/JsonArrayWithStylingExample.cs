@@ -8,6 +8,10 @@ public class JsonArrayWithStylingExample : IExample
     public string Name => "JSON Array Import with Styling";
     public string Description => "Imports JSON array with styled headers (color, bold font) and auto-fitted columns";
 
+
+    public int ExampleNumber { get; }
+
+    public JsonArrayWithStylingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var jsonPath = Path.Combine("Resources", "Data", "Json", "Prices.json");
@@ -20,6 +24,6 @@ public class JsonArrayWithStylingExample : IExample
             .AutoFitAllColumns()
             .Build();
         
-        ExampleRunner.SaveWorkSheet(sheet, "057_JsonArrayWithStyling.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_JsonArrayWithStyling.xlsx");
     }
 }

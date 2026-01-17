@@ -9,6 +9,10 @@ public class AverageFormulaExample : IExample
     public string Name => "AVERAGE Formula";
     public string Description => "Calculating averages with formulas";
 
+
+    public int ExampleNumber { get; }
+
+    public AverageFormulaExample(int exampleNumber) => ExampleNumber = exampleNumber;
     private static readonly string[] SourceArray = ["Student", "Test 1", "Test 2", "Test 3", "Average"];
 
     public void Run()
@@ -41,6 +45,6 @@ public class AverageFormulaExample : IExample
                 .WithFormatCode("0.0"));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "023_AverageFormula.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_AverageFormula.xlsx");
     }
 }

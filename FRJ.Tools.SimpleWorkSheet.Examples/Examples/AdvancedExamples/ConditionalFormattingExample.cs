@@ -8,6 +8,10 @@ public class ConditionalFormattingExample : IExample
     public string Name => "Conditional Formatting";
     public string Description => "Dynamic styling based on cell values";
 
+
+    public int ExampleNumber { get; }
+
+    public ConditionalFormattingExample(int exampleNumber) => ExampleNumber = exampleNumber;
     public void Run()
     {
         var sheet = new WorkSheet("ConditionalFormatting");
@@ -44,6 +48,6 @@ public class ConditionalFormattingExample : IExample
                 .WithColor(color));
         }
         
-        ExampleRunner.SaveWorkSheet(sheet, "016_ConditionalFormatting.xlsx");
+        ExampleRunner.SaveWorkSheet(sheet, $"{ExampleNumber:000}_ConditionalFormatting.xlsx");
     }
 }
