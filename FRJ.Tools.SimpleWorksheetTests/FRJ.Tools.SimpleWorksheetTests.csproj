@@ -30,6 +30,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\FRJ.Tools.SimpleWorkSheet\FRJ.Tools.SimpleWorkSheet.csproj" />
+      <ProjectReference Include="..\FRJ.Tools.SimpleWorkSheet.Examples\FRJ.Tools.SimpleWorkSheet.Examples.csproj" />
     </ItemGroup>
 
     <ItemGroup>
