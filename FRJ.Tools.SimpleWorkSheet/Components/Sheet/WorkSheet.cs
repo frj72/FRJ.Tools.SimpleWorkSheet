@@ -245,11 +245,23 @@ public class WorkSheet
 
     public void AutoFitColumn(uint column)
     {
+        var cellsInColumn = GetCellsInColumn(column);
+        var estimatedWidth = cellsInColumn.EstimateMaxWidth();
+        SetColumnWidth(column, estimatedWidth);
+    }
+
+    private IEnumerable<Cell> GetCellsInColumn(uint column)
+    {
         var cellsInColumn = Cells.Cells
             .Where(kvp => kvp.Key.X == column)
             .Select(kvp => kvp.Value);
+        return cellsInColumn;
+    }
 
-        var estimatedWidth = cellsInColumn.EstimateMaxWidth();
+    public void AutoFitColumn(uint column, double calibration)
+    {
+        var cellsInColumn = GetCellsInColumn(column);
+        var estimatedWidth = cellsInColumn.EstimateMaxWidth() * calibration;
         SetColumnWidth(column, estimatedWidth);
     }
 
@@ -258,6 +270,13 @@ public class WorkSheet
         var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
         foreach (var column in columns)
             AutoFitColumn(column);
+    }
+
+    public void AutoFitAllColumns(double calibration)
+    {
+        var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
+        foreach (var column in columns)
+            AutoFitColumn(column, calibration);
     }
 
     public void SetTabColor(string color)

@@ -13,6 +13,7 @@ public class GenericTableBuilder
     private Action<CellStyleBuilder>? _headerStyleAction;
     private Dictionary<string, Func<CellValue, CellValue>>? _columnParsers;
     private bool _autoFitColumns;
+    private double? _autoFitCalibration;
     private List<string>? _columnOrder;
     private HashSet<string>? _excludeColumns;
     private HashSet<string>? _includeColumns;
@@ -68,6 +69,14 @@ public class GenericTableBuilder
     public GenericTableBuilder AutoFitAllColumns()
     {
         _autoFitColumns = true;
+        _autoFitCalibration = null;
+        return this;
+    }
+    
+    public GenericTableBuilder AutoFitAllColumns(double calibration)
+    {
+        _autoFitColumns = true;
+        _autoFitCalibration = calibration;
         return this;
     }
 
@@ -144,7 +153,15 @@ public class GenericTableBuilder
 
         if (!_autoFitColumns) return sheet;
         for (uint i = 0; i < headers.Count; i++)
-            sheet.AutoFitColumn(i);
+            switch (_autoFitCalibration)
+            {
+                case null:
+                    sheet.AutoFitColumn(i);
+                    break;
+                default:
+                    sheet.AutoFitColumn(i, _autoFitCalibration.Value);
+                    break;
+            }
 
         return sheet;
     }
