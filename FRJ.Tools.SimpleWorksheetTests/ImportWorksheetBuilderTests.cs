@@ -5,6 +5,7 @@ using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
+[Collection("TypefaceCache")]
 public class ImportWorksheetBuilderTests
 {
     [Fact]

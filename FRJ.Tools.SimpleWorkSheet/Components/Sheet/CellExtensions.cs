@@ -49,8 +49,8 @@ public static class CellExtensions
             var fontStyleSlant = cellFont.Italic
                 ? SKFontStyleSlant.Italic
                 : SKFontStyleSlant.Upright;
-            using var typeface = SKTypeface.FromFamilyName(
-                cellFont.Name,
+            var typeface = TypefaceCache.GetOrCreate(
+                cellFont.Name ?? WorkSheetDefaults.FontName,
                 fontStyleWeight,
                 SKFontStyleWidth.Normal,
                 fontStyleSlant

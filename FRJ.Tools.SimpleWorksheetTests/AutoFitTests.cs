@@ -2,6 +2,7 @@ using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
+[Collection("TypefaceCache")]
 public class AutoFitTests
 {
     [Fact]

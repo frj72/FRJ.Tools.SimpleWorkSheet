@@ -117,6 +117,37 @@ var options = ImportOptionsBuilder.Create()
     .Build();
 ```
 
+### Performance and Cache Management
+
+When using `AutoFitAllColumns()` or `AutoFitColumn()`, the library caches font typefaces for improved performance. In most scenarios, this cache is automatically managed and requires no user intervention.
+
+For long-running applications or batch processing scenarios, you may want to clear the cache periodically to free resources:
+
+```csharp
+using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
+
+// Process multiple workbooks
+foreach (var file in files)
+{
+    var workbook = ProcessWorkbook(file);
+    workbook.SaveToFile(outputPath);
+}
+
+// Clear cache after batch processing (optional)
+TypefaceCache.ClearCache();
+```
+
+**When to call ClearCache()**:
+- After processing large batches of workbooks
+- Before application shutdown in long-running processes
+- When switching between many different font families
+
+**Cache Information**:
+- Check current cache size: `TypefaceCache.GetCacheCount()`
+- Typical cache size: 5-20 typefaces (< 100 KB memory)
+
+**Note**: Clearing the cache is optional. The cache size is typically very small and will not cause memory issues in most applications.
+
 ## Examples
 
 ### Creating a Simple Table

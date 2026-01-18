@@ -3,8 +3,14 @@ using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 
 namespace FRJ.Tools.SimpleWorksheetTests;
 
-public class CellExtensionsEstimateMaxWidthTests
+[Collection("TypefaceCache")]
+public class CellExtensionsEstimateMaxWidthTests : IDisposable
 {
+    public void Dispose()
+    {
+        TypefaceCache.ClearCache();
+        GC.SuppressFinalize(this);
+    }
     [Fact]
     public void EstimateMaxWidth_WithEmptyCollection_ReturnsDefaultWidth()
     {
