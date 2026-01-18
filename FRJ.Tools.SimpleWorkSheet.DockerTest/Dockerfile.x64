@@ -1,0 +1,22 @@
+FROM mcr.microsoft.com/dotnet/runtime:10.0 AS runtime
+
+RUN apt-get update && apt-get install -y \
+    fontconfig \
+    fonts-liberation \
+    fonts-dejavu-core \
+    libfontconfig1 \
+    libfreetype6 \
+    libuuid1 \
+    libharfbuzz0b \
+    libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN fc-cache -fv
+
+WORKDIR /app
+
+COPY publish-x64/ .
+
+RUN mkdir -p /output
+
+ENTRYPOINT ["dotnet", "FRJ.Tools.SimpleWorkSheet.DockerTest.dll"]

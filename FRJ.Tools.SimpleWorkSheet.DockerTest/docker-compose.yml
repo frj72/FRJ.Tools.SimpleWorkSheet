@@ -1,0 +1,11 @@
+services:
+  dockertest:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+    volumes:
+      - ./output:/output
+    environment:
+      - DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
