@@ -11,7 +11,18 @@ RUN apt-get update && apt-get install -y \
     libfontconfig1 \
     libfreetype6 \
     ttf-mscorefonts-installer \
+    curl \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /tmp/aptos && \
+    cd /tmp/aptos && \
+    curl -L -o aptos.zip 'https://download.microsoft.com/download/8/6/0/860a94fa-7feb-44ef-ac79-c072d9113d69/Microsoft%20Aptos%20Fonts.zip' && \
+    unzip -q aptos.zip && \
+    mkdir -p /usr/share/fonts/truetype/aptos && \
+    cp *.ttf /usr/share/fonts/truetype/aptos/ && \
+    cd / && \
+    rm -rf /tmp/aptos
 
 RUN fc-cache -fv
 

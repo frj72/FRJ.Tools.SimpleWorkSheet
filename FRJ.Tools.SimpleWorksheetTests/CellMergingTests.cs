@@ -20,7 +20,7 @@ public class CellMergingTests
         using var stream = new MemoryStream(bytes);
         using var document = SpreadsheetDocument.Open(stream, false);
         var worksheetPart = document.WorkbookPart?.WorksheetParts.First();
-        var mergeCells = worksheetPart?.Worksheet.Elements<MergeCells>().FirstOrDefault();
+        var mergeCells = worksheetPart?.Worksheet?.Elements<MergeCells>().FirstOrDefault();
 
         Assert.NotNull(mergeCells);
         var mergeCell = mergeCells.Elements<MergeCell>().FirstOrDefault();

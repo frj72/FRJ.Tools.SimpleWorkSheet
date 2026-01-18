@@ -11,10 +11,12 @@ This document provides copy-paste ready Docker configurations for using FRJ.Tool
 3. **Both linux-x64 and linux-arm64 are supported** - choose based on your deployment platform
 4. **Use appropriate platform flag** when building Docker image (--platform=linux/amd64 or --platform=linux/arm64)
 
-## Option 1: With Microsoft Core Fonts (Recommended)
+## Option 1: With Microsoft Core Fonts + Aptos (Recommended)
 
 ### Fonts Included
-Arial, Arial Black, Andale Mono, Comic Sans MS, Courier New, Georgia, Impact, Times New Roman, Trebuchet MS, Verdana, Webdings (60 font files total)
+- Microsoft Core Fonts: Arial, Arial Black, Andale Mono, Comic Sans MS, Courier New, Georgia, Impact, Times New Roman, Trebuchet MS, Verdana, Webdings (60 font files)
+- Aptos Font Family: Aptos (Regular, Bold, Italic, Black, Display, ExtraBold, Light, SemiBold), Aptos Narrow, Aptos Serif, Aptos Mono (28 font files)
+- Total: 88 Microsoft font files
 
 ### Dockerfile
 
@@ -32,7 +34,18 @@ RUN apt-get update && apt-get install -y \
     libfontconfig1 \
     libfreetype6 \
     ttf-mscorefonts-installer \
+    curl \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /tmp/aptos && \
+    cd /tmp/aptos && \
+    curl -L -o aptos.zip 'https://download.microsoft.com/download/8/6/0/860a94fa-7feb-44ef-ac79-c072d9113d69/Microsoft%20Aptos%20Fonts.zip' && \
+    unzip -q aptos.zip && \
+    mkdir -p /usr/share/fonts/truetype/aptos && \
+    cp *.ttf /usr/share/fonts/truetype/aptos/ && \
+    cd / && \
+    rm -rf /tmp/aptos
 
 RUN fc-cache -fv
 
@@ -56,14 +69,15 @@ docker run --rm your-app:latest
 
 ### Image Size Impact
 - Base runtime: ~200 MB
-- Font libraries + Microsoft fonts: +38-43 MB
-- Total: ~240-245 MB
+- Font libraries + Microsoft Core Fonts + Aptos: +41-46 MB
+- Total: ~241-246 MB
 
 ### When to Use
-- Excel files explicitly use Arial, Times New Roman, Courier New, etc.
+- Excel files explicitly use Arial, Times New Roman, Courier New, Aptos, etc.
 - Maximum font metric accuracy is required
+- You need Aptos (the new default Office font)
 - Image size is not a critical concern
-- You accept the Microsoft Core Fonts EULA
+- You accept the Microsoft Core Fonts EULA and Aptos font license
 
 ## Option 2: Without Microsoft Fonts (Smaller)
 

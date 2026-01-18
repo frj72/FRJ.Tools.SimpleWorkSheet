@@ -1,13 +1,12 @@
 # FRJ.Tools.SimpleWorkSheet
 
+> **Warning:** This document contains AI-generated content. Expect low quality text.
+
 A modern, fluent C# library for creating Excel documents with a clean builder pattern API.
 
 [![.NET](https://img.shields.io/badge/.NET-10.0-blue)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-## Project Status
-
-This project is currently in **alpha** (v1.0.0-alpha).
 
 ## Quick Start
 
@@ -341,9 +340,9 @@ dotnet build --configuration Release
 
 - .NET 10.0 or later
 - Dependencies:
-  - DocumentFormat.OpenXml 3.3.0
+  - DocumentFormat.OpenXml 3.4.1
   - OneOf 3.0.271
-  - SkiaSharp 3.119.1
+  - SkiaSharp 3.116.1
 
 
 ## License

@@ -24,7 +24,7 @@ public class WorkBookReader
         using var spreadsheetDocument = SpreadsheetDocument.Open(stream, false);
         var workbookPart = spreadsheetDocument.WorkbookPart ?? throw new InvalidOperationException("Workbook part not found");
 
-        var workbookSheets = workbookPart.Workbook.Sheets?.Elements<Sheet>() ?? [];
+        var workbookSheets = workbookPart.Workbook?.Sheets?.Elements<Sheet>() ?? [];
 
         var sheets = new List<WorkSheet>();
         foreach (var sheet in workbookSheets)
@@ -48,7 +48,7 @@ public class WorkBookReader
         
         if (sheetElement.State?.Value == SheetStateValues.Hidden)
             workSheet.SetVisible(false);
-        var sheetData = worksheetPart.Worksheet.Elements<SheetData>().FirstOrDefault();
+        var sheetData = worksheetPart.Worksheet?.Elements<SheetData>().FirstOrDefault();
         
         if (sheetData == null)
             return workSheet;
@@ -285,7 +285,7 @@ public class WorkBookReader
         if (string.IsNullOrEmpty(cellReference))
             return null;
 
-        var hyperlinks = worksheetPart.Worksheet.Elements<Hyperlinks>().FirstOrDefault();
+        var hyperlinks = worksheetPart.Worksheet?.Elements<Hyperlinks>().FirstOrDefault();
 
         var hyperlink = hyperlinks?.Elements<Hyperlink>().FirstOrDefault(h => h.Reference?.Value == cellReference);
         if (hyperlink?.Id?.Value == null)
@@ -300,7 +300,7 @@ public class WorkBookReader
 
     private static void ExtractColumnWidths(WorksheetPart worksheetPart, WorkSheet workSheet)
     {
-        var columns = worksheetPart.Worksheet.Elements<Columns>().FirstOrDefault();
+        var columns = worksheetPart.Worksheet?.Elements<Columns>().FirstOrDefault();
         if (columns == null)
             return;
 
@@ -322,7 +322,7 @@ public class WorkBookReader
 
     private static void ExtractRowHeights(WorksheetPart worksheetPart, WorkSheet workSheet)
     {
-        var sheetData = worksheetPart.Worksheet.Elements<SheetData>().FirstOrDefault();
+        var sheetData = worksheetPart.Worksheet?.Elements<SheetData>().FirstOrDefault();
         if (sheetData == null)
             return;
 
@@ -344,7 +344,7 @@ public class WorkBookReader
 
     private static void ExtractFrozenPanes(WorksheetPart worksheetPart, WorkSheet workSheet)
     {
-        var sheetViews = worksheetPart.Worksheet.Elements<SheetViews>().FirstOrDefault();
+        var sheetViews = worksheetPart.Worksheet?.Elements<SheetViews>().FirstOrDefault();
         if (sheetViews == null)
             return;
 
@@ -361,7 +361,7 @@ public class WorkBookReader
 
     private static void ExtractMergedCells(WorksheetPart worksheetPart, WorkSheet workSheet)
     {
-        var mergeCells = worksheetPart.Worksheet.Elements<MergeCells>().FirstOrDefault();
+        var mergeCells = worksheetPart.Worksheet?.Elements<MergeCells>().FirstOrDefault();
         if (mergeCells == null)
             return;
 
@@ -387,7 +387,7 @@ public class WorkBookReader
 
     private static void ExtractTabColor(WorksheetPart worksheetPart, WorkSheet workSheet)
     {
-        var sheetProperties = worksheetPart.Worksheet.Elements<SheetProperties>().FirstOrDefault();
+        var sheetProperties = worksheetPart.Worksheet?.Elements<SheetProperties>().FirstOrDefault();
 
         var tabColor = sheetProperties?.Elements<TabColor>().FirstOrDefault();
         if (tabColor?.Rgb?.Value != null)
@@ -396,7 +396,7 @@ public class WorkBookReader
 
     private static void ExtractTables(WorksheetPart worksheetPart, WorkSheet workSheet)
     {
-        var tableParts = worksheetPart.Worksheet.Elements<TableParts>().FirstOrDefault();
+        var tableParts = worksheetPart.Worksheet?.Elements<TableParts>().FirstOrDefault();
         if (tableParts == null)
             return;
 
@@ -409,7 +409,7 @@ public class WorkBookReader
             var tableDefinitionPart = (TableDefinitionPart)worksheetPart.GetPartById(tablePartId);
             var table = tableDefinitionPart.Table;
             
-            if (table.Name?.Value == null || table.Reference?.Value == null)
+            if (table?.Name?.Value == null || table.Reference?.Value == null)
                 continue;
 
             var referenceParts = table.Reference.Value.Split(':');

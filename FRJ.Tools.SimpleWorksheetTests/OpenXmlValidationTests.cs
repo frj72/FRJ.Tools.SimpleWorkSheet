@@ -263,7 +263,7 @@ public class OpenXmlValidationTests
             Assert.NotNull(chartPart);
             
             var chartSpace = chartPart.ChartSpace;
-            var lineChartElement = chartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.LineChart>().FirstOrDefault();
+            var lineChartElement = chartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.LineChart>().FirstOrDefault();
             Assert.NotNull(lineChartElement);
             
             var dataLabels = lineChartElement.Descendants<DocumentFormat.OpenXml.Drawing.Charts.DataLabels>().FirstOrDefault();
@@ -322,7 +322,7 @@ public class OpenXmlValidationTests
             Assert.NotNull(chartPart);
             
             var chartSpace = chartPart.ChartSpace;
-            var lineChartElement = chartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.LineChart>().FirstOrDefault();
+            var lineChartElement = chartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.LineChart>().FirstOrDefault();
             Assert.NotNull(lineChartElement);
             
             var dataLabels = lineChartElement.Descendants<DocumentFormat.OpenXml.Drawing.Charts.DataLabels>().FirstOrDefault();
@@ -607,7 +607,7 @@ public class OpenXmlValidationTests
             Assert.NotNull(chartPart);
             
             var chartSpace = chartPart.ChartSpace;
-            var scatterChartElement = chartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.ScatterChart>().FirstOrDefault();
+            var scatterChartElement = chartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.ScatterChart>().FirstOrDefault();
             Assert.NotNull(scatterChartElement);
             
             var dataLabels = scatterChartElement.Descendants<DocumentFormat.OpenXml.Drawing.Charts.DataLabels>().FirstOrDefault();
@@ -656,7 +656,7 @@ public class OpenXmlValidationTests
             Assert.NotNull(chartPart);
             
             var chartSpace = chartPart.ChartSpace;
-            var pieChartElement = chartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PieChart>().FirstOrDefault();
+            var pieChartElement = chartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PieChart>().FirstOrDefault();
             Assert.NotNull(pieChartElement);
             
             var dataLabels = pieChartElement.Descendants<DocumentFormat.OpenXml.Drawing.Charts.DataLabels>().FirstOrDefault();
@@ -711,10 +711,10 @@ public class OpenXmlValidationTests
             Assert.NotNull(chartPart);
             
             var chartSpace = chartPart.ChartSpace;
-            var lineChartElement = chartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.LineChart>().FirstOrDefault();
+            var lineChartElement = chartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.LineChart>().FirstOrDefault();
             Assert.NotNull(lineChartElement);
             
-            var plotArea = chartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
+            var plotArea = chartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
             Assert.NotNull(plotArea);
             
             var valueAxis = plotArea.Descendants<DocumentFormat.OpenXml.Drawing.Charts.ValueAxis>().FirstOrDefault();
@@ -770,7 +770,7 @@ public class OpenXmlValidationTests
             var chartPart = doc.WorkbookPart?.WorksheetParts.First().DrawingsPart?.ChartParts.First();
             Assert.NotNull(chartPart);
             
-            var plotArea = chartPart.ChartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
+            var plotArea = chartPart.ChartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
             Assert.NotNull(plotArea);
             
             var valueAxis = plotArea.Descendants<DocumentFormat.OpenXml.Drawing.Charts.ValueAxis>().FirstOrDefault();
@@ -821,7 +821,7 @@ public class OpenXmlValidationTests
             var chartPart = doc.WorkbookPart?.WorksheetParts.First().DrawingsPart?.ChartParts.First();
             Assert.NotNull(chartPart);
             
-            var plotArea = chartPart.ChartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
+            var plotArea = chartPart.ChartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
             Assert.NotNull(plotArea);
             
             var valueAxis = plotArea.Descendants<DocumentFormat.OpenXml.Drawing.Charts.ValueAxis>().FirstOrDefault();
@@ -871,7 +871,7 @@ public class OpenXmlValidationTests
             var chartPart = doc.WorkbookPart?.WorksheetParts.First().DrawingsPart?.ChartParts.First();
             Assert.NotNull(chartPart);
             
-            var plotArea = chartPart.ChartSpace.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
+            var plotArea = chartPart.ChartSpace?.Descendants<DocumentFormat.OpenXml.Drawing.Charts.PlotArea>().FirstOrDefault();
             Assert.NotNull(plotArea);
             
             var valueAxis = plotArea.Descendants<DocumentFormat.OpenXml.Drawing.Charts.ValueAxis>().LastOrDefault();
