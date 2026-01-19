@@ -109,6 +109,12 @@ public class WorkbookBuilder
         return this;
     }
 
+    public WorkbookBuilder AutoFitAllColumns(double calibration, double baseLine)
+    {
+        _genericTableBuilder.AutoFitAllColumns(calibration, baseLine);
+        return this;
+    }
+
     public WorkbookBuilder WithColumnOrder(params string[] columnNames)
     {
         _genericTableBuilder.WithColumnOrder(columnNames);

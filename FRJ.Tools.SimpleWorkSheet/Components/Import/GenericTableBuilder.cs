@@ -14,6 +14,7 @@ public class GenericTableBuilder
     private Dictionary<string, Func<CellValue, CellValue>>? _columnParsers;
     private bool _autoFitColumns;
     private double? _autoFitCalibration;
+    private double _autoFitBaseLine;
     private List<string>? _columnOrder;
     private HashSet<string>? _excludeColumns;
     private HashSet<string>? _includeColumns;
@@ -77,6 +78,14 @@ public class GenericTableBuilder
     {
         _autoFitColumns = true;
         _autoFitCalibration = calibration;
+        return this;
+    }
+
+    public GenericTableBuilder AutoFitAllColumns(double calibration, double baseLine)
+    {
+        _autoFitColumns = true;
+        _autoFitCalibration = calibration;
+        _autoFitBaseLine = baseLine;
         return this;
     }
 
@@ -159,7 +168,7 @@ public class GenericTableBuilder
                     sheet.AutoFitColumn(i);
                     break;
                 default:
-                    sheet.AutoFitColumn(i, _autoFitCalibration.Value);
+                    sheet.AutoFitColumn(i, _autoFitCalibration.Value, _autoFitBaseLine);
                     break;
             }
 

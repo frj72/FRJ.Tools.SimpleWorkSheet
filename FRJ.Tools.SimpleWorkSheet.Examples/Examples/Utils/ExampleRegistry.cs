@@ -123,6 +123,7 @@ public static class ExampleRegistry
         [typeof(EnvironmentSheetInfoExample)] = 108,
         [typeof(SimpleCalibrationWorkbookDefaultExample)] = 109,
         [typeof(SimpleCalibrationWorkbook09Example)] = 110,
-        [typeof(SimpleCalibrationWorkbook11Example)] = 111
+        [typeof(SimpleCalibrationWorkbook11Example)] = 111,
+        [typeof(AutoFitColumnsBaselineExample)] = 112
     };
 }

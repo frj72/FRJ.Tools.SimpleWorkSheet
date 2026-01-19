@@ -1114,6 +1114,65 @@ public class ImportWorkbookBuilderTests
         var sheet = workbook.Sheets.First();
         Assert.NotEmpty(sheet.ExplicitColumnWidths);
     }
+
+    [Fact]
+    public void AutoFitAllColumns_WithCalibrationAndBaseLine_AppliesBoth()
+    {
+        const string json = """[{"product": "Laptop", "price": 999.99, "quantity": 5}]""";
+        
+        var workbook = WorkbookBuilder.FromJson(json)
+            .AutoFitAllColumns(1.2, 8.0)
+            .Build();
+        
+        Assert.NotNull(workbook);
+        var sheet = workbook.Sheets.First();
+        Assert.NotEmpty(sheet.ExplicitColumnWidths);
+        
+        foreach (var width in sheet.ExplicitColumnWidths.Values)
+        {
+            Assert.True(width.IsT0);
+            Assert.True(width.AsT0 > 8.0);
+        }
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_WithNegativeBaseLine_AppliesCorrectly()
+    {
+        const string json = """[{"name": "Test", "value": 100}]""";
+        
+        var workbook = WorkbookBuilder.FromJson(json)
+            .AutoFitAllColumns(1.0, -3.0)
+            .Build();
+        
+        Assert.NotNull(workbook);
+        var sheet = workbook.Sheets.First();
+        Assert.NotEmpty(sheet.ExplicitColumnWidths);
+        
+        foreach (var width in sheet.ExplicitColumnWidths.Values)
+        {
+            Assert.True(width.IsT0);
+            Assert.True(width.AsT0 > 0);
+        }
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_WithZeroBaseLine_EquivalentToCalibrationOnly()
+    {
+        const string json = """[{"test": "value"}]""";
+        
+        var workbook1 = WorkbookBuilder.FromJson(json)
+            .AutoFitAllColumns(1.5)
+            .Build();
+        
+        var workbook2 = WorkbookBuilder.FromJson(json)
+            .AutoFitAllColumns(1.5, 0.0)
+            .Build();
+        
+        var width1 = workbook1.Sheets.First().ExplicitColumnWidths[0].AsT0;
+        var width2 = workbook2.Sheets.First().ExplicitColumnWidths[0].AsT0;
+        
+        Assert.Equal(width1, width2, 0.001);
+    }
 }
 
 

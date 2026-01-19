@@ -264,6 +264,13 @@ public class WorkSheet
         var estimatedWidth = cellsInColumn.EstimateMaxWidth() * calibration;
         SetColumnWidth(column, estimatedWidth);
     }
+    
+    public void AutoFitColumn(uint column, double calibration, double baseLine)
+    {
+        var cellsInColumn = GetCellsInColumn(column);
+        var estimatedWidth = cellsInColumn.EstimateMaxWidth() * calibration + baseLine;
+        SetColumnWidth(column, estimatedWidth);
+    }
 
     public void AutoFitAllColumns()
     {
@@ -277,6 +284,13 @@ public class WorkSheet
         var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
         foreach (var column in columns)
             AutoFitColumn(column, calibration);
+    }
+    
+    public void AutoFitAllColumns(double calibration, double baseLine)
+    {
+        var columns = Cells.Cells.Keys.Select(pos => pos.X).Distinct();
+        foreach (var column in columns)
+            AutoFitColumn(column, calibration, baseLine);
     }
 
     public void SetTabColor(string color)

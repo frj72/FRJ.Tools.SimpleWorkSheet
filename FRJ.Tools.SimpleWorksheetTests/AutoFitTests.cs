@@ -205,4 +205,143 @@ public class AutoFitTests
             Assert.True(width.AsT0 > 0);
         }
     }
+
+    [Fact]
+    public void AutoFitColumn_WithCalibrationAndBaseLine_AppliesBoth()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Test", null);
+        sheet.AddCell(new(0, 1), "Text", null);
+        
+        sheet.AutoFitColumn(0, 1.5, 10.0);
+        
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        var width = sheet.ExplicitColumnWidths[0].AsT0;
+        Assert.True(width > 10.0);
+    }
+
+    [Fact]
+    public void AutoFitColumn_WithCalibrationAndZeroBaseLine_AppliesOnlyCalibration()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Test", null);
+        
+        sheet.AutoFitColumn(0, 1.5, 0.0);
+        
+        var widthWithZeroBaseLine = sheet.ExplicitColumnWidths[0].AsT0;
+        
+        sheet.AutoFitColumn(0, 1.5);
+        
+        var widthWithoutBaseLine = sheet.ExplicitColumnWidths[0].AsT0;
+        
+        Assert.Equal(widthWithoutBaseLine, widthWithZeroBaseLine);
+    }
+
+    [Fact]
+    public void AutoFitColumn_WithPositiveBaseLine_IncreasesWidth()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Test", null);
+        sheet.AddCell(new(0, 1), "Text", null);
+        
+        sheet.AutoFitColumn(0, 1.0);
+        var widthWithoutBaseLine = sheet.ExplicitColumnWidths[0].AsT0;
+        
+        sheet.AutoFitColumn(0, 1.0, 5.0);
+        var widthWithBaseLine = sheet.ExplicitColumnWidths[0].AsT0;
+        
+        Assert.True(widthWithBaseLine > widthWithoutBaseLine);
+        Assert.Equal(widthWithoutBaseLine + 5.0, widthWithBaseLine, 0.001);
+    }
+
+    [Fact]
+    public void AutoFitColumn_WithNegativeBaseLine_DecreasesWidth()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Test", null);
+        sheet.AddCell(new(0, 1), "Text", null);
+        
+        sheet.AutoFitColumn(0, 1.0);
+        var widthWithoutBaseLine = sheet.ExplicitColumnWidths[0].AsT0;
+        
+        sheet.AutoFitColumn(0, 1.0, -2.0);
+        var widthWithNegativeBaseLine = sheet.ExplicitColumnWidths[0].AsT0;
+        
+        Assert.True(widthWithNegativeBaseLine < widthWithoutBaseLine);
+        Assert.Equal(widthWithoutBaseLine - 2.0, widthWithNegativeBaseLine, 0.001);
+    }
+
+    [Fact]
+    public void AutoFitColumn_WithFractionalBaseLine_AppliesCorrectly()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Test", null);
+        
+        sheet.AutoFitColumn(0, 1.0, 2.5);
+        
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        var width = sheet.ExplicitColumnWidths[0].AsT0;
+        Assert.True(width > 2.5);
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_WithCalibrationAndBaseLine_AppliesBothToAllColumns()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Column A", null);
+        sheet.AddCell(new(1, 0), "Column B", null);
+        sheet.AddCell(new(2, 0), "Column C", null);
+        
+        sheet.AutoFitAllColumns(1.2, 5.0);
+        
+        Assert.Equal(3, sheet.ExplicitColumnWidths.Count);
+        foreach (var width in sheet.ExplicitColumnWidths.Values)
+        {
+            Assert.True(width.IsT0);
+            Assert.True(width.AsT0 > 5.0);
+        }
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_WithNegativeBaseLine_AppliesNegativeOffset()
+    {
+        var sheet = new WorkSheet("TestSheet");
+        
+        sheet.AddCell(new(0, 0), "Test Text", null);
+        sheet.AddCell(new(1, 0), "More Text", null);
+        
+        sheet.AutoFitAllColumns(1.0, -3.0);
+        
+        Assert.Equal(2, sheet.ExplicitColumnWidths.Count);
+        foreach (var width in sheet.ExplicitColumnWidths.Values)
+        {
+            Assert.True(width.IsT0);
+            Assert.True(width.AsT0 > 0);
+        }
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_DifferentBaseLines_ProduceDifferentWidths()
+    {
+        var sheet1 = new WorkSheet("Sheet1");
+        var sheet2 = new WorkSheet("Sheet2");
+        
+        sheet1.AddCell(new(0, 0), "Test", null);
+        sheet2.AddCell(new(0, 0), "Test", null);
+        
+        sheet1.AutoFitAllColumns(1.0, 0.0);
+        sheet2.AutoFitAllColumns(1.0, 10.0);
+        
+        var width1 = sheet1.ExplicitColumnWidths[0].AsT0;
+        var width2 = sheet2.ExplicitColumnWidths[0].AsT0;
+        
+        Assert.NotEqual(width1, width2);
+        Assert.Equal(width1 + 10.0, width2, 0.001);
+    }
 }

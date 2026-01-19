@@ -122,6 +122,66 @@ public class GenericTableBuilderTests
     }
 
     [Fact]
+    public void AutoFitAllColumns_WithCalibrationAndBaseLine_AppliesBoth()
+    {
+        var table = GenericTable.Create("Column1", "Column2");
+        table.AddRow(new CellValue("Short"), new CellValue("Much longer text here"));
+        
+        var sheet = GenericTableBuilder.FromGenericTable(table)
+            .AutoFitAllColumns(1.2, 5.0)
+            .Build();
+        
+        Assert.NotNull(sheet);
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(1));
+        
+        var width0 = sheet.ExplicitColumnWidths[0].AsT0;
+        var width1 = sheet.ExplicitColumnWidths[1].AsT0;
+        
+        Assert.True(width0 > 5.0);
+        Assert.True(width1 > 5.0);
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_WithNegativeBaseLine_AppliesCorrectly()
+    {
+        var table = GenericTable.Create("Test");
+        table.AddRow(new CellValue("Sample text"));
+        
+        var sheet = GenericTableBuilder.FromGenericTable(table)
+            .AutoFitAllColumns(1.0, -2.0)
+            .Build();
+        
+        Assert.NotNull(sheet);
+        Assert.True(sheet.ExplicitColumnWidths.ContainsKey(0));
+        var width = sheet.ExplicitColumnWidths[0].AsT0;
+        Assert.True(width > 0);
+    }
+
+    [Fact]
+    public void AutoFitAllColumns_WithZeroBaseLine_SameAsWithoutBaseLine()
+    {
+        var table1 = GenericTable.Create("Test");
+        table1.AddRow(new CellValue("Sample"));
+        
+        var table2 = GenericTable.Create("Test");
+        table2.AddRow(new CellValue("Sample"));
+        
+        var sheet1 = GenericTableBuilder.FromGenericTable(table1)
+            .AutoFitAllColumns(1.5)
+            .Build();
+        
+        var sheet2 = GenericTableBuilder.FromGenericTable(table2)
+            .AutoFitAllColumns(1.5, 0.0)
+            .Build();
+        
+        var width1 = sheet1.ExplicitColumnWidths[0].AsT0;
+        var width2 = sheet2.ExplicitColumnWidths[0].AsT0;
+        
+        Assert.Equal(width1, width2, 0.001);
+    }
+
+    [Fact]
     public void WithColumnOrder_ReordersColumns()
     {
         var table = GenericTable.Create("A", "B", "C");

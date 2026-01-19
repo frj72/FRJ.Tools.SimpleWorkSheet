@@ -16,7 +16,7 @@ public static class EnvironmentSheetInfo
         return new[] { cell }.EstimateMaxWidth();
     }
 
-    public static WorkBook CreateSimpleCalibrationWorkBook(double? calibrationFactor = null)
+    public static WorkBook CreateSimpleCalibrationWorkBook(double? calibrationFactor = null, double baseLine = 0.0)
     {
         var genericTable = GenericTable.Create("Factor", "Integer", "Float", "Text One", "Text Two", "date");
         genericTable.AddRow(calibrationFactor ?? 1.0, 1000, 1000.00001m, "This is a simple calibration test", "All cell values should be fitted", ExampleDate);
@@ -31,8 +31,10 @@ public static class EnvironmentSheetInfo
                 );
         if (calibrationFactor is null)
             builder.AutoFitAllColumns();
-        else
+        else if (baseLine == 0.0)
             builder.AutoFitAllColumns(calibrationFactor.Value);
+        else
+            builder.AutoFitAllColumns(calibrationFactor.Value, baseLine);
         return builder.Build();
     }
 }
