@@ -1,17 +1,21 @@
+using Microsoft.Extensions.Caching.Memory;
 using SkiaSharp;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 
 public static class TypefaceCache
 {
-    private record TypefaceKey(
-        string FamilyName,
-        SKFontStyleWeight Weight,
-        SKFontStyleWidth Width,
-        SKFontStyleSlant Slant);
-
-    private static readonly Dictionary<TypefaceKey, Lazy<SKTypeface>> Cache = new();
-    private static readonly Lock TypefaceCacheLock = new();
+    private static readonly FusionCache Cache = new(
+        new FusionCacheOptions
+        {
+            CacheName = "TypefaceCache",
+            DefaultEntryOptions = new FusionCacheEntryOptions
+            {
+                Duration = TimeSpan.MaxValue,
+                Priority = CacheItemPriority.NeverRemove
+            }
+        });
 
     public static SKTypeface GetOrCreate(
         string familyName,
@@ -19,33 +23,9 @@ public static class TypefaceCache
         SKFontStyleWidth width,
         SKFontStyleSlant slant)
     {
-        lock (TypefaceCacheLock)
-        {
-            var key = new TypefaceKey(familyName, weight, width, slant);
-            if (Cache.TryGetValue(key, out var lazy))
-                return lazy.Value;
-
-            lazy = new Lazy<SKTypeface>(
-                () => SKTypeface.FromFamilyName(familyName, weight, width, slant));
-            Cache[key] = lazy;
-            return lazy.Value;
-        }
-    }
-
-    public static int GetCacheCount()
-    {
-        lock (TypefaceCacheLock)
-            return Cache.Count;
-    }
-
-    public static void ClearCache()
-    {
-        lock (TypefaceCacheLock)
-        {
-            foreach (var lazy in Cache.Values.Where(lazy => lazy.IsValueCreated))
-                lazy.Value.Dispose();
-
-            Cache.Clear();
-        }
+        var key = $"{familyName}|{(int)weight}|{(int)width}|{(int)slant}";
+        return Cache.GetOrSet(
+            key,
+            _ => SKTypeface.FromFamilyName(familyName, weight, width, slant));
     }
 }

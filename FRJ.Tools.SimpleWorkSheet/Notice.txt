@@ -11,4 +11,7 @@ Third-party components used in this repo:
 3. SkiaSharp (Microsoft)
     License: MIT License
     Source: https://www.nuget.org/packages/SkiaSharp/
-   
+
+4. ZiggyCreatures.FusionCache (Jody Donetti)
+   License: MIT License
+   Source: https://www.nuget.org/packages/ZiggyCreatures.FusionCache/
