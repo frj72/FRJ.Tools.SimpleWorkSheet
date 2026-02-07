@@ -124,6 +124,10 @@ public static class ExampleRegistry
         [typeof(SimpleCalibrationWorkbookDefaultExample)] = 109,
         [typeof(SimpleCalibrationWorkbook09Example)] = 110,
         [typeof(SimpleCalibrationWorkbook11Example)] = 111,
-        [typeof(AutoFitColumnsBaselineExample)] = 112
+        [typeof(AutoFitColumnsBaselineExample)] = 112,
+        [typeof(ExcelToGenericTableNoHeadersExample)] = 113,
+        [typeof(ExcelToGenericTableWithHeadersExample)] = 114,
+        [typeof(ExcelToGenericTableAutoDetectExample)] = 115,
+        [typeof(GenericTableJsonRoundTripExample)] = 116
     };
 }

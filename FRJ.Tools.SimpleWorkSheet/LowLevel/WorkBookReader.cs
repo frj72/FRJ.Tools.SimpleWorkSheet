@@ -1,6 +1,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
+using FRJ.Tools.SimpleWorkSheet.Components.Import;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
 using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using OneOf;
@@ -426,5 +427,17 @@ public class WorkBookReader
             
             workSheet.AddTable(table.Name.Value, range, showFilter);
         }
+    }
+
+    public static Dictionary<string, GenericTable> LoadAsGenericTables(string filePath, HeaderMode headerMode = HeaderMode.None)
+    {
+        var workbook = LoadFromFile(filePath);
+        return WorkSheetToGenericTableConverter.ConvertWorkBook(workbook, headerMode);
+    }
+
+    public static Dictionary<string, GenericTable> LoadAsGenericTables(Stream stream, HeaderMode headerMode = HeaderMode.None)
+    {
+        var workbook = LoadFromStream(stream);
+        return WorkSheetToGenericTableConverter.ConvertWorkBook(workbook, headerMode);
     }
 }

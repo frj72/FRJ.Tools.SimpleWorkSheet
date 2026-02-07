@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using SkiaSharp;
 
 namespace FRJ.Tools.SimpleWorkSheet.Components.Sheet;
@@ -11,8 +10,8 @@ public static class TypefaceCache
         SKFontStyleWidth Width,
         SKFontStyleSlant Slant);
 
-    private static readonly ConcurrentDictionary<TypefaceKey, SKTypeface> Cache = new();
-    private static readonly ReaderWriterLockSlim Lock = new(LockRecursionPolicy.NoRecursion);
+    private static readonly Dictionary<TypefaceKey, Lazy<SKTypeface>> Cache = new();
+    private static readonly Lock TypefaceCacheLock = new();
 
     public static SKTypeface GetOrCreate(
         string familyName,
@@ -20,44 +19,33 @@ public static class TypefaceCache
         SKFontStyleWidth width,
         SKFontStyleSlant slant)
     {
-        Lock.EnterReadLock();
-        try
+        lock (TypefaceCacheLock)
         {
             var key = new TypefaceKey(familyName, weight, width, slant);
-            return Cache.GetOrAdd(key, k =>
-                SKTypeface.FromFamilyName(k.FamilyName, k.Weight, k.Width, k.Slant));
-        }
-        finally
-        {
-            Lock.ExitReadLock();
+            if (Cache.TryGetValue(key, out var lazy))
+                return lazy.Value;
+
+            lazy = new Lazy<SKTypeface>(
+                () => SKTypeface.FromFamilyName(familyName, weight, width, slant));
+            Cache[key] = lazy;
+            return lazy.Value;
         }
     }
 
     public static int GetCacheCount()
     {
-        Lock.EnterReadLock();
-        try
-        {
+        lock (TypefaceCacheLock)
             return Cache.Count;
-        }
-        finally
-        {
-            Lock.ExitReadLock();
-        }
     }
 
     public static void ClearCache()
     {
-        Lock.EnterWriteLock();
-        try
+        lock (TypefaceCacheLock)
         {
-            foreach (var typeface in Cache.Values)
-                typeface.Dispose();
+            foreach (var lazy in Cache.Values.Where(lazy => lazy.IsValueCreated))
+                lazy.Value.Dispose();
+
             Cache.Clear();
-        }
-        finally
-        {
-            Lock.ExitWriteLock();
         }
     }
 }

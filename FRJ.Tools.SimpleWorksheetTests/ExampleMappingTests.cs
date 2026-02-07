@@ -43,7 +43,7 @@ public class ExampleMappingTests
 
             var parsed = int.TryParse(parts[0], out var number);
             Assert.True(parsed, $"Invalid number in line: {line}");
-            Assert.True(number is >= 1 and <= 112, $"Number out of range in line: {line}");
+            Assert.True(number is >= 1 and <= 116, $"Number out of range in line: {line}");
 
             Assert.True(parts[1].EndsWith(".xlsx"), $"Invalid filename in line: {line}");
             Assert.True(parts[1].StartsWith($"{number:000}_"), $"Filename doesn't match number in line: {line}");

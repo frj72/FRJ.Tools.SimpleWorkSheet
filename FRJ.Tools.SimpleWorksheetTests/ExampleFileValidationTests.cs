@@ -121,9 +121,13 @@ public partial class ExampleFileValidationTests
     [InlineData("108_EnvironmentSheetInfo.xlsx")]
     [InlineData("109_SimpleCalibrationWorkbook_Default.xlsx")]
     [InlineData("110_SimpleCalibrationWorkbook_0.9.xlsx")]
-    [InlineData("111_SimpleCalibrationWorkbook_1.1.xlsx")]
-    [InlineData("112_AutoFitColumnsBaseline.xlsx")]
-    public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
+        [InlineData("111_SimpleCalibrationWorkbook_1.1.xlsx")]
+        [InlineData("112_AutoFitColumnsBaseline.xlsx")]
+        [InlineData("113_ExcelToGenericTableNoHeaders.xlsx")]
+        [InlineData("114_ExcelToGenericTableWithHeaders.xlsx")]
+        [InlineData("115_ExcelToGenericTableAutoDetect.xlsx")]
+        [InlineData("116_GenericTableJsonRoundTrip.xlsx")]
+        public void ExampleFile_CanBeLoadedByWorkBookReader(string fileName)
     {
         var filePath = Path.Combine(ExamplesPath, fileName);
 
@@ -143,7 +147,7 @@ public partial class ExampleFileValidationTests
     [Fact]
     public void AllExampleFiles_Exist()
     {
-        const int expectedCount = 112;
+        const int expectedCount = 116;
         var actualFiles = Directory.GetFiles(ExamplesPath, "*.xlsx")
             .Where(file => !Path.GetFileName(file).StartsWith("~$"))
             .ToArray();
