@@ -8,7 +8,7 @@ public static class WorkSheetDefaults
 {
     public static string FillColor => Colors.White;
     public static string Color => Colors.Black;
-    public static string FontName => FontFallbackConfig.GetDefaultFontName();
+    public static string FontName => "Aptos Narrow";
     public static int FontSize => 12;
     public static CellFont Font => CellFont.Create(FontSize, FontName, Color);
     public static CellBorder CellBorder => CellBorder.Create(null, CellBorderStyle.None);
