@@ -1,6 +1,5 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Import;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
@@ -76,28 +75,11 @@ public class ExcelToGenericTableWithHeadersExample : IExample
 
         var tables = WorkBookReader.LoadAsGenericTables(tempPath, HeaderMode.FirstRow);
 
-        var outputSheet = new WorkSheet("ImportedData");
-
-        var table = tables["Employees"];
-
-        for (var col = 0; col < table.ColumnCount; col++)
-            outputSheet.AddCell(new((uint)col, 0), table.Headers[col], cell => cell.WithFont(f => f.Bold()));
-
-        for (var row = 0; row < table.RowCount; row++)
-        for (var col = 0; col < table.ColumnCount; col++)
-        {
-            var value = table.GetValue(col, row);
-            if (value == null)
-                continue;
-
-            if (value.IsString())
-                outputSheet.AddCell(new((uint)col, (uint)(row + 1)), value.AsString(), null);
-            else if (value.IsDecimal())
-                outputSheet.AddCell(new((uint)col, (uint)(row + 1)), value.AsDecimal(), null);
-        }
-
-        for (uint col = 0; col < (uint)table.ColumnCount; col++)
-            outputSheet.AutoFitColumn(col);
+        var outputSheet = WorksheetBuilder.FromGenericTable(tables["Employees"])
+            .WithSheetName("ImportedData")
+            .WithHeaderStyle(style => style.WithFont(font => font.Bold()))
+            .AutoFitAllColumns()
+            .Build();
 
         ExampleRunner.SaveWorkSheet(outputSheet, $"{ExampleNumber:000}_{Name}.xlsx");
 

@@ -1,7 +1,6 @@
 using FRJ.Tools.SimpleWorkSheet.Components.Book;
 using FRJ.Tools.SimpleWorkSheet.Components.Import;
 using FRJ.Tools.SimpleWorkSheet.Components.Sheet;
-using FRJ.Tools.SimpleWorkSheet.Components.SimpleCell;
 using FRJ.Tools.SimpleWorkSheet.Examples.Examples.Utils;
 using FRJ.Tools.SimpleWorkSheet.LowLevel;
 
@@ -73,59 +72,21 @@ public class ExcelToGenericTableAutoDetectExample : IExample
 
         var tables = WorkBookReader.LoadAsGenericTables(tempPath, HeaderMode.AutoDetect);
 
-        var outputWorkbook = new List<WorkSheet>();
+        var salesOutput = WorksheetBuilder.FromGenericTable(tables["Sales"])
+            .WithSheetName("Sales_Imported")
+            .WithHeaderStyle(style => style.WithFont(font => font.Bold()))
+            .AutoFitAllColumns()
+            .Build();
 
-        var salesTable = tables["Sales"];
-        var salesOutput = new WorkSheet("Sales_Imported");
+        var matrixOutput = WorksheetBuilder.FromGenericTable(tables["Matrix"])
+            .WithSheetName("Matrix_Imported")
+            .WithHeaderStyle(style => style.WithFont(font => font.Bold()))
+            .AutoFitAllColumns()
+            .Build();
 
-        for (var col = 0; col < salesTable.ColumnCount; col++)
-            salesOutput.AddCell(new((uint)col, 0), salesTable.Headers[col], cell => cell.WithFont(f => f.Bold()));
-
-        for (var row = 0; row < salesTable.RowCount; row++)
-        for (var col = 0; col < salesTable.ColumnCount; col++)
-        {
-            var value = salesTable.GetValue(col, row);
-            if (value == null)
-                continue;
-
-            if (value.IsString())
-                salesOutput.AddCell(new((uint)col, (uint)(row + 1)), value.AsString(), null);
-            else if (value.IsDecimal())
-                salesOutput.AddCell(new((uint)col, (uint)(row + 1)), value.AsDecimal(), null);
-            else if (value.IsLong())
-                salesOutput.AddCell(new((uint)col, (uint)(row + 1)), value.AsLong(), null);
-        }
-
-        for (uint col = 0; col < (uint)salesTable.ColumnCount; col++)
-            salesOutput.AutoFitColumn(col);
-
-        outputWorkbook.Add(salesOutput);
-
-        var matrixTable = tables["Matrix"];
-        var matrixOutput = new WorkSheet("Matrix_Imported");
-
-        for (var col = 0; col < matrixTable.ColumnCount; col++)
-            matrixOutput.AddCell(new((uint)col, 0), matrixTable.Headers[col], cell => cell.WithFont(f => f.Bold()));
-
-        for (var row = 0; row < matrixTable.RowCount; row++)
-        for (var col = 0; col < matrixTable.ColumnCount; col++)
-        {
-            var value = matrixTable.GetValue(col, row);
-            if (value != null)
-                matrixOutput.AddCell(new((uint)col, (uint)(row + 1)), value.AsDecimal(), null);
-        }
-
-        for (uint col = 0; col < (uint)matrixTable.ColumnCount; col++)
-            matrixOutput.AutoFitColumn(col);
-
-        outputWorkbook.Add(matrixOutput);
-
-        var finalWorkbook = new WorkBook("ImportedData", outputWorkbook);
+        var finalWorkbook = new WorkBook("ImportedData", [salesOutput, matrixOutput]);
         
-        var outputDir = Path.Combine(Directory.GetCurrentDirectory(), "Output");
-        Directory.CreateDirectory(outputDir);
-        var filePath = Path.Combine(outputDir, $"{ExampleNumber:000}_{Name}.xlsx");
-        finalWorkbook.SaveToFile(filePath);
+        ExampleRunner.SaveWorkBook(finalWorkbook, $"{ExampleNumber:000}_{Name}.xlsx");
 
         File.Delete(tempPath);
     }
